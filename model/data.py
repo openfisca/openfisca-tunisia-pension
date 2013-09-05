@@ -63,7 +63,7 @@ class InputDescription(ModelDescription):
     sal9 = IntCol()
     sal10 = IntCol()
     
-    age = AgesCol(default=55)
-    nb_trim_val = IntCol(default=30)
+    age = AgesCol(default=65)
+    nb_trim_val = IntCol()
     regime = EnumCol(REG)
     

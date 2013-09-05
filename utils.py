@@ -47,7 +47,7 @@ class Scenario(object):
         self.menage = {}
 
         # on ajoute un individu, déclarant et chef de famille
-        self.addIndiv(0, datetime(1955,1,1).date(), 'vous', 'chef')
+        self.addIndiv(0, datetime(1945,1,1).date(), 'vous', 'chef')
     
         self.nmen = None
         self.xaxis = None

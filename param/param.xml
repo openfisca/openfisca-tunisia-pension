@@ -44,6 +44,10 @@
     	<VALUE valeur="110.051" deb="1996-05-01" fin="1996-09-08" />
     	<VALUE valeur="105.024" deb="1995-05-01" fin="1996-04-31" />    	
       </CODE>
+      <CODE description="SMAG journalier" code="smag" format="float" type="monetary">
+		<VALUE valeur="9.000" deb="2011-07-01" fin="2011-12-31" />
+    	<VALUE valeur="8.380" deb="2010-07-01" fin="2011-06-30" />    	
+      </CODE>
   </NODE>
   <NODE description="Pensions" code="pension" >
     <NODE description="Régime des salariés non agricoles" code="rsna" >
@@ -79,6 +83,29 @@
           <VALUE valeur=".66666" deb="1974-01-01" fin="2012-12-31" />
         </CODE>
       </NODE>  
+    </NODE>
+    <NODE description="Régime des salariés agricoles" code="rsa" >
+      <CODE description="Age légal de de départ à la retraite" code="age_legal" format="integer">
+        <VALUE valeur="60" deb="1981-02-24" fin="2012-12-31" />
+      </CODE>
+      <CODE description="Durée normale du stage requis" code="stage_requis" format="integer">
+        <VALUE valeur="10" deb="1981-02-24" fin="2012-12-31" />
+      </CODE>
+      <CODE description="Période de remplacement de base" code="periode_remp_base" format="integer">
+        <VALUE valeur="10" deb="1981-02-24" fin="2012-12-31" />
+      </CODE>
+      <CODE description="Taux d'annuité de base" code="taux_ann_base" format="percent">
+        <VALUE valeur=".04" deb="1981-02-24" fin="2012-12-31" />
+      </CODE>
+      <CODE description="Taux d'annuité supplémentaire" code="taux_ann_sup" format="percent">
+        <VALUE valeur=".02" deb="1981-02-24" fin="2012-12-31" />
+      </CODE>
+      <CODE description="Plafonnement du taux de pension" code="plaf_taux_pension" format="percent">
+        <VALUE valeur=".8" deb="1981-02-24" fin="2012-12-31" />
+      </CODE>
+      <CODE description="Pension minimale (en part de SMAG)" code="pension_min">
+      	<VALUE valeur=".4" deb="1981-02-24" fin="2012-12-31" />
+      </CODE>
     </NODE>
   </NODE>
 </NODE>

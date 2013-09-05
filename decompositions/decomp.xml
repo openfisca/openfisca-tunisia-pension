@@ -1,2 +1,4 @@
-<NODE desc="Pension" shortname="Pension" code="pension" color="0,0,255" typevar='2' />
- 
+<NODE desc="Pension" shortname="Pension" code="pension" color="0,0,255" typevar='2' >
+  <NODE desc= "RSNA" shortname="RSNA" code= "pension_rsna" color = "0,66,92" />
+  <NODE desc= "RSA" shortname="RSA" code= "pension_rsa" color = "249,208,211"/>
+</NODE>
