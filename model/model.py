@@ -35,5 +35,8 @@ class OutputDescription(ModelDescription):
     # Pensions
     ############################################################
     
-    sal_ref = Prestation(pension._sal_ref, entity="ind", label=u"Salaire de référence")
-    pension = Prestation(pension._pension, entity="ind", label=u"Pension de retraite")
+    sal_ref_rsna = Prestation(pension._sal_ref_rsna, entity="ind", label=u"Salaire de référence")
+    pension_rsna = Prestation(pension._pension_rsna, entity="ind", label=u"Pension de retraite")
+    
+    sal_ref_rsa = Prestation(pension._sal_ref_rsa, entity="ind", label=u"Salaire de référence")
+    pension_rsa = Prestation(pension._pension_rsa, entity="ind", label=u"Pension de retraite")
