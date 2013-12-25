@@ -24,7 +24,7 @@ This file is part of openFisca.
 from datetime import date
 from src.lib.description import ModelDescription
 from src.lib.columns import Prestation, BoolPresta
-import src.countries.tunisia_pension.model.pension as pension
+from . import pension
 
 class OutputDescription(ModelDescription):
     """

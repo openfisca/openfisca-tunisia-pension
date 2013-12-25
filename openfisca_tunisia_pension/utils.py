@@ -30,7 +30,7 @@ import numpy as np
 from numpy import logical_not as not_
 from src.lib.columns import EnumCol, IntCol, BoolCol, AgesCol, FloatCol, DateCol, Prestation, BoolPresta, IntPresta, EnumPresta
 
-from src.countries.tunisia_pension import ENTITIES_INDEX
+from . import ENTITIES_INDEX
 
 class Scenario(object):
     def __init__(self):
