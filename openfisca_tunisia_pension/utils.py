@@ -25,12 +25,12 @@ from __future__ import division
 from src import __version__ as VERSION
 import pickle
 from datetime import datetime
-from src.lib.utils import of_import
 import numpy as np
 from numpy import logical_not as not_
 from src.lib.columns import EnumCol, IntCol, BoolCol, AgesCol, FloatCol, DateCol, Prestation, BoolPresta, IntPresta, EnumPresta
 
-from . import ENTITIES_INDEX
+from . import ENTITIES_INDEX, XAXIS_PROPERTIES
+
 
 class Scenario(object):
     def __init__(self):
@@ -349,11 +349,6 @@ class Scenario(object):
                 datatable.set_value(var, vls, entity, opt = 0)
                 
             datatable._isPopulated = True
-        
-
-
-country = "tunisia_pension"
-XAXIS_PROPERTIES =  of_import('','XAXIS_PROPERTIES', country)
 
 
 class Xaxis(object):
@@ -369,9 +364,8 @@ class Xaxis(object):
             self.typ_tot_default = None
                  
     def set_label(self, country):
-        from src.lib.utils import of_import
         from src.lib.datatable import Description
-        InputDescription = of_import('model.data', 'InputDescription', country)
+        from .model.data import InputDescription
         description = Description(InputDescription().columns)
         label2var, var2label, var2enum = description.builds_dicts()
         print self.col_name
@@ -390,9 +384,6 @@ class Xaxis(object):
 
 
 def build_axes(country):
-    # TODO: should be in __init__.py of tunisia
-    from src.lib.utils import of_import
-    Xaxis = of_import('utils','Xaxis', country)
     axes = []
     for col_name in XAXIS_PROPERTIES:
         axe = Xaxis(col_name, country)
