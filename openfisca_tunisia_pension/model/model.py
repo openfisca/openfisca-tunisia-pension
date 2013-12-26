@@ -21,10 +21,14 @@ This file is part of openFisca.
     along with openFisca.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+
 from datetime import date
-from src.lib.description import ModelDescription
-from src.lib.columns import Prestation, BoolPresta
+
+from openfisca_core.columns import Prestation, BoolPresta
+from openfisca_core.descriptions import ModelDescription
+
 from . import pension
+
 
 class OutputDescription(ModelDescription):
     """
