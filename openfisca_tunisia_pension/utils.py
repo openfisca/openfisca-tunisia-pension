@@ -24,5 +24,5 @@ This file is part of openFisca.
 
 REV_TYPE = {'superbrut' : ['salsuperbrut'],
              'brut': ['salbrut'],
-             'imposable'      : ['sal']}        
+             'imposable'      : ['sal']}
 

@@ -37,20 +37,20 @@ REG    = Enum(['rsna', 'rsa', 'rsaa', 'rtns', 'rtte', 're', 'rtfr', 'raic', 'cnr
 class InputDescription(ModelDescription):
     '''
     Socio-economic data
-    Donnée d'entrée de la simulation à fournir à partir d'une enquète ou 
+    Donnée d'entrée de la simulation à fournir à partir d'une enquète ou
     à générer avec un générateur de cas type
     '''
-    
+
     noi = IntCol()
-    idmen = IntCol() 
-    idfoy = IntCol() 
+    idmen = IntCol()
+    idfoy = IntCol()
 
     quimen  = EnumCol(QUIMEN)
     quifoy  = EnumCol(QUIFOY)
-    
+
     statmarit = BoolCol()
     loyer = IntCol()
-    
+
     sal0 = IntCol()
     sal1 = IntCol()
     sal2 = IntCol()
@@ -62,7 +62,7 @@ class InputDescription(ModelDescription):
     sal8 = IntCol()
     sal9 = IntCol()
     sal10 = IntCol()
-    
+
     age = AgesCol(default=65)
     nb_trim_val = IntCol()
     regime = EnumCol(REG)

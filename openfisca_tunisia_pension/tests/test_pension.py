@@ -12,11 +12,11 @@ from datetime import datetime
 
 
 def test_rsna():
-    
-    
+
+
     year = 2011
-    
-    
+
+
     test_list = [ {"year" : 2011, "sal_mensuel": 1000, "nb_trim_val": 50, "age": 60, "pension": 5400 },
                  ]
 
@@ -29,7 +29,7 @@ def test_rsna():
         pension = dico.pop("pension")
         for key, val in dico.iteritems():
             if key in ["sal_mensuel"]:
-                for i in range(10): 
+                for i in range(10):
                     print "sal" + str(i)
                     test_case.indiv[0].update({"sal" + str(i): val*12})
             else:
@@ -40,25 +40,25 @@ def test_rsna():
             print year
             print "OpenFisca :", abs(df.loc["pension_rsna"][0])
             print "Real value :", pension
-        
-        assert abs(df.loc["pension_rsna"][0] - pension) < 1 
 
-    
-# 
-# 
+        assert abs(df.loc["pension_rsna"][0] - pension) < 1
+
+
+#
+#
 # def test_rsna():
 #     """
-#     test  
+#     test
 #     """
-#     dico = { 
+#     dico = {
 #             "sal0": [
 #             {"year" : 2011, "amount": 20000, "pension_rsna": -1181 },
 #             ]
 #             }
-# 
-#     
-#     for revenu, test_list in dico.iteritems():        
-#         for item in test_list: 
+#
+#
+#     for revenu, test_list in dico.iteritems():
+#         for item in test_list:
 #             year = item["year"]
 #             amount = item["amount"]
 #             pension_rsna = item["pension_rsna"]
@@ -66,10 +66,10 @@ def test_rsna():
 #             simulation.set_config(year = year, nmen = 1)
 #             simulation.set_param()
 #             test_case = simulation.scenario
-#             
+#
 #             test_case.indiv[0].update({"nb_trim_val": 50})
 #             test_case.indiv[0].update({revenu: amount})
-#             
+#
 #             df = simulation.get_results_dataframe(index_by_code=True)
 #             print df
 #             if not abs(df.loc["pension_rsna"][0] - pension_rsna) < 1:
@@ -78,15 +78,15 @@ def test_rsna():
 #                 print amount
 #                 print "OpenFisca :", abs(df.loc["pension_rsna"][0])
 #                 print "Real value :", pension_rsna
-#             
-#             assert abs(df.loc["pension_rsna"][0] - pension_rsna) < 1 
+#
+#             assert abs(df.loc["pension_rsna"][0] - pension_rsna) < 1
 
 
 if __name__ == '__main__':
-   
+
 
     test_rsna()
-    
+
 #    nose.core.runmodule(argv=[__file__, '-v', '-i test_*.py'])
 #     nose.core.runmodule(argv=[__file__, '-vvs', '-x', '--pdb', '--pdb-failure'], exit=False)
 
