@@ -15,7 +15,6 @@ def test_rsna():
     
     
     year = 2011
-    country = "tunisia_pension"
     
     
     test_list = [ {"year" : 2011, "sal_mensuel": 1000, "nb_trim_val": 50, "age": 60, "pension": 5400 },
@@ -24,7 +23,7 @@ def test_rsna():
     for dico in test_list:
         simulation = ScenarioSimulation()
         year = dico.pop("year")
-        simulation.set_config(year = year, country = country, nmen = 1)
+        simulation.set_config(year = year, nmen = 1)
         simulation.set_param()
         test_case = simulation.scenario
         pension = dico.pop("pension")
@@ -51,7 +50,6 @@ def test_rsna():
 #     """
 #     test  
 #     """
-#     country = 'tunisia_pension'
 #     dico = { 
 #             "sal0": [
 #             {"year" : 2011, "amount": 20000, "pension_rsna": -1181 },
@@ -65,7 +63,7 @@ def test_rsna():
 #             amount = item["amount"]
 #             pension_rsna = item["pension_rsna"]
 #             simulation = ScenarioSimulation()
-#             simulation.set_config(year = year, country = country, nmen = 1)
+#             simulation.set_config(year = year, nmen = 1)
 #             simulation.set_param()
 #             test_case = simulation.scenario
 #             
