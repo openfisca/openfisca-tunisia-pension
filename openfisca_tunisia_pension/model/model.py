@@ -24,9 +24,8 @@
 
 
 import collections
-from datetime import date
 
-from openfisca_core.columns import Prestation, BoolPresta
+from openfisca_core.columns import Prestation
 
 from . import pension
 

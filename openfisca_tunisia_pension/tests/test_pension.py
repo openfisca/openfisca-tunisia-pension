@@ -33,15 +33,14 @@
 # Licensed under the terms of the GVPLv3 or later license
 # (see openfisca/__init__.py for details)
 
+
+#import nose
 import openfisca_tunisia_pension
 openfisca_tunisia_pension.init_country()
 from openfisca_core.simulations import ScenarioSimulation
 
-import nose
-
 
 def test_rsna():
-
     year = 2011 
     test_list = [ {"year": 2011,
                    "sal_mensuel": 1000,

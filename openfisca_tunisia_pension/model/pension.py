@@ -20,9 +20,11 @@ This file is part of openFisca.
     You should have received a copy of the GNU General Public License
     along with openFisca.  If not, see <http://www.gnu.org/licenses/>.
 """
+
+
 from __future__ import division
-from numpy import ( maximum as max_, minimum as min_, logical_xor as xor_, logical_and as and_,
-                     logical_not as not_, round)
+
+from numpy import maximum as max_, minimum as min_, logical_not as not_
 
 
 ###############################################################################
@@ -33,9 +35,9 @@ def generic_pension(nb_trim_val, sal_ref, age,
                     taux_ann_base,taux_ann_sup, duree_stage, age_elig,
                     periode_remp_base, plaf_taux_pension, smig):
 
-    stage = nb_trim_val > 4*duree_stage
-    elig_age = age > age_elig
-    elig = stage*elig_age*(sal_ref>0)
+    # stage = nb_trim_val > 4*duree_stage
+    # elig_age = age > age_elig
+    # elig = stage*elig_age*(sal_ref>0)
     taux_pension = ( (nb_trim_val < 4*periode_remp_base)*(nb_trim_val/4*taux_ann_base) +
                        (nb_trim_val >= 4*periode_remp_base)*( taux_ann_base*periode_remp_base + (nb_trim_val/4 - periode_remp_base)*taux_ann_sup ))
 

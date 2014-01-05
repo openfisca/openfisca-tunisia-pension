@@ -25,11 +25,13 @@
 
 from __future__ import division
 
+from copy import deepcopy
 import datetime
 import pickle
 
 from openfisca_core import __version__ as VERSION
 from openfisca_core import model
+from pandas import DataFrame, concat
 
 from . import ENTITIES_INDEX
 
@@ -58,7 +60,6 @@ class Scenario(object):
         self.year = None
     
     def copy(self):
-        from copy import deepcopy
         return deepcopy(self)
 
     
@@ -253,8 +254,6 @@ class Scenario(object):
         '''
         Popualte a datatable from a given scenario
         '''
-        from pandas import DataFrame, concat
-        import numpy as np
         scenario = self
         
         if self.nmen is None:
