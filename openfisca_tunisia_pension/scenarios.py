@@ -276,7 +276,7 @@ class Scenario(object):
             quifoy = datatable.column_by_name.get('quifoy').enum[dct['quifoy']]
 
             quimen = datatable.column_by_name.get('quimen').enum[dct['quimen']]
->>>>>       dct = {'noi': noi*np.ones(nmen),
+            dct = {'noi': noi*np.ones(nmen),
                    'age': age*np.ones(nmen),
                    'agem': agem*np.ones(nmen),
                    'quimen': quimen*np.ones(nmen),
