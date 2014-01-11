@@ -39,16 +39,16 @@ REVENUES_CATEGORIES = {
 WEIGHT = "wprm"
 WEIGHT_INI = "wprm_init"
 X_AXES_PROPERTIES = {
-    'sali': {
-        'name': 'sal',
-        'typ_tot': {
-            'sal':  'Salaire imposable',
-            'salbrut': 'Salaire brut',
-            'salnet': 'Salaire net',
-            'salsuperbrut': 'Salaire super brut',
-            },
-        'typ_tot_default' : 'sal',
-        },
+#    'sali': {
+#        'name': 'sal',
+#        'typ_tot': {
+#            'sal':  'Salaire imposable',
+#            'salbrut': 'Salaire brut',
+#            'salnet': 'Salaire net',
+#            'salsuperbrut': 'Salaire super brut',
+#            },
+#        'typ_tot_default' : 'sal',
+#        },
     }
 
 
