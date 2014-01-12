@@ -26,7 +26,7 @@
 import collections
 
 from openfisca_core.columns import IntCol, EnumCol, BoolCol, AgesCol
-from openfisca_core.utils import Enum
+from openfisca_core.enumerations import Enum
 
 
 QUIFOY = Enum(['vous', 'conj', 'enf1','enf2','enf3','enf4','enf5','enf6','enf7','enf8','enf9'])
