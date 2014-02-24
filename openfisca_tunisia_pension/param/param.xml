@@ -1,4 +1,4 @@
-<NODE code = 'root'>
+<NODE code = 'root' deb="2012-01-01" fin="2013-12-31">
   <NODE description="Paramètres généraux" code="param_gen" >
   	<CODE description="SMIG 48h" code="smig_48h" format="float" type="monetary">
 	    <VALUE valeur="255.632" deb="2011-05-01" fin="2011-12-31" />
