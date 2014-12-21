@@ -34,86 +34,38 @@
 # (see openfisca/__init__.py for details)
 
 
-#import nose
-import openfisca_tunisia_pension
-openfisca_tunisia_pension.init_country()
-from openfisca_core.simulations import ScenarioSimulation
+import datetime
+
+
+from openfisca_core.tools import assert_near
+from . import base
 
 
 def test_rsna():
-    year = 2011 
-    test_list = [ {"year": 2011,
-                   "sal_mensuel": 1000,
-                   "nb_trim_val": 50,
-                   "age": 60,
-                   "pension": 5400 },
-                ]
-    for dico in test_list:
-        simulation = ScenarioSimulation()
-        year = dico.pop("year")
-        simulation.set_config(year = year, nmen = 1)
-        simulation.set_param()
-        test_case = simulation.scenario
-        pension = dico.pop("pension")
-        for key, val in dico.iteritems():
-            if key in ["sal_mensuel"]:
-                for i in range(10):
-                    test_case.indiv[0].update({"sal" + str(i): val*12})
-            else:
-                test_case.indiv[0].update({key: val})
+#    test_list = [ {"year": 2011,
+#                   "sal_mensuel": 1000,
+#                   "nb_trim_val": 50,
+#                   "age": 60,
+#                   "pension": 5400 },
 
-        df = simulation.get_results_dataframe(index_by_code=True)
-        if not abs(df.loc["pension_rsna"][0] - pension) < 1:
-            print year
-            print "OpenFisca :", abs(df.loc["pension_rsna"][0])
-            print "Real value :", pension
+    year = 2011
+    simulation = base.tax_benefit_system.new_scenario().init_single_entity(
+        period = year,
+        parent1 = dict(
+            age = 60,  # birth = datetime.date(year - 60, 1, 1),
+            nb_trim_val = 50,
+            salaire = dict(
+                [("{}".format(yr + 1), 1000) for yr in range(2014 - 40, 2014)]
+                ),
+            ),
+        ).new_simulation(debug = True)
+    assert_near(simulation.calculate('pension_rsna'), 5400, 1)
 
-        assert abs(df.loc["pension_rsna"][0] - pension) < 1
-
-
-#
-#
-# def test_rsna():
-#     """
-#     test
-#     """
-#     dico = {
-#             "sal0": [
-#             {"year" : 2011, "amount": 20000, "pension_rsna": -1181 },
-#             ]
-#             }
-#
-#
-#     for revenu, test_list in dico.iteritems():
-#         for item in test_list:
-#             year = item["year"]
-#             amount = item["amount"]
-#             pension_rsna = item["pension_rsna"]
-#             simulation = ScenarioSimulation()
-#             simulation.set_config(year = year, nmen = 1)
-#             simulation.set_param()
-#             test_case = simulation.scenario
-#
-#             test_case.indiv[0].update({"nb_trim_val": 50})
-#             test_case.indiv[0].update({revenu: amount})
-#
-#             df = simulation.get_results_dataframe(index_by_code=True)
-#             print df
-#             if not abs(df.loc["pension_rsna"][0] - pension_rsna) < 1:
-#                 print year
-#                 print revenu
-#                 print amount
-#                 print "OpenFisca :", abs(df.loc["pension_rsna"][0])
-#                 print "Real value :", pension_rsna
-#
-#             assert abs(df.loc["pension_rsna"][0] - pension_rsna) < 1
 
 
 if __name__ == '__main__':
-
 
     test_rsna()
 
 #    nose.core.runmodule(argv=[__file__, '-v', '-i test_*.py'])
 #     nose.core.runmodule(argv=[__file__, '-vvs', '-x', '--pdb', '--pdb-failure'], exit=False)
-

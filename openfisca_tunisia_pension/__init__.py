@@ -26,74 +26,33 @@ import os
 
 
 COUNTRY_DIR = os.path.dirname(os.path.abspath(__file__))
-CURRENCY = u"DT"
-ENTITIES_INDEX = ['men', 'foy']
-REV_TYP = {
-    'brut': ['salbrut'],
-    'imposable': ['sal'],
-    'superbrut': ['salsuperbrut'],
-    }
-REVENUES_CATEGORIES = {
-    'imposable': ['sal'],
-    }
-WEIGHT = "wprm"
-WEIGHT_INI = "wprm_init"
-X_AXES_PROPERTIES = {
-#    'sali': {
-#        'name': 'sal',
-#        'typ_tot': {
-#            'sal':  'Salaire imposable',
-#            'salbrut': 'Salaire brut',
-#            'salnet': 'Salaire net',
-#            'salsuperbrut': 'Salaire super brut',
-#            },
-#        'typ_tot_default' : 'sal',
-#        },
-    }
 
 
 def init_country(qt = False):
     """Add country-specific content to OpenFisca-Core package."""
-    from openfisca_core import model as core_model
+    from openfisca_core.taxbenefitsystems import LegacyTaxBenefitSystem
 
-    from openfisca_core import simulations as core_simulations
-    from openfisca_core import taxbenefitsystems as core_taxbenefitsystems
-    from openfisca_core.xaxes import XAxis
+    from . import decompositions, entities, scenarios
 
-    if qt:
-        from openfisca_qt import widgets as qt_widgets
+#    from .model import datatrees
+    from .model import data  # Load input variables into entities. # noqa
+    from .model import model  # Load output variables into entities. # noqa
 
-    from . import decompositions, scenarios
-    from .model.data import column_by_name
-    from .model.model import prestation_by_name
-    if qt:
-        from .widgets.Composition import CompositionWidget
+    class TaxBenefitSystem(LegacyTaxBenefitSystem):
+        """Tunisian tax benefit system"""
+        # AGGREGATES_DEFAULT_VARS = AGGREGATES_DEFAULT_VARS
+        check_consistency = None  # staticmethod(utils.check_consistency)
+#        columns_name_tree_by_entity = datatrees.columns_name_tree_by_entity
+        CURRENCY = u"DT"
 
-    core_taxbenefitsystems.preproc_inputs = None
+        DECOMP_DIR = os.path.dirname(os.path.abspath(decompositions.__file__))
+        DEFAULT_DECOMP_FILE = decompositions.DEFAULT_DECOMP_FILE
+        entity_class_by_key_plural = dict(
+            (entity_class.key_plural, entity_class)
+            for entity_class in entities.entity_class_by_symbol.itervalues()
+            )
+        legislation_xml_file_path = os.path.join(COUNTRY_DIR, 'param', 'param.xml')
 
-    core_model.AGGREGATES_DEFAULT_VARS = None # AGGREGATES_DEFAULT_VARS
-    core_model.column_by_name = column_by_name
-    core_model.CURRENCY = CURRENCY
-    core_model.DATA_DIR = None
-    core_model.DATA_SOURCES_DIR = os.path.join(COUNTRY_DIR, 'data', 'sources')
-    core_model.DECOMP_DIR = os.path.dirname(os.path.abspath(decompositions.__file__))
-    core_model.DEFAULT_DECOMP_FILE = decompositions.DEFAULT_DECOMP_FILE
-    core_model.ENTITIES_INDEX = ENTITIES_INDEX
-    core_model.FILTERING_VARS = None # FILTERING_VARS
-    core_model.prestation_by_name = prestation_by_name
-    core_model.PARAM_FILE = os.path.join(COUNTRY_DIR, 'param', 'param.xml')
-    core_model.REFORMS_DIR = os.path.join(COUNTRY_DIR, 'reformes')
+        Scenario = scenarios.Scenario
 
-    core_model.REV_TYP = REV_TYP  
-    core_model.REVENUES_CATEGORIES = REVENUES_CATEGORIES
-    core_model.Scenario = scenarios.Scenario
-    core_model.WEIGHT = WEIGHT
-    core_model.WEIGHT_INI = WEIGHT_INI
-
-    core_model.x_axes = dict(
-        (col_name, XAxis(col_name = col_name, label = column_by_name[col_name].label, **properties))
-        for col_name, properties in X_AXES_PROPERTIES.iteritems()
-        )
-
-    if qt:
-        qt_widgets.CompositionWidget = CompositionWidget
+    return TaxBenefitSystem

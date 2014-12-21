@@ -23,26 +23,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from openfisca_core.tools import assert_near
 
-from . import (  # noqua
-    pension,
-    )
+from .. import init_country
 
 
-#prestation_by_name = collections.OrderedDict((
-#    ############################################################
-#    # Pensions
-#    ############################################################
-#
-#    ('sal_ref_rsna', Prestation(pension._sal_ref_rsna, entity = "ind", label = u"Salaire de référence")),
-#    ('pension_rsna', Prestation(pension._pension_rsna, entity = "ind", label = u"Pension de retraite")),
-#
-#    ('sal_ref_rsa', Prestation(pension._sal_ref_rsa, entity = "ind", label = u"Salaire de référence")),
-#    ('pension_rsa', Prestation(pension._pension_rsa, entity = "ind", label = u"Pension de retraite")),
-#    ))
-#
-#for name, prestation in prestation_by_name.iteritems():
-#    if prestation.label is None:
-#        prestation.label = name
-#    assert prestation.name is None
-#    prestation.name = name
+__all__ = [
+    'assert_near',
+    'tax_benefit_system',
+    'TaxBenefitSystem',
+    ]
+
+
+TaxBenefitSystem = init_country()
+tax_benefit_system = TaxBenefitSystem()

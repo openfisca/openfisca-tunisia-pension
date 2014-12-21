@@ -23,15 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import collections
-
-from openfisca_core.columns import IntCol, EnumCol, BoolCol, AgesCol
-from openfisca_core.enumerations import Enum
-
-
-QUIFOY = Enum(['vous', 'conj', 'enf1','enf2','enf3','enf4','enf5','enf6','enf7','enf8','enf9'])
-QUIMEN = Enum(['pref', 'cref', 'enf1','enf2','enf3','enf4','enf5','enf6','enf7','enf8','enf9'])
-REG = Enum(['rsna', 'rsa', 'rsaa', 'rtns', 'rtte', 're', 'rtfr', 'raic', 'cnrps_sal', 'cnrps_pen'])
+from .base import * #  noqua
 
 
 # raic -> raci
@@ -39,36 +31,89 @@ REG = Enum(['rsna', 'rsa', 'rsaa', 'rtns', 'rtte', 're', 'rtfr', 'raic', 'cnrps_
 # Socio-economic data
 # Donnée d'entrée de la simulation à fournir à partir d'une enquète ou
 # à générer avec un générateur de cas type
-column_by_name = collections.OrderedDict((
-    ('noi', IntCol()),
-    ('idmen', IntCol()),
-    ('idfoy', IntCol()),
 
-    ('quimen', EnumCol(QUIMEN)),
-    ('quifoy', EnumCol(QUIFOY)),
 
-    ('statmarit', BoolCol()),
-    ('loyer', IntCol()),
 
-    ('sal0', IntCol()),
-    ('sal1', IntCol()),
-    ('sal2', IntCol()),
-    ('sal3', IntCol()),
-    ('sal4', IntCol()),
-    ('sal5', IntCol()),
-    ('sal6', IntCol()),
-    ('sal7', IntCol()),
-    ('sal8', IntCol()),
-    ('sal9', IntCol()),
-    ('sal10', IntCol()),
+reference_input_variable(
+    column = IntCol(is_permanent = True),
+    entity_class = Individus,
+    label = u"Identifiant du foyer",
+    name = 'idfoy',
+    )
 
-    ('age', AgesCol(default = 65)),
-    ('nb_trim_val', IntCol()),
-    ('regime', EnumCol(REG)),
-    ))
+reference_input_variable(
+    column = IntCol(is_permanent = True),
+    entity_class = Individus,
+    label = u"Identifiant du ménage",
+    name = 'idmen',
+    )
 
-for name, column in column_by_name.iteritems():
-    if column.label is None:
-        column.label = name
-    assert column.name is None
-    column.name = name
+
+reference_input_variable(
+    column = EnumCol(QUIMEN, is_permanent = True),
+    entity_class = Individus,
+    label = u"Rôle dans le foyer",
+    name = 'quifoy',
+    )
+
+reference_input_variable(
+    column = EnumCol(QUIMEN, is_permanent = True),
+    entity_class = Individus,
+    label = u"Rôle dans le ménage",
+    name = 'quimen',
+    )
+
+
+reference_input_variable(
+    column = DateCol(is_permanent = True),
+    entity_class = Individus,
+    label = u"Date de naissance",
+    name = 'birth',
+    )
+
+
+
+reference_input_variable(
+    column = EnumCol(
+        enum = Enum(
+            [
+                u"Inconnue",
+                u"Collège",
+                u"Lycée"
+                ],
+            ),
+        default = 0
+        ),
+    entity_class = Individus,
+    label = u"Scolarité de l'enfant : collège, lycée...",
+    name = "scolarite",
+    )
+
+
+reference_input_variable(
+    column = IntCol(),
+    entity_class = Individus,
+    label = u"Salaires",
+    name = 'salaire',
+    )
+
+reference_input_variable(
+    column = AgeCol(),
+    entity_class = Individus,
+    label = u"Âge",
+    name = 'age',
+    )
+
+reference_input_variable(
+    column = IntCol(),
+    entity_class = Individus,
+    label = u"Nombre de trimestres validés",
+    name = 'nb_trim_val',
+    )
+
+reference_input_variable(
+    column = EnumCol(REG),
+    entity_class = Individus,
+    label = u"Régime de retraite",
+    name = 'regime',
+    )
