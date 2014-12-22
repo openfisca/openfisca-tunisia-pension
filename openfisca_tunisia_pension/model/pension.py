@@ -24,9 +24,15 @@ This file is part of openFisca.
 
 from __future__ import division
 
-
-from numpy import maximum as max_, minimum as min_, logical_not as not_
-
+import bottleneck
+import functools
+from numpy import (
+    apply_along_axis,
+    logical_not as not_,
+    maximum as max_,
+    minimum as min_,
+    vstack,
+    )
 
 from openfisca_core import periods
 from .base import *  # noqa
@@ -45,15 +51,18 @@ class salaire_reference_rsa(SimpleFormulaColumn):
         base_declaration_rsa = 180
         base_liquidation_rsa = 300
 
-        salaire = 0
-
-        for year in range(period.start.year, period.start.year - 3, -1):
-            print year
-            print simulation.calculate('salaire', period = periods.period("year", year))
-            salaire += simulation.calculate('salaire', period = periods.period("year", year))
-
-        salaire = (salaire / 3) * base_liquidation_rsa / base_declaration_rsa
-        return period, sal_ref_rsa
+        n = 3
+        mean_over_largest = functools.partial(mean_over_k_largest, k = n)
+        salaire = apply_along_axis(
+            mean_over_largest,
+            axis = 0,
+            arr = vstack([
+                simulation.calculate('salaire', period = periods.period("year", year))
+                for year in range(period.start.year, period.start.year - n, -1)
+                ]),
+            )
+        salaire_refererence = salaire * base_liquidation_rsa / base_declaration_rsa
+        return period, salaire_refererence
 
 
 @reference_formula
@@ -64,15 +73,20 @@ class salaire_reference_rsna(SimpleFormulaColumn):
 
     def function(self, simulation, period):
 
-        # TODO: gérer le nombre d'année
+        # TODO: gérer le nombre d'année n
         # TODO: plafonner les salaires à 6 fois le smig de l'année d'encaissement
-
         period = period.start.offset('first-of', 'month').period('year')
-
-        salaire = 0
-        for year in range(period.start.year, period.start.year - 10, -1):
-            salaire += simulation.calculate('salaire', period = periods.period("year", year))
-        return period, salaire
+        n = 10
+        mean_over_largest = functools.partial(mean_over_k_largest, k = n)
+        salaire_refererence = apply_along_axis(
+            mean_over_largest,
+            axis = 0,
+            arr = vstack([
+                simulation.calculate('salaire', period = periods.period("year", year))
+                for year in range(period.start.year, period.start.year - n, -1)
+                ]),
+            )
+        return period, salaire_refererence
 
 
 @reference_formula
@@ -158,33 +172,12 @@ def generic_pension(nb_trim_val, sal_ref, age,
     return montant
 
 
+def mean_over_k_largest(vector, k):
+    '''Return the mean over the k largest values of a vector'''
+    if k == 0:
+        return 0
 
+    z = -bottleneck.partsort(-vector, k)[:k]
+    return z.sum() / k
 
-
-
-#
-#def _pension(nb_trim_val, sal_ref, regime, age, _P):
-#    """
-#    Pension
-#    """
-#    taux_ann_base = _P.pension.rsna.taux_ann_base
-#    taux_ann_sup  = _P.pension.rsna.taux_ann_sup
-#    duree_stage = _P.pension.rsna.stage_derog
-#    age_elig = _P.pension.rsna.age_dep_anticip
-#    periode_remp_base = _P.pension.rsna.periode_remp_base
-#    plaf_pension = _P.pension.rsna.plaf_taux_pension
-#    smig = _P.param_gen.smig_48h
-#    stage = nb_trim_val > 4 * duree_stage
-#    pension_min = (stage)*_P.pension.rsna.pension_min.sup + not_(stage)*_P.pension.rsna.pension_min.inf
-#
-#    elig_age = age > age_elig
-#    elig = stage * elig_age * (sal_ref > 0)
-#    taux_pension = ( (nb_trim_val < 4 * periode_remp_base)*(nb_trim_val / 4 * taux_ann_base) +
-#                       (nb_trim_val >= 4*periode_remp_base)*( taux_ann_base*periode_remp_base + (nb_trim_val/4 - periode_remp_base)*taux_ann_sup ))
-#
-#    montant = min_(taux_pension, plaf_pension)*sal_ref
-#
-#    montant_percu = max_(montant, pension_min*smig)
-#    pension = elig*montant_percu
-#    return pension
 

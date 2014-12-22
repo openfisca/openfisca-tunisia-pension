@@ -42,14 +42,14 @@ from . import base
 
 
 def test_rsna():
-#    test_list = [ {"year": 2011,
-#                   "sal_mensuel": 1000,
-#                   "nb_trim_val": 50,
-#                   "age": 60,
-#                   "pension": 5400 },
-
     year = 2011
     simulation = base.tax_benefit_system.new_scenario().init_single_entity(
+        axes = [dict(
+            count = 5,
+            max = 60,
+            min = 10,
+            name = "nb_trim_val",
+            )],
         period = year,
         parent1 = dict(
             age = 60,  # birth = datetime.date(year - 60, 1, 1),
