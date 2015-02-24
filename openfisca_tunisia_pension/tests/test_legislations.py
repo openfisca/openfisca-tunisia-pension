@@ -4,7 +4,7 @@
 # OpenFisca -- A versatile microsimulation software
 # By: OpenFisca Team <contact@openfisca.fr>
 #
-# Copyright (C) 2011, 2012, 2013, 2014 OpenFisca Team
+# Copyright (C) 2011, 2012, 2013, 2014, 2015 OpenFisca Team
 # https://github.com/openfisca
 #
 # This file is part of OpenFisca.
@@ -23,16 +23,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import datetime
 import json
 import xml.etree.ElementTree
 
 from openfisca_core import conv, legislations, legislationsxml
+from . import base
 
-from .base import TaxBenefitSystem
 
-
-def check_legislation_xml_file(tax_benefit_system_class, year):
-    legislation_tree = xml.etree.ElementTree.parse(tax_benefit_system_class.legislation_xml_file_path)
+def check_legislation_xml_file(year):
+    legislation_tree = xml.etree.ElementTree.parse(base.TaxBenefitSystem.legislation_xml_file_path)
     legislation_xml_json = conv.check(legislationsxml.xml_legislation_to_json)(legislation_tree.getroot(),
         state = conv.default_state)
 
@@ -60,6 +60,10 @@ def check_legislation_xml_file(tax_benefit_system_class, year):
             unicode(json.dumps(legislation_json, ensure_ascii = False, indent = 2)),
             ).encode('utf-8'))
 
+    # Create tax_benefit system only now, to be able to debug XML validation errors in above code.
+    if base.tax_benefit_system.preprocess_legislation is not None:
+        base.tax_benefit_system.preprocess_legislation(legislation_json)
+
     legislation_json = legislations.generate_dated_legislation_json(legislation_json, year)
     legislation_json, errors = legislations.validate_dated_legislation_json(legislation_json,
         state = conv.default_state)
@@ -74,15 +78,11 @@ def check_legislation_xml_file(tax_benefit_system_class, year):
             ).encode('utf-8'))
 
     compact_legislation = legislations.compact_dated_node_json(legislation_json)
-    # Create tax_benefit system only now, to be able to debug XML validation errors in above code.
-    tax_benefit_system = TaxBenefitSystem()
-    if tax_benefit_system.preprocess_compact_legislation is not None:
-        tax_benefit_system.preprocess_compact_legislation(compact_legislation)
 
 
 def test_legislation_xml_file():
     for year in range(1974, 2012):
-        yield check_legislation_xml_file, TaxBenefitSystem, year
+        yield check_legislation_xml_file, year
 
 
 if __name__ == '__main__':
