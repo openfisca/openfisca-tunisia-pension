@@ -99,7 +99,7 @@ class pension_rsna(SimpleFormulaColumn):
 
         nb_trim_val = simulation.calculate('nb_trim_val', period = period)
         salaire_reference = simulation.calculate('salaire_reference_rsna', period = period)
-#        regime = simulation.calculate('regime', period = period)
+        # regime = simulation.calculate('regime', period = period)
         age = simulation.calculate('age', period = period)
 
         taux_ann_base = simulation.legislation_at(period.start).pension.rsna.taux_ann_base
