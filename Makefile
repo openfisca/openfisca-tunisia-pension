@@ -16,13 +16,13 @@ ctags:
 	ctags --recurse=yes .
 
 flake8: clean-pyc
-				flake8
+	flake8
 
 test: check-syntax-errors
-	nosetests $(TESTS_DIR) $(IGNORE_OPT) --exe --stop --with-doctest
+	nosetests $(TESTS_DIR) --exe --stop --with-doctest
 
 test-ci: check-syntax-errors
-	nosetests $(TESTS_DIR) $(IGNORE_OPT) --exe --with-doctest
+	nosetests $(TESTS_DIR) --exe --with-doctest
 
 test-with-coverage:
-	nosetests $(TESTS_DIR) $(IGNORE_OPT) --exe --stop --with-coverage --cover-package=openfisca_tunisia_pension --cover-erase --cover-branches --cover-html
+	nosetests $(TESTS_DIR) --exe --stop --with-coverage --cover-package=openfisca_tunisia_pension --cover-erase --cover-branches --cover-html
