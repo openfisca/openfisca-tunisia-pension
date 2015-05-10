@@ -36,7 +36,7 @@
 
 import datetime
 
-
+from openfisca_core import periods
 from openfisca_core.tools import assert_near
 from . import base
 
@@ -44,22 +44,24 @@ from . import base
 def test_rsna():
     year = 2011
     simulation = base.tax_benefit_system.new_scenario().init_single_entity(
-        axes = [dict(
-            count = 5,
-            max = 60,
-            min = 10,
-            name = "nb_trim_val",
-            )],
-        period = year,
+        # axes = [dict(
+        #     count = 5,
+        #     max = 50,
+        #     min = 10,
+        #     name = "nb_trim_val",
+        #     )],
+        period = periods.period(year),
         parent1 = dict(
             age = 60,  # birth = datetime.date(year - 60, 1, 1),
             nb_trim_val = 50,
             salaire = dict(
-                [("{}".format(yr + 1), 1000) for yr in range(2014 - 40, 2014)]
+                [("{}".format(yr + 1), 12 * 1000) for yr in range(2014 - 40, 2014)]
                 ),
             ),
         ).new_simulation(debug = True)
-    assert_near(simulation.calculate('pension_rsna'), 5400, 1)
+
+    assert_near(simulation.calculate_add('salaire_reference_rsna'), 12000, .001)
+    assert_near(simulation.calculate_add('pension_rsna'), 5400, 1)
 
 
 

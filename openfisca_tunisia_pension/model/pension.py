@@ -47,7 +47,7 @@ class salaire_reference_rsa(SimpleFormulaColumn):
     def function(self, simulation, period):
         # TODO: gérer le nombre d'année
         # TODO: plafonner les salaires à 2 fois le smag de l'année d'encaissement
-        period = period.start.offset('first-of', 'month').period('year')
+        # period = period.start.offset('first-of', 'month').period('year')
         base_declaration_rsa = 180
         base_liquidation_rsa = 300
 
@@ -96,9 +96,10 @@ class pension_rsna(SimpleFormulaColumn):
     label = u"Pension des affiliés au régime des salariés non agricoles"
 
     def function(self, simulation, period):
-
+        period = period.start.offset('first-of', 'month').period('year')
         nb_trim_val = simulation.calculate('nb_trim_val', period = period)
         salaire_reference = simulation.calculate('salaire_reference_rsna', period = period)
+        print salaire_reference
         # regime = simulation.calculate('regime', period = period)
         age = simulation.calculate('age', period = period)
 
@@ -179,5 +180,3 @@ def mean_over_k_largest(vector, k):
 
     z = -bottleneck.partsort(-vector, k)[:k]
     return z.sum() / k
-
-
