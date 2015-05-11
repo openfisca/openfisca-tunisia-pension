@@ -57,7 +57,7 @@ setup(
     data_files = [],
     install_requires = [
         "numpy",
-        "pandas",
+        "bottleneck",
         ],
     packages = find_packages(),
     zip_safe = False,
