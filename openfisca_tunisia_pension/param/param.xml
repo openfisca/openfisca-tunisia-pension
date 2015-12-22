@@ -1,4 +1,4 @@
-﻿<NODE code = 'root' deb="1974-01-01" fin="2012-12-31">
+﻿<NODE code = 'root' >
   <NODE description="Paramètres généraux" code="param_gen" >
   	<CODE description="SMIG 48h" code="smig_48h" format="float" type="monetary">
 	    <VALUE valeur="255.632" deb="2011-05-01" fin="2011-12-31" />
@@ -82,7 +82,7 @@
       	<CODE description="Supérieur à la durée du stage requis" code="sup" format="percent">
           <VALUE valeur=".66666" deb="1974-01-01" fin="2012-12-31" />
         </CODE>
-      </NODE>  
+      </NODE>
     </NODE>
     <NODE description="Régime des salariés agricoles" code="rsa" >
       <CODE description="Age légal de de départ à la retraite" code="age_legal" format="integer">
