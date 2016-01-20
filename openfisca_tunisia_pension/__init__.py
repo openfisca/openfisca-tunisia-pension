@@ -30,7 +30,7 @@ COUNTRY_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def init_country(qt = False):
     """Add country-specific content to OpenFisca-Core package."""
-    from openfisca_core.taxbenefitsystems import LegacyTaxBenefitSystem
+    from openfisca_core.taxbenefitsystems import XmlBasedTaxBenefitSystem
 
     from . import decompositions, entities, scenarios
 
@@ -38,7 +38,7 @@ def init_country(qt = False):
     from .model import data  # Load input variables into entities. # noqa
     from .model import model  # Load output variables into entities. # noqa
 
-    class TaxBenefitSystem(LegacyTaxBenefitSystem):
+    class TaxBenefitSystem(XmlBasedTaxBenefitSystem):
         """Tunisian tax benefit system"""
         # AGGREGATES_DEFAULT_VARS = AGGREGATES_DEFAULT_VARS
         check_consistency = None  # staticmethod(utils.check_consistency)
