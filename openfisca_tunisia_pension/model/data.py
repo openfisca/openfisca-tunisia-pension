@@ -23,7 +23,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from .base import * #  noqua
+from .base import *  #  noqua
 
 
 # raic -> raci
@@ -34,46 +34,37 @@ from .base import * #  noqua
 
 
 
-reference_input_variable(
-    column = IntCol(is_permanent = True),
-    entity_class = Individus,
-    label = u"Identifiant du foyer",
-    name = 'idfoy',
-    )
-
-reference_input_variable(
-    column = IntCol(is_permanent = True),
-    entity_class = Individus,
-    label = u"Identifiant du ménage",
-    name = 'idmen',
-    )
+class idfoy(Variable):
+    column = IntCol(is_permanent = True)
+    entity_class = Individus
+    label = u"Identifiant du foyer"
 
 
-reference_input_variable(
-    column = EnumCol(QUIMEN, is_permanent = True),
-    entity_class = Individus,
-    label = u"Rôle dans le foyer",
-    name = 'quifoy',
-    )
-
-reference_input_variable(
-    column = EnumCol(QUIMEN, is_permanent = True),
-    entity_class = Individus,
-    label = u"Rôle dans le ménage",
-    name = 'quimen',
-    )
+class idmen(Variable):
+    column = IntCol(is_permanent = True)
+    entity_class = Individus
+    label = u"Identifiant du ménage"
 
 
-reference_input_variable(
-    column = DateCol(is_permanent = True),
-    entity_class = Individus,
-    label = u"Date de naissance",
-    name = 'birth',
-    )
+class quifoy(Variable):
+    column = EnumCol(QUIMEN, is_permanent = True)
+    entity_class = Individus
+    label = u"Rôle dans le foyer"
 
 
+class quimen(Variable):
+    column = EnumCol(QUIMEN, is_permanent = True)
+    entity_class = Individus
+    label = u"Rôle dans le ménage"
 
-reference_input_variable(
+
+class birth(Variable):
+    column = DateCol(is_permanent = True)
+    entity_class = Individus
+    label = u"Date de naissance"
+
+
+class scolarite(Variable):
     column = EnumCol(
         enum = Enum(
             [
@@ -82,38 +73,31 @@ reference_input_variable(
                 u"Lycée"
                 ],
             ),
-        default = 0
-        ),
-    entity_class = Individus,
-    label = u"Scolarité de l'enfant : collège, lycée...",
-    name = "scolarite",
-    )
+        default = 0,
+        )
+    entity_class = Individus
+    label = u"Scolarité de l'enfant : collège, lycée..."
 
 
-reference_input_variable(
-    column = IntCol(),
-    entity_class = Individus,
-    label = u"Salaires",
-    name = 'salaire',
-    )
+class salaire(Variable):
+    column = IntCol()
+    entity_class = Individus
+    label = u"Salaires"
 
-reference_input_variable(
-    column = AgeCol(),
-    entity_class = Individus,
-    label = u"Âge",
-    name = 'age',
-    )
 
-reference_input_variable(
-    column = IntCol(),
-    entity_class = Individus,
-    label = u"Nombre de trimestres validés",
-    name = 'nb_trim_val',
-    )
+class age(Variable):
+    column = AgeCol()
+    entity_class = Individus
+    label = u"Âge"
 
-reference_input_variable(
-    column = EnumCol(REG),
-    entity_class = Individus,
-    label = u"Régime de retraite",
-    name = 'regime',
-    )
+
+class nb_trim_val(Variable):
+    column = IntCol()
+    entity_class = Individus
+    label = u"Nombre de trimestres validés"
+
+
+class regime(Variable):
+    column = EnumCol(REG)
+    entity_class = Individus
+    label = u"Régime de retraite"

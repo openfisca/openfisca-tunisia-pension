@@ -38,8 +38,7 @@ from openfisca_core import periods
 from .base import *  # noqa
 
 
-@reference_formula
-class salaire_reference_rsa(SimpleFormulaColumn):
+class salaire_reference_rsa(Variable):
     column = FloatCol()
     entity_class = Individus
     label = u"Salaires de référence du régime des salariés agricoles"
@@ -65,8 +64,7 @@ class salaire_reference_rsa(SimpleFormulaColumn):
         return period, salaire_refererence
 
 
-@reference_formula
-class salaire_reference_rsna(SimpleFormulaColumn):
+class salaire_reference_rsna(Variable):
     column = FloatCol()
     entity_class = Individus
     label = u"Salaires de référence du régime des salariés non agricoles"
@@ -89,8 +87,8 @@ class salaire_reference_rsna(SimpleFormulaColumn):
         return period, salaire_refererence
 
 
-@reference_formula
-class pension_rsna(SimpleFormulaColumn):
+
+class pension_rsna(Variable):
     column = FloatCol()
     entity_class = Individus
     label = u"Pension des affiliés au régime des salariés non agricoles"
