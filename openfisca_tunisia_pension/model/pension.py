@@ -75,7 +75,6 @@ class pension_rsna(Variable):
         period = period.start.offset('first-of', 'month').period('year')
         nb_trim_val = simulation.calculate('nb_trim_val', period = period)
         salaire_reference = simulation.calculate('salaire_reference_rsna', period = period)
-        print salaire_reference
         # regime = simulation.calculate('regime', period = period)
         age = simulation.calculate('age', period = period)
 

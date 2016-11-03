@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from openfisca_tunisia_pension.model.base import * #  noqua
+from openfisca_tunisia_pension.model.base import *  #  noqua
 
 
 # raic -> raci
@@ -15,6 +15,7 @@ class idfoy(Variable):
     column = IntCol(is_permanent = True)
     entity_class = Individus
     label = u"Identifiant du foyer"
+
 
 class idmen(Variable):
     column = IntCol(is_permanent = True)
