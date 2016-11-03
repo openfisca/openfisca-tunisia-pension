@@ -1,25 +1,4 @@
 # -*- coding:utf-8 -*-
-# Copyright © 2011 Clément Schaff, Mahdi Ben Jelloul
-
-"""
-openFisca, Logiciel libre de simulation du système socio-fiscal français
-Copyright © 2011 Clément Schaff, Mahdi Ben Jelloul
-
-This file is part of openFisca.
-
-    openFisca is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    openFisca is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with openFisca.  If not, see <http://www.gnu.org/licenses/>.
-"""
 
 
 from __future__ import division
@@ -35,11 +14,10 @@ from numpy import (
     )
 
 from openfisca_core import periods
-from .base import *  # noqa
+from openfisca_tunisia_pension.model.base import *  # noqa
 
 
-@reference_formula
-class salaire_reference_rsa(SimpleFormulaColumn):
+class salaire_reference_rsa(Variable):
     column = FloatCol()
     entity_class = Individus
     label = u"Salaires de référence du régime des salariés agricoles"
@@ -65,8 +43,7 @@ class salaire_reference_rsa(SimpleFormulaColumn):
         return period, salaire_refererence
 
 
-@reference_formula
-class salaire_reference_rsna(SimpleFormulaColumn):
+class salaire_reference_rsna(Variable):
     column = FloatCol()
     entity_class = Individus
     label = u"Salaires de référence du régime des salariés non agricoles"
@@ -89,8 +66,7 @@ class salaire_reference_rsna(SimpleFormulaColumn):
         return period, salaire_refererence
 
 
-@reference_formula
-class pension_rsna(SimpleFormulaColumn):
+class pension_rsna(Variable):
     column = FloatCol()
     entity_class = Individus
     label = u"Pension des affiliés au régime des salariés non agricoles"
