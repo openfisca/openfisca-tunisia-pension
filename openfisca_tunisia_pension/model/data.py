@@ -50,7 +50,7 @@ class scolarite(Variable):
                 u"Lycée"
                 ],
             ),
-        default = 0
+        default = 0,
         )
     entity_class = Individus
     label = u"Scolarité de l'enfant : collège, lycée..."
