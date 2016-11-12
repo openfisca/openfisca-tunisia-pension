@@ -43,7 +43,7 @@ doc_lines = __doc__.split('\n')
 
 setup(
     name = 'OpenFisca-Tunisia-Pension',
-    version = '0.2dev',
+    version = '0.5.dev0',
 
     author = 'OpenFisca Team',
     author_email = 'contact@openfisca.fr',
@@ -55,10 +55,18 @@ setup(
     url = 'https://github.com/openfisca/openfisca-tunisia-pension',
 
     data_files = [],
+    extras_require = dict(
+        tests = [
+            'nose',
+            ],
+        ),
     install_requires = [
-        "numpy",
+        'Babel >= 0.9.4',
         "bottleneck",
+        'Biryani[datetimeconv] >= 0.10.4',
+        'OpenFisca-Core >= 3.0.0, < 4.0',
+        'PyYAML >= 3.10',
+        'scipy >= 0.12',
         ],
-    packages = find_packages(),
-    zip_safe = False,
+    packages = find_packages(exclude=['openfisca_tunisia_pension.tests*']),
     )
