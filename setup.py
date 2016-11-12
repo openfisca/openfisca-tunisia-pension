@@ -62,7 +62,7 @@ setup(
         ),
     install_requires = [
         'Babel >= 0.9.4',
-        "bottleneck",
+        "Bottleneck >= 1.2.0",
         'Biryani[datetimeconv] >= 0.10.4',
         'OpenFisca-Core >= 3.0.0, < 4.0',
         'PyYAML >= 3.10',
