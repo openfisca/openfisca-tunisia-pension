@@ -52,59 +52,59 @@
   <NODE description="Pensions" code="pension" >
     <NODE description="Régime des salariés non agricoles" code="rsna" >
       <CODE description="Age légal de de départ à la retraite" code="age_legal" format="integer">
-        <VALUE valeur="60" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur="60" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <CODE description="Age minimum de départ à la retraite anticipée" code="age_dep_anticip" format="integer">
-        <VALUE valeur="50" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur="50" deb="1974-01-01" fuzzy="true" />
       </CODE>
        <CODE description="Durée normale du stage requis" code="stage_requis" format="integer">
-        <VALUE valeur="10" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur="10" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <CODE description="Durée du stage dérogatoire" code="stage_derog" format="integer">
-        <VALUE valeur="5" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur="5" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <CODE description="Période de remplacement de base" code="periode_remp_base" format="integer">
-        <VALUE valeur="10" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur="10" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <CODE description="Taux d'annuité de base" code="taux_ann_base" format="percent">
-        <VALUE valeur=".04" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur=".04" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <CODE description="Taux d'annuité supplémentaire" code="taux_ann_sup" format="percent">
-        <VALUE valeur=".02" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur=".02" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <CODE description="Plafonnement du taux de pension" code="plaf_taux_pension" format="percent">
-        <VALUE valeur=".8" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur=".8" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <NODE description="Pension minimale (en part de SMIG)" code="pension_min">
       	<CODE description="Inférieur à la durée du stage requis" code="inf" format="percent">
-          <VALUE valeur=".5" deb="1974-01-01" fin="2012-12-31" />
+          <VALUE valeur=".5" deb="1974-01-01" fuzzy="true" />
         </CODE>
       	<CODE description="Supérieur à la durée du stage requis" code="sup" format="percent">
-          <VALUE valeur=".66666" deb="1974-01-01" fin="2012-12-31" />
+          <VALUE valeur=".66666" deb="1974-01-01" fuzzy="true" />
         </CODE>
       </NODE>
     </NODE>
     <NODE description="Régime des salariés agricoles" code="rsa" >
       <CODE description="Age légal de de départ à la retraite" code="age_legal" format="integer">
-        <VALUE valeur="60" deb="1981-02-24" fin="2012-12-31" />
+        <VALUE valeur="60" deb="1981-02-24" fuzzy="true" />
       </CODE>
       <CODE description="Durée normale du stage requis" code="stage_requis" format="integer">
-        <VALUE valeur="10" deb="1981-02-24" fin="2012-12-31" />
+        <VALUE valeur="10" deb="1981-02-24" fuzzy="true" />
       </CODE>
       <CODE description="Période de remplacement de base" code="periode_remp_base" format="integer">
-        <VALUE valeur="10" deb="1981-02-24" fin="2012-12-31" />
+        <VALUE valeur="10" deb="1981-02-24" fuzzy="true" />
       </CODE>
       <CODE description="Taux d'annuité de base" code="taux_ann_base" format="percent">
-        <VALUE valeur=".04" deb="1981-02-24" fin="2012-12-31" />
+        <VALUE valeur=".04" deb="1981-02-24" fuzzy="true" />
       </CODE>
       <CODE description="Taux d'annuité supplémentaire" code="taux_ann_sup" format="percent">
-        <VALUE valeur=".02" deb="1981-02-24" fin="2012-12-31" />
+        <VALUE valeur=".02" deb="1981-02-24" fuzzy="true" />
       </CODE>
       <CODE description="Plafonnement du taux de pension" code="plaf_taux_pension" format="percent">
-        <VALUE valeur=".8" deb="1981-02-24" fin="2012-12-31" />
+        <VALUE valeur=".8" deb="1981-02-24" fuzzy="true" />
       </CODE>
       <CODE description="Pension minimale (en part de SMAG)" code="pension_min">
-      	<VALUE valeur=".4" deb="1981-02-24" fin="2012-12-31" />
+      	<VALUE valeur=".4" deb="1981-02-24" fuzzy="true" />
       </CODE>
     </NODE>
   </NODE>
