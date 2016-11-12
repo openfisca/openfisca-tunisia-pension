@@ -1,28 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-# OpenFisca -- A versatile microsimulation software
-# By: OpenFisca Team <contact@openfisca.fr>
-#
-# Copyright (C) 2011, 2012, 2013, 2014, 2015 OpenFisca Team
-# https://github.com/openfisca
-#
-# This file is part of OpenFisca.
-#
-# OpenFisca is free software; you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-#
-# OpenFisca is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-
 import collections
 import datetime
 import itertools
@@ -33,8 +11,11 @@ import uuid
 from openfisca_core import conv, scenarios
 
 
+def N_(message):
+    return message
+
+
 log = logging.getLogger(__name__)
-N_ = lambda message: message
 year_or_month_or_day_re = re.compile(ur'(18|19|20)\d{2}(-(0[1-9]|1[0-2])(-([0-2]\d|3[0-1]))?)?$')
 
 
@@ -481,8 +462,13 @@ class Scenario(scenarios.AbstractScenario):
         return json_or_python_to_test_case
 
     def suggest(self):
-        period_start_year = self.period.start.year
+        """Returns a dict of suggestions and modifies self.test_case applying those suggestions."""
         test_case = self.test_case
+        if test_case is None:
+            return None
+
+        period_start_date = self.period.start.date
+        period_start_year = self.period.start.year
         suggestions = dict()
 
         for individu in test_case['individus']:
