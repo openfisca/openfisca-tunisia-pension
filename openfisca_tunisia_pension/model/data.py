@@ -35,7 +35,7 @@ class quimen(Variable):
     label = u"Rôle dans le ménage"
 
 
-class birth(Variable):
+class date_naissance(Variable):
     column = DateCol(is_permanent = True)
     entity_class = Individus
     label = u"Date de naissance"

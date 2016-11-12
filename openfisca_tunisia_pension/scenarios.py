@@ -432,8 +432,8 @@ class Scenario(scenarios.AbstractScenario):
                     # individus = conv.uniform_sequence(
                     #     conv.struct(
                     #         dict(
-                    #             birth = conv.test(
-                    #                 lambda birth: period.start.date - birth >= datetime.timedelta(0),
+                    #             date_naissance = conv.test(
+                    #                 lambda date_naissance: period.start.date - date_naissance >= datetime.timedelta(0),
                     #                 error = u"L'individu doit être né au plus tard le jour de la simulation",
                     #                 ),
                     #             ),
@@ -473,17 +473,17 @@ class Scenario(scenarios.AbstractScenario):
 
         for individu in test_case['individus']:
             individu_id = individu['id']
-            if individu.get('age') is None and individu.get('agem') is None and individu.get('birth') is None:
-                # Add missing birth date to person (a parent is 40 years old and a child is 10 years old.
+            if individu.get('age') is None and individu.get('agem') is None and individu.get('date_naissance') is None:
+                # Add missing date_naissance date to person (a parent is 40 years old and a child is 10 years old.
                 is_declarant = any(
                     individu_id in foyer_fiscal['declarants']
                     for foyer_fiscal in test_case['foyers_fiscaux']
                     )
-                birth_year = period_start_year - 40 if is_declarant else period_start_year - 10
-                birth = datetime.date(birth_year, 1, 1)
-                individu['birth'] = birth
+                date_naissance_year = period_start_year - 40 if is_declarant else period_start_year - 10
+                date_naissance = datetime.date(date_naissance_year, 1, 1)
+                individu['date_naissance'] = date_naissance
                 suggestions.setdefault('test_case', {}).setdefault('individus', {}).setdefault(individu_id, {})[
-                    'birth'] = birth.isoformat()
+                    'date_naissance'] = date_naissance.isoformat()
 
         return suggestions or None
 
@@ -593,10 +593,10 @@ def find_menage_and_role(test_case, individu_id):
 
 
 def find_age(individu, date, default = None):
-    birth = individu.get('birth')
-    if birth is not None:
-        age = date.year - birth.year
-        if date.month < birth.month or date.month == birth.month and date.day < birth.day:
+    date_naissance = individu.get('date_naissance')
+    if date_naissance is not None:
+        age = date.year - date_naissance.year
+        if date.month < date_naissance.month or date.month == date_naissance.month and date.day < date_naissance.day:
             age -= 1
         return age
     age = individu.get('age')
