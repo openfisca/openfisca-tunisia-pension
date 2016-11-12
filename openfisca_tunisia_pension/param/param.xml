@@ -52,7 +52,7 @@
   <NODE description="Pensions" code="pension" >
     <NODE description="Régime des salariés non agricoles" code="rsna" >
       <CODE description="Age légal de de départ à la retraite" code="age_legal" format="integer">
-        <VALUE valeur="60" deb="1974-01-01" fin="2012-12-31" />
+        <VALUE valeur="60" deb="1974-01-01" fuzzy="true" />
       </CODE>
       <CODE description="Age minimum de départ à la retraite anticipée" code="age_dep_anticip" format="integer">
         <VALUE valeur="50" deb="1974-01-01" fin="2012-12-31" />
