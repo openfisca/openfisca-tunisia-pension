@@ -5,7 +5,7 @@ import os
 
 from openfisca_core.taxbenefitsystems import TaxBenefitSystem
 
-from . import decompositions, entities, scenarios
+from . import entities, scenarios
 
 COUNTRY_DIR = os.path.dirname(os.path.abspath(__file__))
 EXTENSIONS_PATH = os.path.join(COUNTRY_DIR, 'extensions')
@@ -15,8 +15,6 @@ EXTENSIONS_DIRECTORIES = glob.glob(os.path.join(EXTENSIONS_PATH, '*/'))
 class TunisiaPensionTaxBenefitSystem(TaxBenefitSystem):
     """Tunisian pensions tax benefit system"""
     CURRENCY = u"DT"
-    DECOMP_DIR = os.path.dirname(os.path.abspath(decompositions.__file__))
-    DEFAULT_DECOMP_FILE = decompositions.DEFAULT_DECOMP_FILE
 
     def __init__(self):
         TaxBenefitSystem.__init__(self, entities.entities)
