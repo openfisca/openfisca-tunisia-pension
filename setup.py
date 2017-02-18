@@ -21,8 +21,7 @@ doc_lines = __doc__.split('\n')
 
 setup(
     name = 'OpenFisca-Tunisia-Pension',
-    version = '0.6',
-
+    version = '0.7',
     author = 'OpenFisca Team',
     author_email = 'contact@openfisca.fr',
     classifiers = [classifier for classifier in classifiers.split('\n') if classifier],
@@ -42,7 +41,7 @@ setup(
         'Babel >= 0.9.4',
         "Bottleneck >= 1.2.0",
         'Biryani[datetimeconv] >= 0.10.4',
-        'OpenFisca-Core',
+        'OpenFisca-Core >= 5.0',
         'PyYAML >= 3.10',
         'scipy >= 0.12',
         ],

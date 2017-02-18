@@ -19,7 +19,7 @@ from openfisca_tunisia_pension.model.base import *  # noqa
 
 class salaire_reference_rsa(Variable):
     column = FloatCol()
-    entity_class = Individus
+    entity = Individu
     label = u"Salaires de référence du régime des salariés agricoles"
 
     def function(self, simulation, period):
@@ -45,7 +45,7 @@ class salaire_reference_rsa(Variable):
 
 class salaire_reference_rsna(Variable):
     column = FloatCol()
-    entity_class = Individus
+    entity = Individu
     label = u"Salaires de référence du régime des salariés non agricoles"
 
     def function(self, simulation, period):
@@ -68,7 +68,7 @@ class salaire_reference_rsna(Variable):
 
 class pension_rsna(Variable):
     column = FloatCol()
-    entity_class = Individus
+    entity = Individu
     label = u"Pension des affiliés au régime des salariés non agricoles"
 
     def function(self, simulation, period):

@@ -7,7 +7,7 @@ from openfisca_core.columns import (AgeCol, DateCol, EnumCol, FloatCol, IntCol)
 from openfisca_core.enumerations import Enum
 from openfisca_core.variables import Variable
 
-from openfisca_tunisia_pension.entities import FoyersFiscaux, Individus, Menages
+from openfisca_tunisia_pension.entities import FoyerFiscal, Individu, Menage
 
 
 __all__ = [
@@ -17,10 +17,10 @@ __all__ = [
     'Enum',
     'EnumCol',
     'FloatCol',
-    'FoyersFiscaux',
+    'FoyerFiscal',
     'IntCol',
-    'Individus',
-    'Menages',
+    'Individu',
+    'Menage',
     'QUIFOY',
     'QUIMEN',
     'REG',
