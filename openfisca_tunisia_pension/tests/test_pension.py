@@ -8,12 +8,6 @@ from . import base
 def test_rsna():
     year = 2011
     simulation = base.tax_benefit_system.new_scenario().init_single_entity(
-        # axes = [dict(
-        #     count = 5,
-        #     max = 50,
-        #     min = 10,
-        #     name = "nb_trim_val",
-        #     )],
         period = periods.period(year),
         parent1 = dict(
             age = 60,
