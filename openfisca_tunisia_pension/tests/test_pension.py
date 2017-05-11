@@ -18,8 +18,8 @@ def test_rsna():
             ),
         ).new_simulation(debug = True)
 
-    assert_near(simulation.calculate_add('salaire_reference_rsna'), 12000, .001)
-    assert_near(simulation.calculate_add('pension_rsna'), 5400, 1)
+    assert_near(simulation.calculate_add('salaire_reference_rsna', period = year), 12000, .001)
+    assert_near(simulation.calculate_add('pension_rsna', period = year), 5400, 1)
 
 
 if __name__ == '__main__':

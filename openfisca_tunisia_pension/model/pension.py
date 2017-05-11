@@ -21,6 +21,7 @@ class salaire_reference_rsa(Variable):
     column = FloatCol()
     entity = Individu
     label = u"Salaires de référence du régime des salariés agricoles"
+    definition_period = YEAR
 
     def function(self, simulation, period):
         # TODO: gérer le nombre d'année
@@ -47,47 +48,47 @@ class salaire_reference_rsna(Variable):
     column = FloatCol()
     entity = Individu
     label = u"Salaires de référence du régime des salariés non agricoles"
+    definition_period = YEAR
 
-    def function(self, simulation, period):
+    def function(individu, period):
 
         # TODO: gérer le nombre d'année n
         # TODO: plafonner les salaires à 6 fois le smig de l'année d'encaissement
-        period = period.start.offset('first-of', 'month').period('year')
         n = 10
         mean_over_largest = functools.partial(mean_over_k_largest, k = n)
         salaire_refererence = apply_along_axis(
             mean_over_largest,
             axis = 0,
             arr = vstack([
-                simulation.calculate('salaire', period = periods.period("year", year))
+                individu('salaire', period = year)
                 for year in range(period.start.year, period.start.year - n, -1)
                 ]),
             )
-        return period, salaire_refererence
+        return salaire_refererence
 
 
 class pension_rsna(Variable):
     column = FloatCol()
     entity = Individu
     label = u"Pension des affiliés au régime des salariés non agricoles"
+    definition_period = YEAR
 
-    def function(self, simulation, period):
-        period = period.start.offset('first-of', 'month').period('year')
-        nb_trim_val = simulation.calculate('nb_trim_val', period = period)
-        salaire_reference = simulation.calculate('salaire_reference_rsna', period = period)
+    def function(individu, period, legislation):
+        nb_trim_val = individu('nb_trim_val', period = period)
+        salaire_reference = individu('salaire_reference_rsna', period = period)
         # regime = simulation.calculate('regime', period = period)
-        age = simulation.calculate('age', period = period)
+        age = individu('age', period = period)
 
-        taux_ann_base = simulation.legislation_at(period.start).pension.rsna.taux_ann_base
-        taux_ann_sup = simulation.legislation_at(period.start).pension.rsna.taux_ann_sup
-        duree_stage = simulation.legislation_at(period.start).pension.rsna.stage_derog
-        age_elig = simulation.legislation_at(period.start).pension.rsna.age_dep_anticip
-        periode_remp_base = simulation.legislation_at(period.start).pension.rsna.periode_remp_base
-        plaf_taux_pension = simulation.legislation_at(period.start).pension.rsna.plaf_taux_pension
-        smig = simulation.legislation_at(period.start).param_gen.smig_48h
+        taux_ann_base = legislation(period.start).pension.rsna.taux_ann_base
+        taux_ann_sup = legislation(period.start).pension.rsna.taux_ann_sup
+        duree_stage = legislation(period.start).pension.rsna.stage_derog
+        age_elig = legislation(period.start).pension.rsna.age_dep_anticip
+        periode_remp_base = legislation(period.start).pension.rsna.periode_remp_base
+        plaf_taux_pension = legislation(period.start).pension.rsna.plaf_taux_pension
+        smig = legislation(period.start).param_gen.smig_48h
 
-        pension_min_sup = simulation.legislation_at(period.start).pension.rsna.pension_min.sup
-        pension_min_inf = simulation.legislation_at(period.start).pension.rsna.pension_min.inf
+        pension_min_sup = legislation(period.start).pension.rsna.pension_min.sup
+        pension_min_inf = legislation(period.start).pension.rsna.pension_min.inf
 
         stage = nb_trim_val > 4 * duree_stage
         pension_min = (
@@ -101,7 +102,7 @@ class pension_rsna(Variable):
         elig = stage * elig_age * (salaire_reference > 0)
         montant_percu = max_(montant, pension_min * smig)
         pension = elig * montant_percu
-        return period, pension
+        return pension
 
 
 def _pension_rsa(nb_trim_val, sal_ref_rsa, regime, age, _P):
