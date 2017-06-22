@@ -1,7 +1,7 @@
 all: test
 
 check-no-prints:
-	@test -z "`git grep -w print openfisca_tunisia/model`"
+	@test -z "`git grep -w print openfisca_tunisia_pension/model`"
 
 check-syntax-errors:
 	python -m compileall -q .
