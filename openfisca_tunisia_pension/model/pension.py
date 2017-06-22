@@ -23,7 +23,7 @@ class salaire_reference_rsa(Variable):
     label = u"Salaires de référence du régime des salariés agricoles"
     definition_period = YEAR
 
-    def function(self, simulation, period):
+    def formula(self, simulation, period):
         # TODO: gérer le nombre d'année
         # TODO: plafonner les salaires à 2 fois le smag de l'année d'encaissement
         # period = period.start.offset('first-of', 'month').period('year')
@@ -50,7 +50,7 @@ class salaire_reference_rsna(Variable):
     label = u"Salaires de référence du régime des salariés non agricoles"
     definition_period = YEAR
 
-    def function(individu, period):
+    def formula(individu, period):
 
         # TODO: gérer le nombre d'année n
         # TODO: plafonner les salaires à 6 fois le smig de l'année d'encaissement
@@ -73,7 +73,7 @@ class pension_rsna(Variable):
     label = u"Pension des affiliés au régime des salariés non agricoles"
     definition_period = YEAR
 
-    def function(individu, period, legislation):
+    def formula(individu, period, legislation):
         nb_trim_val = individu('nb_trim_val', period = period)
         salaire_reference = individu('salaire_reference_rsna', period = period)
         # regime = simulation.calculate('regime', period = period)
@@ -154,5 +154,8 @@ def mean_over_k_largest(vector, k):
     if k == 0:
         return 0
 
-    z = -bottleneck.partsort(-vector, k)[:k]
+    if k <= len(vector):
+        return vector.sum() / len(vector)
+
+    z = -bottleneck.partition(-vector, kth = k)
     return z.sum() / k
