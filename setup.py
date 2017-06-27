@@ -21,7 +21,7 @@ doc_lines = __doc__.split('\n')
 
 setup(
     name = 'OpenFisca-Tunisia-Pension',
-    version = '0.9',
+    version = '0.9.1',
     author = 'OpenFisca Team',
     author_email = 'contact@openfisca.fr',
     classifiers = [classifier for classifier in classifiers.split('\n') if classifier],
