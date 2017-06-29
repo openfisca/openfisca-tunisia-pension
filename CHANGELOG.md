@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.9.2
+* Migrate old-syntax formula
 
 ## 0.9.1
 * Fix legislation tests

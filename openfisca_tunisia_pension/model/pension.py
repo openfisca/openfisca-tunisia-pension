@@ -23,7 +23,7 @@ class salaire_reference_rsa(Variable):
     label = u"Salaires de référence du régime des salariés agricoles"
     definition_period = YEAR
 
-    def formula(self, simulation, period):
+    def formula(individu, period):
         # TODO: gérer le nombre d'année
         # TODO: plafonner les salaires à 2 fois le smag de l'année d'encaissement
         # period = period.start.offset('first-of', 'month').period('year')
@@ -36,12 +36,12 @@ class salaire_reference_rsa(Variable):
             mean_over_largest,
             axis = 0,
             arr = vstack([
-                simulation.calculate('salaire', period = periods.period("year", year))
+                individu('salaire', period = periods.period("year", year))
                 for year in range(period.start.year, period.start.year - n, -1)
                 ]),
             )
         salaire_refererence = salaire * base_liquidation_rsa / base_declaration_rsa
-        return period, salaire_refererence
+        return salaire_refererence
 
 
 class salaire_reference_rsna(Variable):
