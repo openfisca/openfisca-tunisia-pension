@@ -127,8 +127,8 @@ def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, _P):
     pension_min = _P.pension.rsa.pension_min
     sal_ref = sal_ref_rsa
 
-    montant = pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire, duree_stage,
-                              age_elig, periode_remplacement_base, plaf_taux_pension, smag)
+    montant = pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire,
+        duree_stage, age_elig, periode_remplacement_base, plaf_taux_pension, smag)
 
     elig_age = age > age_elig
     elig = stage * elig_age * (sal_ref > 0)
@@ -139,8 +139,8 @@ def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, _P):
 
 # Helper function
 
-def pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire, duree_stage, age_elig,
-        periode_remplacement_base, plaf_taux_pension, smig):
+def pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire, duree_stage,
+        age_elig, periode_remplacement_base, plaf_taux_pension, smig):
     taux_pension = (
         (trimestres_valides < 4 * periode_remplacement_base) * (trimestres_valides / 4) * taux_annuite_base +
         (trimestres_valides >= 4 * periode_remplacement_base) * (
