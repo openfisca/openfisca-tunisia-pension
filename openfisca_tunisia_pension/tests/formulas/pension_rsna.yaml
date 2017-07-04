@@ -3,8 +3,8 @@
   absolute_error_margin: 0.5
   input_variables:
     age: 60
-    nb_trim_val: 50
-    salaire: 
+    trimestres_valides: 50
+    salaire:
       1975: 12000
       1976: 12000
       1977: 12000

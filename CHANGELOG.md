@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0
+* Renomme `nb_trim_val` en `trimestres_valides`
+* Utilisation de noms longs pour différent paramètres
+
 ## 0.9.2
 * Migrate old-syntax formula
 

@@ -51,7 +51,6 @@ class salaire_reference_rsna(Variable):
     definition_period = YEAR
 
     def formula(individu, period):
-
         # TODO: gérer le nombre d'année n
         # TODO: plafonner les salaires à 6 fois le smig de l'année d'encaissement
         n = 10
@@ -74,54 +73,62 @@ class pension_rsna(Variable):
     definition_period = YEAR
 
     def formula(individu, period, legislation):
-        nb_trim_val = individu('nb_trim_val', period = period)
+        trimestres_valides = individu('trimestres_valides', period = period)
         salaire_reference = individu('salaire_reference_rsna', period = period)
-        # regime = simulation.calculate('regime', period = period)
         age = individu('age', period = period)
 
-        taux_ann_base = legislation(period.start).pension.rsna.taux_ann_base
-        taux_ann_sup = legislation(period.start).pension.rsna.taux_ann_sup
+        taux_annuite_base = legislation(period.start).pension.rsna.taux_annuite_base
+        taux_annuite_supplemetaire = legislation(period.start).pension.rsna.taux_annuite_supplemetaire
         duree_stage = legislation(period.start).pension.rsna.stage_derog
-        age_elig = legislation(period.start).pension.rsna.age_dep_anticip
-        periode_remp_base = legislation(period.start).pension.rsna.periode_remp_base
+        age_eligible = legislation(period.start).pension.rsna.age_dep_anticip
+        periode_remplacement_base = legislation(period.start).pension.rsna.periode_remplacement_base
         plaf_taux_pension = legislation(period.start).pension.rsna.plaf_taux_pension
         smig = legislation(period.start).param_gen.smig_48h
 
-        pension_min_sup = legislation(period.start).pension.rsna.pension_min.sup
-        pension_min_inf = legislation(period.start).pension.rsna.pension_min.inf
+        pension_min_sup = legislation(period.start).pension.rsna.pension_minimale.sup
+        pension_min_inf = legislation(period.start).pension.rsna.pension_minimale.inf
 
-        stage = nb_trim_val > 4 * duree_stage
-        pension_min = (
-            stage * pension_min_sup +
-            not_(stage) * pension_min_inf
+        stage = trimestres_valides > 4 * duree_stage
+        pension_minimale = (
+            stage * pension_min_sup + not_(stage) * pension_min_inf
             )
-        montant = generic_pension(nb_trim_val, salaire_reference, age, taux_ann_base, taux_ann_sup, duree_stage,
-                                  age_elig, periode_remp_base, plaf_taux_pension, smig)
+        montant = pension_generique(
+            trimestres_valides,
+            salaire_reference,
+            age,
+            taux_annuite_base,
+            taux_annuite_supplemetaire,
+            duree_stage,
+            age_elig,
+            periode_remplacement_base,
+            plaf_taux_pension,
+            smig,
+            )
+        # eligibilite
+        eligibilite_age = age > age_eligible
+        eligibilite = stage * eligibilite_age * (salaire_reference > 0)
+        # plafonnement
+        montant_pension_percu = max_(montant, pension_minimale * smig)
+        return eligibilite * montant_pension_percu
 
-        elig_age = age > age_elig
-        elig = stage * elig_age * (salaire_reference > 0)
-        montant_percu = max_(montant, pension_min * smig)
-        pension = elig * montant_percu
-        return pension
 
-
-def _pension_rsa(nb_trim_val, sal_ref_rsa, regime, age, _P):
+def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, _P):
     """
     Pension du régime des salariés agricoles
     """
-    taux_ann_base = _P.pension.rsa.taux_ann_base
-    taux_ann_sup = _P.pension.rsa.taux_ann_sup
+    taux_annuite_base = _P.pension.rsa.taux_annuite_base
+    taux_annuite_supplemetaire = _P.pension.rsa.taux_annuite_supplemetaire
     duree_stage = _P.pension.rsa.stage_requis
     age_elig = _P.pension.rsa.age_legal
-    periode_remp_base = _P.pension.rsa.periode_remp_base
+    periode_remplacement_base = _P.pension.rsa.periode_remplacement_base
     plaf_taux_pension = _P.pension.rsa.plaf_taux_pension
     smag = _P.param_gen.smag * 25
-    stage = nb_trim_val > 4 * duree_stage
+    stage = trimestres_valides > 4 * duree_stage
     pension_min = _P.pension.rsa.pension_min
     sal_ref = sal_ref_rsa
 
-    montant = generic_pension(nb_trim_val, sal_ref, age, taux_ann_base, taux_ann_sup, duree_stage,
-                              age_elig, periode_remp_base, plaf_taux_pension, smag)
+    montant = pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire, duree_stage,
+                              age_elig, periode_remplacement_base, plaf_taux_pension, smag)
 
     elig_age = age > age_elig
     elig = stage * elig_age * (sal_ref > 0)
@@ -132,17 +139,13 @@ def _pension_rsa(nb_trim_val, sal_ref_rsa, regime, age, _P):
 
 # Helper function
 
-def generic_pension(nb_trim_val, sal_ref, age,
-                    taux_ann_base, taux_ann_sup, duree_stage, age_elig,
-                    periode_remp_base, plaf_taux_pension, smig):
-    # stage = nb_trim_val > 4*duree_stage
-    # elig_age = age > age_elig
-    # elig = stage*elig_age*(sal_ref>0)
+def pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire, duree_stage, age_elig,
+        periode_remplacement_base, plaf_taux_pension, smig):
     taux_pension = (
-        (nb_trim_val < 4 * periode_remp_base) * (nb_trim_val / 4 * taux_ann_base) +
-        (nb_trim_val >= 4 * periode_remp_base) * (
-            taux_ann_base * periode_remp_base +
-            (nb_trim_val / 4 - periode_remp_base) * taux_ann_sup
+        (trimestres_valides < 4 * periode_remplacement_base) * (trimestres_valides / 4) * taux_annuite_base +
+        (trimestres_valides >= 4 * periode_remplacement_base) * (
+            taux_annuite_base * periode_remplacement_base +
+            (trimestres_valides / 4 - periode_remplacement_base) * taux_annuite_supplemetaire
             )
         )
     montant = min_(taux_pension, plaf_taux_pension) * sal_ref

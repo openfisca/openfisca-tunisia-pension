@@ -56,7 +56,7 @@ class age(Variable):
     definition_period = YEAR
 
 
-class nb_trim_val(Variable):
+class trimestres_valides(Variable):
     column = IntCol()
     entity = Individu
     label = u"Nombre de trimestres validés"

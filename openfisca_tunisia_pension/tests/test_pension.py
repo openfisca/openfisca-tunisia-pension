@@ -11,7 +11,7 @@ def test_rsna():
         period = periods.period(year),
         parent1 = dict(
             age = 60,
-            nb_trim_val = 50,
+            trimestres_valides = 50,
             salaire = dict(
                 [("{}".format(yr + 1), 12 * 1000) for yr in range(2014 - 40, 2014)]
                 ),
