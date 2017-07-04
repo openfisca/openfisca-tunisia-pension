@@ -62,13 +62,15 @@ Vérifiez alors que la version de python appelée par défaut débute bien par `
 python --version
 ```
 
-Et installez les éventuelles mises à jour pour la gestion de paquets python avec :
+Et pour ce qui suit, les droits d'administrateur pourront vous être demandés selon l'emplacement de l'installation (`sudo` optionnel).
+
+Commencez par installer les éventuelles mises à jour pour la gestion de paquets python avec :
 
 ```
 sudo pip install --upgrade pip wheel
 ```
 
-Ensuite, afin de créer un environnement de travail propre et pour vous permettre de faire cohabiter plusieurs contextes de travail en python, nous vous conseillons l'utilisation d'environnements virtuels, dits virtualenv. Il vous faut alors installer un gestionnaire de virtualenv python (tel que [pew](https://github.com/berdario/pew)).
+Ensuite, afin de créer un environnement de travail propre et pour vous permettre de faire cohabiter plusieurs contextes de travail en python, nous vous conseillons l'utilisation d'environnements virtuels, dits virtualenv. Il vous faut alors installer un gestionnaire de virtualenv python tel que [pew](https://github.com/berdario/pew) :
 
 ```
 sudo pip install pew
@@ -129,7 +131,7 @@ Ainsi, pour exécuter le test python `openfisca_tunisia_pension/tests/test_pensi
 nosetests nosetests openfisca_tunisia_pension/tests/test_pension.py
 ```
 
-Il vous est également possible de n'exécuter qu'un seul test d'un fichier. Dans l'exemple suivant, `test_1_parent` sera l'unique test déroulé du fichier `openfisca_tunisia_pension/tests/test_pension.py` :
+Il vous est également possible de n'exécuter qu'un seul test d'un fichier. Dans l'exemple suivant, `test_rsna` sera l'unique test déroulé du fichier `openfisca_tunisia_pension/tests/test_pension.py` :
 
 ```
 nosetests openfisca_tunisia_pension/tests/test_pension.py:test_rsna
