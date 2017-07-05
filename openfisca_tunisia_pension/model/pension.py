@@ -99,7 +99,7 @@ class pension_rsna(Variable):
             taux_annuite_base,
             taux_annuite_supplemetaire,
             duree_stage,
-            age_elig,
+            age_eligible,
             periode_remplacement_base,
             plaf_taux_pension,
             smig,
