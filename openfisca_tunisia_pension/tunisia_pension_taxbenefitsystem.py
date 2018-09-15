@@ -17,12 +17,12 @@ class TunisiaPensionTaxBenefitSystem(TaxBenefitSystem):
     CURRENCY = u"DT"
 
     def __init__(self):
-        TaxBenefitSystem.__init__(self, entities.entities)
+        super(TunisiaPensionTaxBenefitSystem, self).__init__(entities.entities)
         self.Scenario = scenarios.Scenario
 
-        legislation_xml_file_path = os.path.join(COUNTRY_DIR, 'param', 'param.xml')
-        self.add_legislation_params(legislation_xml_file_path)
-
+        # We add to our tax and benefit system all the variables
         self.add_variables_from_directory(os.path.join(COUNTRY_DIR, 'model'))
-        for extension_dir in EXTENSIONS_DIRECTORIES:
-            self.load_extension(extension_dir)
+
+        # We add to our tax and benefit system all the legislation parameters defined in the  parameters files
+        parameters_path = os.path.join(COUNTRY_DIR, 'parameters')
+        self.load_parameters(parameters_path)
