@@ -41,7 +41,7 @@ setup(
         'Babel >= 0.9.4',
         "Bottleneck >= 1.2.0",
         'Biryani[datetimeconv] >= 0.10.4',
-        'OpenFisca-Core >= 14.0.1, < 15.0',
+        'OpenFisca-Core >= 24.0, < 25.0',
         'PyYAML >= 3.10',
         'scipy >= 0.12',
         ],
