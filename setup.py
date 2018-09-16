@@ -21,9 +21,9 @@ doc_lines = __doc__.split('\n')
 
 setup(
     name = 'OpenFisca-Tunisia-Pension',
-    version = '0.9.2',
+    version = '2.0.0',
     author = 'OpenFisca Team',
-    author_email = 'contact@openfisca.fr',
+    author_email = 'contact@openfisca.org',
     classifiers = [classifier for classifier in classifiers.split('\n') if classifier],
     description = doc_lines[0],
     keywords = 'benefit microsimulation pension social tax tunisia',
