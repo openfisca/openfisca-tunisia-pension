@@ -33,7 +33,7 @@ def test():
             tax_benefit_system = base.tax_benefit_system,
             ) if reform_keys is not None else base.tax_benefit_system
 
-        test_generator = generate_tests(tax_benefit_system, path, options)
+        test_generator = generate_tests(tax_benefit_system, [path], options)
 
         for test in test_generator:
             yield test
