@@ -11,30 +11,6 @@ from openfisca_tunisia_pension.model.base import *
 # à générer avec un générateur de cas type
 
 
-# class idfoy(Variable):
-#     column = IntCol()
-#     entity = Individu
-#     label = u"Identifiant du foyer"
-
-
-# class idmen(Variable):
-#     column = IntCol()
-#     entity = Individu
-#     label = u"Identifiant du ménage"
-
-
-# class quifoy(Variable):
-#     column = EnumCol(QUIMEN, )
-#     entity = Individu
-#     label = u"Rôle dans le foyer"
-
-
-# class quimen(Variable):
-#     column = EnumCol(QUIMEN, )
-#     entity = Individu
-#     label = u"Rôle dans le ménage"
-
-
 class date_naissance(Variable):
     value_type = date
     default_value = date(1970, 1, 1)
