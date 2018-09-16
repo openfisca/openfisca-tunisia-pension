@@ -90,4 +90,4 @@ class regime_securite_sociale(Variable):
     default_value = TypesRegimeSecuriteSociale.rsna
     entity = Individu
     label = u"Régime de sécurité sociale du retraité"
-    definition_period = ETERNITY
+    definition_period = YEAR
