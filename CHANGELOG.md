@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.0.0
+### 2.0.0
+
+* Migrate to openfisca-core v24 syntax
+* Update `regime_securite_social` variable periodicity
+* Details:
+    * Move parameters from xml format to yaml files tree
+
+### 1.0.0
 * Renomme `nb_trim_val` en `trimestres_valides`
 * Utilisation de noms longs pour différent paramètres
 

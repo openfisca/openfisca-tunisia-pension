@@ -2,7 +2,7 @@
 
 from openfisca_core import periods
 from openfisca_core.tools import assert_near
-from . import base
+from openfisca_tunisia_pension.tests import base
 
 
 def test_rsna():

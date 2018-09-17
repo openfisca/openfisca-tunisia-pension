@@ -18,7 +18,7 @@ from openfisca_tunisia_pension.model.base import *  # noqa
 
 
 class salaire_reference_rsa(Variable):
-    column = FloatCol()
+    value_type = float
     entity = Individu
     label = u"Salaires de référence du régime des salariés agricoles"
     definition_period = YEAR
@@ -45,7 +45,7 @@ class salaire_reference_rsa(Variable):
 
 
 class salaire_reference_rsna(Variable):
-    column = FloatCol()
+    value_type = float
     entity = Individu
     label = u"Salaires de référence du régime des salariés non agricoles"
     definition_period = YEAR
@@ -67,26 +67,26 @@ class salaire_reference_rsna(Variable):
 
 
 class pension_rsna(Variable):
-    column = FloatCol()
+    value_type = float
     entity = Individu
     label = u"Pension des affiliés au régime des salariés non agricoles"
     definition_period = YEAR
 
-    def formula(individu, period, legislation):
+    def formula(individu, period, parameters):
         trimestres_valides = individu('trimestres_valides', period = period)
         salaire_reference = individu('salaire_reference_rsna', period = period)
         age = individu('age', period = period)
 
-        taux_annuite_base = legislation(period.start).pension.rsna.taux_annuite_base
-        taux_annuite_supplemetaire = legislation(period.start).pension.rsna.taux_annuite_supplemetaire
-        duree_stage = legislation(period.start).pension.rsna.stage_derog
-        age_eligible = legislation(period.start).pension.rsna.age_dep_anticip
-        periode_remplacement_base = legislation(period.start).pension.rsna.periode_remplacement_base
-        plaf_taux_pension = legislation(period.start).pension.rsna.plaf_taux_pension
-        smig = legislation(period.start).param_gen.smig_48h
+        taux_annuite_base = parameters(period).pension.rsna.taux_annuite_base
+        taux_annuite_supplemetaire = parameters(period).pension.rsna.taux_annuite_supplemetaire
+        duree_stage = parameters(period).pension.rsna.stage_derog
+        age_eligible = parameters(period).pension.rsna.age_dep_anticip
+        periode_remplacement_base = parameters(period).pension.rsna.periode_remplacement_base
+        plaf_taux_pension = parameters(period).pension.rsna.plaf_taux_pension
+        smig = parameters(period).param_gen.smig_48h
 
-        pension_min_sup = legislation(period.start).pension.rsna.pension_minimale.sup
-        pension_min_inf = legislation(period.start).pension.rsna.pension_minimale.inf
+        pension_min_sup = parameters(period).pension.rsna.pension_minimale.sup
+        pension_min_inf = parameters(period).pension.rsna.pension_minimale.inf
 
         stage = trimestres_valides > 4 * duree_stage
         pension_minimale = (

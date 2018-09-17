@@ -1,0 +1,7 @@
+description: SMAG journalier
+unit: currency
+values:
+  2010-07-01:
+    value: 8.38
+  2011-07-01:
+    value: 9.0
