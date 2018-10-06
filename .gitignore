@@ -1,3 +1,4 @@
+tags
 settings.json
 .project
 .pydevproject
@@ -9,7 +10,4 @@ dist/
 *.pyc
 *.pyo
 *~
-.project
-.pydevproject
-.settings/
-tags
+*.DS_Store
