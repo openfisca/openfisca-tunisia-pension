@@ -144,7 +144,7 @@ Le format d'un test yaml est décrit dans la [documentation officielle](https://
 Ainsi, si vous souhaitez exécuter le test yaml `openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml`, utilisez la commande :
 
 ```
-openfisca-run-test -c openfisca_tunisia_pension openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml 
+openfisca-run-test --country-package openfisca_tunisia --extensions openfisca_tunisia_pension openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml 
 ```
 
 ### Tout tester
