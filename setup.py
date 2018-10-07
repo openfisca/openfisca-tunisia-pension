@@ -38,13 +38,8 @@ setup(
             ],
         ),
     install_requires = [
-        'Babel >= 0.9.4',
-        'numpy<1.15,>=1.11',  # Attune Bottleneck & Core dependency
+        'OpenFisca-Tunisia >= 0.20, < 0.21',
         'Bottleneck == 1.2.0', 
-        'Biryani[datetimeconv] >= 0.10.4',
-        'OpenFisca-Core >= 24.0, < 25.0',
-        'PyYAML >= 3.10',
-        'scipy >= 0.12',
         ],
     packages = find_packages(exclude=['openfisca_tunisia_pension.tests*']),
     )
