@@ -11,25 +11,10 @@ from openfisca_tunisia_pension.model.base import *
 # à générer avec un générateur de cas type
 
 
-class date_naissance(Variable):
-    value_type = date
-    default_value = date(1970, 1, 1)
-    entity = Individu
-    label = u"Date de naissance"
-    definition_period = ETERNITY
-
-
 class salaire(Variable):
     value_type = float
     entity = Individu
     label = u"Salaires"
-    definition_period = YEAR
-
-
-class age(Variable):
-    value_type = int
-    entity = Individu
-    label = u"Âge"
     definition_period = YEAR
 
 
@@ -60,10 +45,3 @@ class TypesRegimeSecuriteSociale(Enum):
 
 
 
-class regime_securite_sociale(Variable):
-    value_type = Enum
-    possible_values = TypesRegimeSecuriteSociale
-    default_value = TypesRegimeSecuriteSociale.rsna
-    entity = Individu
-    label = u"Régime de sécurité sociale du retraité"
-    definition_period = YEAR
