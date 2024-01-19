@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from openfisca_core.tools import assert_near
 
 from openfisca_tunisia_pension import TunisiaPensionTaxBenefitSystem
