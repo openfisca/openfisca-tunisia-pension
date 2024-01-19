@@ -3,7 +3,7 @@ import os
 
 from openfisca_core.taxbenefitsystems import TaxBenefitSystem
 
-from . import entities, scenarios
+from openfisca_tunisia_pension import entities
 
 COUNTRY_DIR = os.path.dirname(os.path.abspath(__file__))
 EXTENSIONS_PATH = os.path.join(COUNTRY_DIR, 'extensions')
@@ -16,7 +16,6 @@ class TunisiaPensionTaxBenefitSystem(TaxBenefitSystem):
 
     def __init__(self):
         super(TunisiaPensionTaxBenefitSystem, self).__init__(entities.entities)
-        self.Scenario = scenarios.Scenario
 
         # We add to our tax and benefit system all the variables
         self.add_variables_from_directory(os.path.join(COUNTRY_DIR, 'model'))

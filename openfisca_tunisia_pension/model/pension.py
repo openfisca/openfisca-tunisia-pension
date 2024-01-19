@@ -1,7 +1,5 @@
-# -*- coding:utf-8 -*-
-
-
 from __future__ import division
+
 
 import bottleneck
 import functools
@@ -14,7 +12,8 @@ from numpy import (
     )
 
 from openfisca_core import periods
-from openfisca_tunisia_pension.model.base import *  # noqa
+from openfisca_core.model_api import *
+from openfisca_tunisia_pension.entities import Individu
 
 
 class salaire_reference_rsa(Variable):

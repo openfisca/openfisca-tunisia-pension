@@ -1,5 +1,6 @@
-from openfisca_tunisia_pension.model.base import *
+from openfisca_core.model_api import *
 
+from openfisca_tunisia_pension.entities import Individu
 
 # raic -> raci
 

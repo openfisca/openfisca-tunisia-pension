@@ -50,4 +50,4 @@ check-all-yaml:
 test: clean check-syntax-errors check-style
 	@# Launch tests from openfisca_tunisia_pension/tests directory (and not .) because TaxBenefitSystem must be initialized
 	@# before parsing source files containing formulas.
-	openfisca test --country-package openfisca_tunisia_pension tests
+	openfisca test --country-package openfisca_tunisia_pension openfisca_tunisia_pension/tests

@@ -44,6 +44,7 @@ setup(
             ],
         },
     install_requires = [
+        'bottleneck >=1.3.2,<=2.0.0',
         'OpenFisca-Core >= 41.4.1, < 42.0',
         'scipy >= 0.12',
         ],

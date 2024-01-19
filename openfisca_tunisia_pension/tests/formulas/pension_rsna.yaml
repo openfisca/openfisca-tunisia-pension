@@ -1,7 +1,7 @@
 - name: "Individu salarié 12000 DT par an toute sa carrière"
   period: 2011
   absolute_error_margin: 0.5
-  input_variables:
+  input:
     age: 60
     trimestres_valides: 50
     salaire:
@@ -45,6 +45,6 @@
       2012: 12000
       2013: 12000
       2014: 12000
-  output_variables:
+  output:
     salaire_reference_rsna: 12000
     pension_rsna: 5400
