@@ -11,7 +11,7 @@ def test_rsna():
             age = 60,
             trimestres_valides = 50,
             salaire = dict(
-                [("{}".format(yr + 1), 12 * 1000) for yr in range(2014 - 40, 2014)]
+                [('{}'.format(yr + 1), 12 * 1000) for yr in range(2014 - 40, 2014)]
                 ),
             ),
         ).new_simulation(debug = True)

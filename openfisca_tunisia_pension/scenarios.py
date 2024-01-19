@@ -78,8 +78,8 @@ class Scenario(scenarios.AbstractScenario):
                 #                             individu_by_id[individu_id].get('invalide', False)
                 #                             or find_age(individu_by_id[individu_id], period.start.date,
                 #                                 default = 0) <= 25,
-                #                         error = u"Une personne à charge d'un foyer fiscal doit avoir moins de"
-                #                                 u" 25 ans ou être handicapée",
+                #                         error = "Une personne à charge d'un foyer fiscal doit avoir moins de"
+                #                                 " 25 ans ou être handicapée",
                 #                         ),
                 #                     ),
                 #                 parents = conv.pipe(
@@ -115,8 +115,8 @@ class Scenario(scenarios.AbstractScenario):
                                             individu_by_id[individu_id].get('handicap', False)
                                             or find_age(individu_by_id[individu_id], period.start.date,
                                                 default = 0) <= 25,
-                                        error = u"Une personne à charge d'un foyer fiscal doit avoir moins de"
-                                                u" 25 ans ou être handicapée",
+                                        error = "Une personne à charge d'un foyer fiscal doit avoir moins de"
+                                                " 25 ans ou être handicapée",
                                         ),
                                     ),
                                 ),
@@ -403,7 +403,7 @@ class Scenario(scenarios.AbstractScenario):
                 error = {}
             for individu_id in remaining_individus_id:
                 error.setdefault('individus', {})[individu_index_by_id[individu_id]] = state._(
-                    u"Individual is missing from {}").format(
+                    "Individual is missing from {}").format(
                         state._(' & ').join(
                             word
                             for word in [
@@ -434,13 +434,13 @@ class Scenario(scenarios.AbstractScenario):
                                             # conv.test(lambda individu_id:
                                             #     find_age(individu_by_id[individu_id], period.start.date,
                                             #         default = 100) >= 18,
-                                            #     error = u"Un déclarant d'un foyer fiscal doit être agé d'au moins 18"
-                                            #         u" ans",
+                                            #     error = "Un déclarant d'un foyer fiscal doit être agé d'au moins 18"
+                                            #         " ans",
                                             #     ),
                                             # conv.test(
                                                 # lambda individu_id: individu_id in parents_id,
-                                                # error = u"Un déclarant ou un conjoint sur la déclaration d'impôt, doit"
-                                                        # u" être un parent dans sa famille",
+                                                # error = "Un déclarant ou un conjoint sur la déclaration d'impôt, doit"
+                                                        # " être un parent dans sa famille",
                                                 # ),
                                             # )),
                                         ),
@@ -450,8 +450,8 @@ class Scenario(scenarios.AbstractScenario):
                                                 individu_by_id[individu_id].get('invalide', False)
                                                 or find_age(individu_by_id[individu_id], period.start.date,
                                                     default = 0) < 25,
-                                            error = u"Une personne à charge d'un foyer fiscal doit avoir moins de"
-                                                    u" 25 ans ou être invalide",
+                                            error = "Une personne à charge d'un foyer fiscal doit avoir moins de"
+                                                    " 25 ans ou être invalide",
                                             ),
                                         ),
                                     ),
@@ -466,7 +466,7 @@ class Scenario(scenarios.AbstractScenario):
                     #         dict(
                     #             date_naissance = conv.test(
                     #                 lambda date_naissance: period.start.date - date_naissance >= datetime.timedelta(0),
-                    #                 error = u"L'individu doit être né au plus tard le jour de la simulation",
+                    #                 error = "L'individu doit être né au plus tard le jour de la simulation",
                     #                 ),
                     #             ),
                     #         default = conv.noop,
@@ -494,7 +494,7 @@ class Scenario(scenarios.AbstractScenario):
         return json_or_python_to_test_case
 
     def suggest(self):
-        """Returns a dict of suggestions and modifies self.test_case applying those suggestions."""
+        '''Returns a dict of suggestions and modifies self.test_case applying those suggestions.'''
         test_case = self.test_case
         if test_case is None:
             return None

@@ -11,8 +11,8 @@ EXTENSIONS_DIRECTORIES = glob.glob(os.path.join(EXTENSIONS_PATH, '*/'))
 
 
 class TunisiaPensionTaxBenefitSystem(TaxBenefitSystem):
-    """Tunisian pensions tax benefit system"""
-    CURRENCY = u"DT"
+    '''Tunisian pensions tax benefit system'''
+    CURRENCY = 'DT'
 
     def __init__(self):
         super(TunisiaPensionTaxBenefitSystem, self).__init__(entities.entities)

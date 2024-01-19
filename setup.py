@@ -1,19 +1,19 @@
 #! /usr/bin/env python
 
 
-"""Tunisia Pension specific model for OpenFisca -- a versatile microsimulation free software"""
+'''Tunisia Pension specific model for OpenFisca -- a versatile microsimulation free software'''
 
 
 from setuptools import setup, find_packages
 
 
-classifiers = """\
+classifiers = '''\
 Development Status :: 2 - Pre-Alpha
 License :: OSI Approved :: GNU Affero General Public License v3
 Operating System :: POSIX
 Programming Language :: Python
 Topic :: Scientific/Engineering :: Information Analysis
-"""
+'''
 
 doc_lines = __doc__.split('\n')
 

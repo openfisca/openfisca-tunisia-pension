@@ -20,7 +20,7 @@ from openfisca_tunisia_pension.model.base import *  # noqa
 class salaire_reference_rsa(Variable):
     value_type = float
     entity = Individu
-    label = u"Salaires de référence du régime des salariés agricoles"
+    label = 'Salaires de référence du régime des salariés agricoles'
     definition_period = YEAR
 
     def formula(individu, period):
@@ -36,7 +36,7 @@ class salaire_reference_rsa(Variable):
             mean_over_largest,
             axis = 0,
             arr = vstack([
-                individu('salaire', period = periods.period("year", year))
+                individu('salaire', period = periods.period('year', year))
                 for year in range(period.start.year, period.start.year - n, -1)
                 ]),
             )
@@ -47,7 +47,7 @@ class salaire_reference_rsa(Variable):
 class salaire_reference_rsna(Variable):
     value_type = float
     entity = Individu
-    label = u"Salaires de référence du régime des salariés non agricoles"
+    label = 'Salaires de référence du régime des salariés non agricoles'
     definition_period = YEAR
 
     def formula(individu, period):
@@ -69,7 +69,7 @@ class salaire_reference_rsna(Variable):
 class pension_rsna(Variable):
     value_type = float
     entity = Individu
-    label = u"Pension des affiliés au régime des salariés non agricoles"
+    label = 'Pension des affiliés au régime des salariés non agricoles'
     definition_period = YEAR
 
     def formula(individu, period, parameters):
@@ -113,9 +113,9 @@ class pension_rsna(Variable):
 
 
 def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, _P):
-    """
+    '''
     Pension du régime des salariés agricoles
-    """
+    '''
     taux_annuite_base = _P.pension.rsa.taux_annuite_base
     taux_annuite_supplemetaire = _P.pension.rsa.taux_annuite_supplemetaire
     duree_stage = _P.pension.rsa.stage_requis
@@ -142,10 +142,10 @@ def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, _P):
 def pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire, duree_stage,
         age_elig, periode_remplacement_base, plaf_taux_pension, smig):
     taux_pension = (
-        (trimestres_valides < 4 * periode_remplacement_base) * (trimestres_valides / 4) * taux_annuite_base +
-        (trimestres_valides >= 4 * periode_remplacement_base) * (
-            taux_annuite_base * periode_remplacement_base +
-            (trimestres_valides / 4 - periode_remplacement_base) * taux_annuite_supplemetaire
+        (trimestres_valides < 4 * periode_remplacement_base) * (trimestres_valides / 4) * taux_annuite_base
+        + (trimestres_valides >= 4 * periode_remplacement_base) * (
+            taux_annuite_base * periode_remplacement_base
+            + (trimestres_valides / 4 - periode_remplacement_base) * taux_annuite_supplemetaire
             )
         )
     montant = min_(taux_pension, plaf_taux_pension) * sal_ref
