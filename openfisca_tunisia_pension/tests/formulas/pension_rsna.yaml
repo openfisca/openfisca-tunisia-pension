@@ -1,4 +1,4 @@
-- name: "Individu salarié 12000 DT par an toute sa carrière"
+- name: "Individu salarié 12000 DT par an durant toute sa carrière"
   period: 2011
   absolute_error_margin: 0.5
   input:

@@ -82,7 +82,7 @@ class pension_rsna(Variable):
         age_eligible = parameters(period).pension.rsna.age_dep_anticip
         periode_remplacement_base = parameters(period).pension.rsna.periode_remplacement_base
         plaf_taux_pension = parameters(period).pension.rsna.plaf_taux_pension
-        smig = parameters(period).param_gen.smig_48h
+        smig = parameters(period).marche_travail.smig_48h
 
         pension_min_sup = parameters(period).pension.rsna.pension_minimale.sup
         pension_min_inf = parameters(period).pension.rsna.pension_minimale.inf
@@ -111,19 +111,19 @@ class pension_rsna(Variable):
         return eligibilite * montant_pension_percu
 
 
-def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, _P):
+def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, parameters):
     '''
     Pension du régime des salariés agricoles
     '''
-    taux_annuite_base = _P.pension.rsa.taux_annuite_base
-    taux_annuite_supplemetaire = _P.pension.rsa.taux_annuite_supplemetaire
-    duree_stage = _P.pension.rsa.stage_requis
-    age_elig = _P.pension.rsa.age_legal
-    periode_remplacement_base = _P.pension.rsa.periode_remplacement_base
-    plaf_taux_pension = _P.pension.rsa.plaf_taux_pension
-    smag = _P.param_gen.smag * 25
+    taux_annuite_base = parameters.pension.rsa.taux_annuite_base
+    taux_annuite_supplemetaire = parameters.pension.rsa.taux_annuite_supplemetaire
+    duree_stage = parameters.pension.rsa.stage_requis
+    age_elig = parameters.pension.rsa.age_legal
+    periode_remplacement_base = parameters.pension.rsa.periode_remplacement_base
+    plaf_taux_pension = parameters.pension.rsa.plaf_taux_pension
+    smag = parameters.marche_travail.smag * 25
     stage = trimestres_valides > 4 * duree_stage
-    pension_min = _P.pension.rsa.pension_min
+    pension_min = parameters.pension.rsa.pension_min
     sal_ref = sal_ref_rsa
 
     montant = pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire,
