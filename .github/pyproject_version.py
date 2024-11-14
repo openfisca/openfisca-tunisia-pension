@@ -18,7 +18,7 @@ def get_versions():
     openfisca_tunisia_pension = None
     with open('./pyproject.toml', 'r') as file:
         content = file.read()
-    # Extract the version of openfisca_tunisia-pension
+    # Extract the version of openfisca_tunisia_pension
     version_match = re.search(r'^version\s*=\s*"([\d.]*)"', content, re.MULTILINE)
     if version_match:
         openfisca_tunisia_pension = version_match.group(1)
@@ -50,7 +50,7 @@ def replace_in_file(filepath: str, info: dict):
     # Replace with info from pyproject.toml
     if PACKAGE_VERSION not in meta:
         raise Exception(f'{PACKAGE_VERSION=} not found in {filepath}')
-    meta = meta.replace(PACKAGE_VERSION, info['openfisca_tunisia-pension'])
+    meta = meta.replace(PACKAGE_VERSION, info['openfisca_tunisia_pension'])
     if CORE_VERSION not in meta:
         raise Exception(f'{CORE_VERSION=} not found in {filepath}')
     meta = meta.replace(CORE_VERSION, info['openfisca_core_api'])
