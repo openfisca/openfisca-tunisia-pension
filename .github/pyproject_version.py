@@ -72,7 +72,7 @@ if __name__ == '__main__':
     info = get_versions()
     file = args.filename
     if args.only_package_version:
-        print(f'{info["openfisca_tunisia-pension"]}')  # noqa: T201
+        print(f'{info["openfisca_tunisia_pension"]}')  # noqa: T201
         exit()
     logging.info('Versions :')
     print(info)  # noqa: T201
