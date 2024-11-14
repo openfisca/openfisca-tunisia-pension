@@ -2,19 +2,12 @@ from openfisca_core.model_api import *
 
 from openfisca_tunisia_pension.entities import Individu
 
-# raic -> raci
 
-# Socio-economic data
-# Donnée d'entrée de la simulation à fournir à partir d'une enquète ou
-# à générer avec un générateur de cas type
-
-
-class date_naissance(Variable):
-    value_type = date
-    default_value = date(1970, 1, 1)
+class age(Variable):
+    value_type = int
     entity = Individu
-    label = 'Date de naissance'
-    definition_period = ETERNITY
+    label = 'Âge'
+    definition_period = YEAR
 
 
 class salaire(Variable):
@@ -24,11 +17,12 @@ class salaire(Variable):
     definition_period = YEAR
 
 
-class age(Variable):
-    value_type = int
+class date_naissance(Variable):
+    value_type = date
+    default_value = date(1970, 1, 1)
     entity = Individu
-    label = 'Âge'
-    definition_period = YEAR
+    label = 'Date de naissance'
+    definition_period = ETERNITY
 
 
 class trimestres_valides(Variable):

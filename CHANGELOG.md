@@ -1,5 +1,12 @@
 # Changelog
 
+### 2.0.1 [#11](https://github.com/openfisca/openfisca-tunisia-pension/pull/11)
+
+* Amélioration technique.
+* Détails :
+  - Utilise variables au lieu de model.
+  - Utilise github actions et pyproject.toml.
+
 ### 2.0.0
 
 * Migrate to openfisca-core v24 syntax
@@ -23,5 +30,3 @@
 
 ## 0.8.0
 * Migrate to openfisca-core 12.0.3 syntax
-
-

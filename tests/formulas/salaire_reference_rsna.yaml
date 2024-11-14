@@ -46,4 +46,5 @@
       2013: 12000
       2014: 12000
   output:
+    trimestres_valides: 50
     salaire_reference_rsna: 12000
