@@ -76,16 +76,16 @@ class pension_rsna(Variable):
         salaire_reference = individu('salaire_reference_rsna', period = period)
         age = individu('age', period = period)
 
-        taux_annuite_base = parameters(period).pension.rsna.taux_annuite_base
-        taux_annuite_supplemetaire = parameters(period).pension.rsna.taux_annuite_supplemetaire
-        duree_stage = parameters(period).pension.rsna.stage_derog
-        age_eligible = parameters(period).pension.rsna.age_dep_anticip
-        periode_remplacement_base = parameters(period).pension.rsna.periode_remplacement_base
-        plaf_taux_pension = parameters(period).pension.rsna.plaf_taux_pension
+        taux_annuite_base = parameters(period).retraite.rsna.taux_annuite_base
+        taux_annuite_supplemetaire = parameters(period).retraite.rsna.taux_annuite_supplemetaire
+        duree_stage = parameters(period).retraite.rsna.stage_derog
+        age_eligible = parameters(period).retraite.rsna.age_dep_anticip
+        periode_remplacement_base = parameters(period).retraite.rsna.periode_remplacement_base
+        plaf_taux_pension = parameters(period).retraite.rsna.plaf_taux_pension
         smig = parameters(period).marche_travail.smig_48h
 
-        pension_min_sup = parameters(period).pension.rsna.pension_minimale.sup
-        pension_min_inf = parameters(period).pension.rsna.pension_minimale.inf
+        pension_min_sup = parameters(period).retraite.rsna.pension_minimale.sup
+        pension_min_inf = parameters(period).retraite.rsna.pension_minimale.inf
 
         stage = trimestres_valides > 4 * duree_stage
         pension_minimale = (
@@ -115,15 +115,15 @@ def _pension_rsa(trimestres_valides, sal_ref_rsa, regime, age, parameters):
     '''
     Pension du régime des salariés agricoles
     '''
-    taux_annuite_base = parameters.pension.rsa.taux_annuite_base
-    taux_annuite_supplemetaire = parameters.pension.rsa.taux_annuite_supplemetaire
-    duree_stage = parameters.pension.rsa.stage_requis
-    age_elig = parameters.pension.rsa.age_legal
-    periode_remplacement_base = parameters.pension.rsa.periode_remplacement_base
-    plaf_taux_pension = parameters.pension.rsa.plaf_taux_pension
+    taux_annuite_base = parameters.retraite.rsa.taux_annuite_base
+    taux_annuite_supplemetaire = parameters.retraite.rsa.taux_annuite_supplemetaire
+    duree_stage = parameters.retraite.rsa.stage_requis
+    age_elig = parameters.retraite.rsa.age_legal
+    periode_remplacement_base = parameters.retraite.rsa.periode_remplacement_base
+    plaf_taux_pension = parameters.retraite.rsa.plaf_taux_pension
     smag = parameters.marche_travail.smag * 25
     stage = trimestres_valides > 4 * duree_stage
-    pension_min = parameters.pension.rsa.pension_min
+    pension_min = parameters.retraite.rsa.pension_min
     sal_ref = sal_ref_rsa
 
     montant = pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire,
