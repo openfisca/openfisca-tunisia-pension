@@ -15,7 +15,7 @@
 OpenFisca est un projet de logiciel libre.
 
 Son code source est distribué sous la licence [GNU Affero General Public Licence](http://www.gnu.org/licenses/agpl.html)
-version 3 ou ultérieure (cf. [LICENSE](https://github.com/openfisca/openfisca-tunisia/blob/master/LICENSE)).
+version 3 ou ultérieure (cf. [LICENSE](https://github.com/openfisca/openfisca-tunisia-pension/blob/master/LICENSE)).
 
 N'hésitez pas à rejoindre l'équipe de développement OpenFisca ! Pour en savoir plus, une [documentation](https://doc.openfisca.fr/contribute/index.html) est à votre disposition.
 
@@ -24,7 +24,7 @@ N'hésitez pas à rejoindre l'équipe de développement OpenFisca ! Pour en savo
 
 <p align='right'> تم توزيع مصدر هذا البرنامج تحت رخصة أفيرو العامة الثالثة أو ما أعلى</p>
 
-<p align='right'>تعالو انضمو إلى فريق الجباية المفتوحة و ساهمو في تطوير البرنامج! 
+<p align='right'>تعالو انضمو إلى فريق الجباية المفتوحة و ساهمو في تطوير البرنامج!
 انظرو للموقع الرسمي للمزيد من المعلومات
 </p>
 
@@ -32,7 +32,7 @@ N'hésitez pas à rejoindre l'équipe de développement OpenFisca ! Pour en savo
 OpenFisca is a free software project.
 
 Its source code is distributed under the [GNU Affero General Public Licence](http://www.gnu.org/licenses/agpl.html)
-version 3 or later (see [LICENSE](https://github.com/openfisca/openfisca-tunisia/blob/master/LICENSE) file).
+version 3 or later (see [LICENSE](https://github.com/openfisca/openfisca-tunisia-pension/blob/master/LICENSE) file).
 
 Feel free to join the OpenFisca development team! See the [documentation](https://doc.openfisca.fr/contribute/index.html) for more information.
 
@@ -76,7 +76,7 @@ Ensuite, afin de créer un environnement de travail propre et pour vous permettr
 sudo pip install pew
 ```
 
-Il vous est désormais possible de créer votre premier environnement dédié à OpenFisca-Tunisia Pension. 
+Il vous est désormais possible de créer votre premier environnement dédié à OpenFisca-Tunisia Pension.
 
 ### Création d'environnement virtuel
 
@@ -108,7 +108,7 @@ cd openfisca-tunisia-pension
 pip install -e .
 ```
 
-:tada: Félicitations, vous avez désormais terminé l'installation d'OpenFisca Tunisia Pension ! 
+:tada: Félicitations, vous avez désormais terminé l'installation d'OpenFisca Tunisia Pension !
 
 Vous pouvez vérifier que votre environnement fonctionne bien en démarrant les tests tel que décrit dans le paragraphe suivant.
 
@@ -144,7 +144,7 @@ Le format d'un test yaml est décrit dans la [documentation officielle](https://
 Ainsi, si vous souhaitez exécuter le test yaml `openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml`, utilisez la commande :
 
 ```
-openfisca-run-test -c openfisca_tunisia_pension openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml 
+openfisca-run-test -c openfisca_tunisia_pension openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml
 ```
 
 ### Tout tester

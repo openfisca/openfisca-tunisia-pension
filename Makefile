@@ -1,22 +1,53 @@
 all: test
 
-check-no-prints:
-	@test -z "`git grep -w print openfisca_tunisia_pension/model`"
+uninstall:
+	pip freeze | grep -v "^-e" | xargs pip uninstall -y
+
+clean:
+	rm -rf build dist
+	find . -name '*.pyc' -exec rm \{\} \;
+
+deps:
+	pip install --upgrade pip build twine
+
+install: deps
+	@# Install OpenFisca-Tunisia-Pension for development.
+	@# `make install` installs the editable version of OpenFisca-Tunisia.
+	@# This allows contributors to test as they code.
+	pip install --editable .[dev] --upgrade
+	pip install openfisca-core[web-api]
+
+build: clean deps
+	@# Install OpenFisca-Tunisia-Pension for deployment and publishing.
+	@# `make build` allows us to be be sure tests are run against the packaged version
+	@# of OpenFisca-Tunisia-Pension, the same we put in the hands of users and reusers.
+	python -m build
+	pip uninstall --yes openfisca-tunisia-pension
+	find dist -name "*.whl" -exec pip install {}[dev] \;
+	pip install openfisca-core[web-api]
 
 check-syntax-errors:
 	python -m compileall -q .
 
-clean:
-	rm -rf build dist
-	find . -name '*.mo' -exec rm \{\} \;
-	find . -name '*.pyc' -exec rm \{\} \;
+format-style:
+	@# Do not analyse .gitignored files.
+	@# `make` needs `$$` to output `$`. Ref: http://stackoverflow.com/questions/2382764.
+	autopep8 `git ls-files | grep "\.py$$"`
 
-flake8:
+check-style:
 	@# Do not analyse .gitignored files.
 	@# `make` needs `$$` to output `$`. Ref: http://stackoverflow.com/questions/2382764.
 	flake8 `git ls-files | grep "\.py$$"`
 
-test: check-syntax-errors check-no-prints
+check-yaml:
+	@# check yaml style
+	.github/lint-changed-yaml-tests.sh
+
+check-all-yaml:
+	@# check yaml style
+	yamllint .
+
+test: clean check-syntax-errors check-style
 	@# Launch tests from openfisca_tunisia_pension/tests directory (and not .) because TaxBenefitSystem must be initialized
 	@# before parsing source files containing formulas.
-	nosetests openfisca_tunisia_pension/tests --exe --with-doctest
+	openfisca test --country-package openfisca_tunisia_pension openfisca_tunisia_pension/tests
