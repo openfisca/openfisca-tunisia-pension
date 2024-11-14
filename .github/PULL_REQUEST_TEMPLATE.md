@@ -20,7 +20,7 @@ Ces changements (effacez les lignes ne correspondant pas à votre cas) :
 
 Quelques conseils à prendre en compte :
 
-- [ ] Jetez un coup d'œil au [guide de contribution](https://github.com/openfisca/openfisca-tunisia-pension-pension/blob/master/CONTRIBUTING.md).
+- [ ] Jetez un coup d'œil au [guide de contribution](https://github.com/openfisca/openfisca-tunisia-pension/blob/master/CONTRIBUTING.md).
 - [ ] Regardez s'il n'y a pas une [proposition introduisant ces mêmes changements](https://github.com/openfisca/openfisca-tunisia-pension/pulls).
 - [ ] Documentez votre contribution avec des références législatives.
 - [ ] Mettez à jour ou ajoutez des tests correspondant à votre contribution.
