@@ -3,11 +3,9 @@ from numpy import (
     apply_along_axis,
     logical_not as not_,
     maximum as max_,
-    minimum as min_,
     vstack,
     )
 
-from openfisca_core import periods
 from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.variables.helpers import mean_over_k_largest, pension_generique
@@ -46,16 +44,17 @@ class pension_rsna(Variable):
         salaire_reference = individu('salaire_reference_rsna', period = period)
         age = individu('age', period = period)
 
-        taux_annuite_base = parameters(period).pension.rsna.taux_annuite_base
-        taux_annuite_supplemetaire = parameters(period).pension.rsna.taux_annuite_supplemetaire
-        duree_stage = parameters(period).pension.rsna.stage_derog
-        age_eligible = parameters(period).pension.rsna.age_dep_anticip
-        periode_remplacement_base = parameters(period).pension.rsna.periode_remplacement_base
-        plaf_taux_pension = parameters(period).pension.rsna.plaf_taux_pension
+        rsna = parameters(period).retraite.rsna
+        taux_annuite_base = rsna.taux_annuite_base
+        taux_annuite_supplemetaire = rsna.taux_annuite_supplemetaire
+        duree_stage = rsna.stage_derog
+        age_eligible = rsna.age_dep_anticip
+        periode_remplacement_base = rsna.periode_remplacement_base
+        plaf_taux_pension = rsna.plaf_taux_pension
         smig = parameters(period).marche_travail.smig_48h
 
-        pension_min_sup = parameters(period).pension.rsna.pension_minimale.sup
-        pension_min_inf = parameters(period).pension.rsna.pension_minimale.inf
+        pension_min_sup = rsna.pension_minimale.sup
+        pension_min_inf = rsna.pension_minimale.inf
 
         stage = trimestres_valides > 4 * duree_stage
         pension_minimale = (
