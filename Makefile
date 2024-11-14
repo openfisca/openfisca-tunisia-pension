@@ -39,15 +39,19 @@ check-style:
 	@# `make` needs `$$` to output `$`. Ref: http://stackoverflow.com/questions/2382764.
 	flake8 `git ls-files | grep "\.py$$"`
 
+check-path-length:
+	@# Verify that there is no path exceeding Windows limit
+	python openfisca_tunisia_pension/scripts/check_path_length.py
+
 check-yaml:
 	@# check yaml style
 	.github/lint-changed-yaml-tests.sh
 
 check-all-yaml:
 	@# check yaml style
-	yamllint .
+	yamllint openfisca_tunisia_pension/parameters
+	yamllint tests
 
 test: clean check-syntax-errors check-style
-	@# Launch tests from openfisca_tunisia_pension/tests directory (and not .) because TaxBenefitSystem must be initialized
 	@# before parsing source files containing formulas.
-	openfisca test --country-package openfisca_tunisia_pension openfisca_tunisia_pension/tests
+	openfisca test --country-package openfisca_tunisia_pension tests
