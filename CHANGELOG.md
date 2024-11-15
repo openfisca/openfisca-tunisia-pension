@@ -1,5 +1,13 @@
 # Changelog
 
+# 3.0.0 [#13](https://github.com/openfisca/openfisca-tunisia-pension/pull/13)
+
+* Amélioration technique.
+* Périodes concernées : toutes.
+* Zones impactées : `parameters/pension`, `parameters/retraite`.
+* Détails :
+  - Renomme `parameters/pension` en  `parameters/retraite`
+
 ### 2.0.1 [#11](https://github.com/openfisca/openfisca-tunisia-pension/pull/11)
 
 * Amélioration technique.
