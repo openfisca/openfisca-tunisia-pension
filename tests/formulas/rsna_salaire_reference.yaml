@@ -4,7 +4,7 @@
   input:
     age: 60
     rsna_duree_assurance: 50
-    salaire:
+    rsna_salaire_de_base:
       1975: 12000
       1976: 12000
       1977: 12000
