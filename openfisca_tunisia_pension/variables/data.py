@@ -10,26 +10,12 @@ class age(Variable):
     definition_period = YEAR
 
 
-class salaire(Variable):
-    value_type = float
-    entity = Individu
-    label = 'Salaires'
-    definition_period = YEAR
-
-
 class date_naissance(Variable):
     value_type = date
     default_value = date(1970, 1, 1)
     entity = Individu
     label = 'Date de naissance'
     definition_period = ETERNITY
-
-
-class duree_assurance(Variable):
-    value_type = int
-    entity = Individu
-    label = 'Nombre de trimestres validés'
-    definition_period = YEAR
 
 
 class TypesRegimeSecuriteSociale(Enum):

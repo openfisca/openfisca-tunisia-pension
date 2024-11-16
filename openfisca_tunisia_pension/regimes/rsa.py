@@ -6,13 +6,11 @@ from openfisca_core import periods
 
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-# from openfisca_tunisia_pension.tools import add_vectorial_timedelta, year_
 
 
 import functools
 from numpy import (
     apply_along_axis,
-    logical_not as not_,
     maximum as max_,
     vstack,
     )
@@ -49,7 +47,6 @@ class RegimeRSA(AbstractRegimeEnAnnuites):
                 )
             salaire_refererence = salaire * base_liquidation_rsa / base_declaration_rsa
             return salaire_refererence
-
 
     class pension(Variable):
         value_type = float

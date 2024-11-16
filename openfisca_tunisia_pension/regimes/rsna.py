@@ -40,7 +40,7 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
                 mean_over_largest,
                 axis = 0,
                 arr = vstack([
-                    individu('salaire', period = year)
+                    individu('regime_name_salaire_de_base', period = year)
                     for year in range(period.start.year, period.start.year - n, -1)
                     ]),
                 )
