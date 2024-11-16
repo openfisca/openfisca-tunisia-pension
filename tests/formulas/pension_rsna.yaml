@@ -47,5 +47,5 @@
       2014: 12000
   output:
     trimestres_valides: 50
-    salaire_reference_rsna: 12000
-    pension_rsna: 5400
+    rsna_salaire_reference: 12000
+    rsna_pension: 5400

@@ -36,7 +36,7 @@ class salaire_reference_rsa(Variable):
         return salaire_refererence
 
 
-class pension_rsa(Variable):
+class rsa_pension(Variable):
     value_type = float
     entity = Individu
     label = 'Salaires de référence du régime des salariés agricoles'
@@ -45,7 +45,7 @@ class pension_rsa(Variable):
     def formula(individu, period, parameters):
         rsa = parameters.retraite.rsa(period)
         taux_annuite_base = rsa.taux_annuite_base
-        taux_annuite_supplemetaire = rsa.taux_annuite_supplemetaire
+        taux_annuite_supplementaire = rsa.taux_annuite_supplementaire
         duree_stage = rsa.stage_requis
         age_elig = rsa.age_legal
         periode_remplacement_base = rsa.periode_remplacement_base
@@ -55,8 +55,16 @@ class pension_rsa(Variable):
         pension_min = rsa.pension_min
         salaire_reference = individu('salaire_reference_rsa', period)
 
-        montant = pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire,
-            duree_stage, age_elig, periode_remplacement_base, plaf_taux_pension, smag)
+        montant = pension_generique(
+            trimestres_valides,
+            sal_ref,
+            taux_annuite_base,
+            taux_annuite_supplementaire,
+            duree_stage,
+            age_elig,
+            periode_remplacement_base,
+            plaf_taux_pension
+            )
 
         elig_age = age > age_elig
         elig = duree_stage_validee * elig_age * (salaire_reference > 0)

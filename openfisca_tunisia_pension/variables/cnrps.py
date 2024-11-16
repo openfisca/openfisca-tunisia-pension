@@ -11,10 +11,10 @@ from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.variables.helpers import mean_over_k_largest, pension_generique
 
 
-class rsna_salaire_reference(Variable):
+class cnrps_salaire_reference(Variable):
     value_type = float
     entity = Individu
-    label = 'Salaires de référence du régime des salariés non agricoles'
+    label = 'Salaire de référence de la CNRPS'
     definition_period = YEAR
 
     def formula(individu, period):
@@ -33,7 +33,7 @@ class rsna_salaire_reference(Variable):
         return salaire_refererence
 
 
-class rsna_pension(Variable):
+class cnrps_pension(Variable):
     value_type = float
     entity = Individu
     label = 'Pension des affiliés au régime des salariés non agricoles'

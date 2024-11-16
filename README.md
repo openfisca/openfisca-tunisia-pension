@@ -141,10 +141,10 @@ nosetests openfisca_tunisia_pension/tests/test_pension.py:test_rsna
 
 Le format d'un test yaml est décrit dans la [documentation officielle](https://doc.openfisca.fr/coding-the-legislation/writing_yaml_tests.html).
 
-Ainsi, si vous souhaitez exécuter le test yaml `openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml`, utilisez la commande :
+Ainsi, si vous souhaitez exécuter le test yaml `openfisca_tunisia_pension/tests/formulas/rsna_pension.yaml`, utilisez la commande :
 
 ```
-openfisca-run-test -c openfisca_tunisia_pension openfisca_tunisia_pension/tests/formulas/pension_rsna.yaml
+openfisca-run-test -c openfisca_tunisia_pension openfisca_tunisia_pension/tests/formulas/rsna_pension.yaml
 ```
 
 ### Tout tester

@@ -5,13 +5,13 @@ import bottleneck
 from numpy import minimum as min_
 
 
-def pension_generique(trimestres_valides, sal_ref, age, taux_annuite_base, taux_annuite_supplemetaire, duree_stage,
-        age_elig, periode_remplacement_base, plaf_taux_pension, smig):
+def pension_generique(trimestres_valides, sal_ref, taux_annuite_base, taux_annuite_supplementaire, duree_stage,
+        age_elig, periode_remplacement_base, plaf_taux_pension):
     taux_pension = (
         (trimestres_valides < 4 * periode_remplacement_base) * (trimestres_valides / 4) * taux_annuite_base
         + (trimestres_valides >= 4 * periode_remplacement_base) * (
             taux_annuite_base * periode_remplacement_base
-            + (trimestres_valides / 4 - periode_remplacement_base) * taux_annuite_supplemetaire
+            + (trimestres_valides / 4 - periode_remplacement_base) * taux_annuite_supplementaire
             )
         )
     montant = min_(taux_pension, plaf_taux_pension) * sal_ref
