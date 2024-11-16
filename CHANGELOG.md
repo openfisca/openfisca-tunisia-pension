@@ -1,6 +1,15 @@
 # Changelog
 
-# 3.0.0 [#14](https://github.com/openfisca/openfisca-tunisia-pension/pull/14)
+# 5.0.0 [#15](https://github.com/openfisca/openfisca-tunisia-pension/pull/15)
+
+* Évolution du système socio-fiscal.
+* Périodes concernées : toutes.
+* Zones impactées : `variables/regimes/cnrps`.
+* Détails :
+  - Introduit le régime de la CNRPS
+
+
+# 4.0.0 [#14](https://github.com/openfisca/openfisca-tunisia-pension/pull/14)
 
 * Évolution du système socio-fiscal.
 * Périodes concernées : toutes.
