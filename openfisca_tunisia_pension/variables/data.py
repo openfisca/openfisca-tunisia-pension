@@ -25,7 +25,7 @@ class date_naissance(Variable):
     definition_period = ETERNITY
 
 
-class trimestres_valides(Variable):
+class duree_assurance(Variable):
     value_type = int
     entity = Individu
     label = 'Nombre de trimestres validés'

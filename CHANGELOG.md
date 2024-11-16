@@ -40,7 +40,7 @@
     * Move parameters from xml format to yaml files tree
 
 ### 1.0.0
-* Renomme `nb_trim_val` en `trimestres_valides`
+* Renomme `nb_trim_val` en `duree_assurance`
 * Utilisation de noms longs pour différent paramètres
 
 ## 0.9.2

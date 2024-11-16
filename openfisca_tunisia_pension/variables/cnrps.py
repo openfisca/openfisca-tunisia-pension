@@ -40,7 +40,7 @@ class cnrps_pension(Variable):
     definition_period = YEAR
 
     def formula(individu, period, parameters):
-        trimestres_valides = individu('trimestres_valides', period = period)
+        duree_assurance = individu('duree_assurance', period = period)
         salaire_reference = individu('rsna_salaire_reference', period = period)
         age = individu('age', period = period)
 
@@ -56,12 +56,12 @@ class cnrps_pension(Variable):
         pension_min_sup = rsna.pension_minimale.sup
         pension_min_inf = rsna.pension_minimale.inf
 
-        stage = trimestres_valides > 4 * duree_stage
+        stage = duree_assurance > 4 * duree_stage
         pension_minimale = (
             stage * pension_min_sup + not_(stage) * pension_min_inf
             )
         montant = pension_generique(
-            trimestres_valides,
+            duree_assurance,
             salaire_reference,
             taux_annuite_base,
             taux_annuite_supplementaire,
