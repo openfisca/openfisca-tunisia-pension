@@ -1,5 +1,13 @@
 # Changelog
 
+# 3.0.0 [#14](https://github.com/openfisca/openfisca-tunisia-pension/pull/14)
+
+* Évolution du système socio-fiscal.
+* Périodes concernées : toutes.
+* Zones impactées : `variables/regimes`.
+* Détails :
+  - Sépare les régimes dans différents répertoires
+
 # 3.0.0 [#13](https://github.com/openfisca/openfisca-tunisia-pension/pull/13)
 
 * Amélioration technique.
