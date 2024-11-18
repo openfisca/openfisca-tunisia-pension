@@ -14,7 +14,7 @@ brackets:
       value: 0.005
 - threshold:
     1960-01-01:
-      value: 160
+      value: 120
   rate:
     1960-01-01:
       value: 0
