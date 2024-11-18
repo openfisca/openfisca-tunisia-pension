@@ -1,0 +1,6 @@
+- name: smig
+  label:
+    one: Smig
+    other: Smigs
+  # parameter: marche_travail.salaire_minimum.smig.
+  ratio: true
