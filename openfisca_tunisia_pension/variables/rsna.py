@@ -187,7 +187,7 @@ class rsna_taux_de_liquidation(Variable):
     label = 'Taux de liquidation de la pension'
 
     def formula(individu, period, parameters):
-        decote = individu('rsna_decote', period)
-        surcote = individu('rsna_surcote', period)
-        taux_plein = parameters(period).rsna.taux_plein.taux_plein
-        return taux_plein * (1 - decote + surcote)
+        bareme_annuite = parameters(period).retraite.rsna.bareme_annuite
+        duree_assurance = individu('rsna_duree_assurance', period)
+        taux_annuite = bareme_annuite.calc(duree_assurance)
+        return taux_annuite

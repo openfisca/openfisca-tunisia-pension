@@ -187,7 +187,7 @@ class rsa_taux_de_liquidation(Variable):
     label = 'Taux de liquidation de la pension'
 
     def formula(individu, period, parameters):
-        decote = individu('rsa_decote', period)
-        surcote = individu('rsa_surcote', period)
-        taux_plein = parameters(period).rsa.taux_plein.taux_plein
-        return taux_plein * (1 - decote + surcote)
+        bareme_annuite = parameters(period).retraite.rsa.bareme_annuite
+        duree_assurance = individu('rsa_duree_assurance', period)
+        taux_annuite = bareme_annuite.calc(duree_assurance)
+        return taux_annuite

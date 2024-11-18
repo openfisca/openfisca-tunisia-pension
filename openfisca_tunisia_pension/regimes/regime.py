@@ -228,10 +228,10 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
         label = 'Taux de liquidation de la pension'
 
         def formula(individu, period, parameters):
-            decote = individu('regime_name_decote', period)
-            surcote = individu('regime_name_surcote', period)
-            taux_plein = parameters(period).regime_name.taux_plein.taux_plein
-            return taux_plein * (1 - decote + surcote)
+            bareme_annuite = parameters(period).retraite.regime_name.bareme_annuite
+            duree_assurance = individu('regime_name_duree_assurance', period)
+            taux_annuite = bareme_annuite.calc(duree_assurance)
+            return taux_annuite
 
 
 # def revalorise(variable_31_decembre_annee_precedente, variable_originale, annee_de_liquidation, revalorisation, period):
