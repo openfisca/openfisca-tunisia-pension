@@ -8,14 +8,15 @@ from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
 
 
-import functools
 from numpy import (
     apply_along_axis,
     maximum as max_,
     vstack,
     )
 
-from openfisca_tunisia_pension.variables.helpers import mean_over_k_largest, pension_generique
+
+from openfisca_tunisia_pension.tools import make_mean_over_largest
+from openfisca_tunisia_pension.variables.helpers import pension_generique
 
 
 class RegimeRSA(AbstractRegimeEnAnnuites):
@@ -35,8 +36,8 @@ class RegimeRSA(AbstractRegimeEnAnnuites):
             base_declaration_rsa = 180
             base_liquidation_rsa = 300
 
-            n = 3
-            mean_over_largest = functools.partial(mean_over_k_largest, k = n)
+            k = 3
+            mean_over_largest = make_mean_over_largest(k)
             salaire = apply_along_axis(
                 mean_over_largest,
                 axis = 0,

@@ -8,7 +8,6 @@ from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
 
 
-import functools
 from numpy import (
     apply_along_axis,
     logical_not as not_,
@@ -16,7 +15,8 @@ from numpy import (
     vstack,
     )
 
-from openfisca_tunisia_pension.variables.helpers import mean_over_k_largest, pension_generique
+from openfisca_tunisia_pension.variables.helpers import pension_generique
+from openfisca_tunisia_pension.tools import make_mean_over_largest
 
 
 class RegimeCNRPS(AbstractRegimeEnAnnuites):
@@ -34,14 +34,11 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
             '''3 dernières rémunérations ou les 2 plus élevées sur demande.'''
             n = 40
             k = 2
-            mean_over_largest = functools.partial(mean_over_k_largest, k = k)
+            mean_over_largest = make_mean_over_largest(k)
             moyenne_2_salaires_plus_eleves = apply_along_axis(
                 mean_over_largest,
                 axis = 0,
-                arr = vstack([
-                    individu('regime_name_salaire_de_base', period = year)
-                    for year in range(period.start.year, period.start.year - n, -1)
-                    ]),
+                arr = vstack([individu('regime_name_salaire_de_base', period = year) for year in range(period.start.year, period.start.year - n, -1)]),
                 )
             p = 3
             moyenne_3_derniers_salaires = sum(

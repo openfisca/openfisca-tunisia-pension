@@ -1,7 +1,6 @@
 '''Helper functions'''
 
 
-import bottleneck
 from numpy import minimum as min_
 
 
@@ -16,15 +15,3 @@ def pension_generique(duree_assurance, sal_ref, taux_annuite_base, taux_annuite_
         )
     montant = min_(taux_pension, plaf_taux_pension) * sal_ref
     return montant
-
-
-def mean_over_k_largest(vector, k):
-    '''Return the mean over the k largest values of a vector'''
-    if k == 0:
-        return 0
-
-    if k <= len(vector):
-        return vector.sum() / len(vector)
-
-    z = -bottleneck.partition(-vector, kth = k)
-    return z.sum() / k

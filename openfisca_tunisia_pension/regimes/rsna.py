@@ -9,7 +9,6 @@ from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
 # from openfisca_tunisia_pension.tools import add_vectorial_timedelta, year_
 
 
-import functools
 from numpy import (
     apply_along_axis,
     logical_not as not_,
@@ -17,7 +16,9 @@ from numpy import (
     vstack,
     )
 
-from openfisca_tunisia_pension.variables.helpers import mean_over_k_largest, pension_generique
+
+from openfisca_tunisia_pension.tools import make_mean_over_largest
+from openfisca_tunisia_pension.variables.helpers import pension_generique
 
 
 class RegimeRSNA(AbstractRegimeEnAnnuites):
@@ -34,8 +35,9 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
         def formula(individu, period):
             # TODO: gérer le nombre d'année n
             # TODO: plafonner les salaires à 6 fois le smig de l'année d'encaissement
-            n = 10
-            mean_over_largest = functools.partial(mean_over_k_largest, k = n)
+            k = 10
+            mean_over_largest = make_mean_over_largest(k = k)
+            n = 40
             salaire_refererence = apply_along_axis(
                 mean_over_largest,
                 axis = 0,

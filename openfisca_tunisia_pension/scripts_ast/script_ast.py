@@ -214,8 +214,8 @@ def main(verbose = False):
             }
         for name in [
             'rsna',
-            # 'rsa',
-            # 'cnrps'
+            'rsa',
+            'cnrps'
             ]
         }
 
