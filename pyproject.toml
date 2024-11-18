@@ -68,6 +68,7 @@ ignore       = ["E128","E251","F403","F405","E501","W503"]
 docstring-quotes = "single"
 inline-quotes = "single"
 multiline-quotes = "single"
+exclude = "openfisca_tunisia_pension/variables/*.py"
 
 [tool.pep8]
 hang-closing = true
