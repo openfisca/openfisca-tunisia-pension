@@ -120,7 +120,11 @@ class cnrps_pension_brute(Variable):
     label = 'Pension brute'
 
     def formula(individu, period, parameters):
-        NotImplementedError
+        taux_de_liquidation = individu('cnrps_taux_de_liquidation', period)
+        salaire_de_reference = individu('cnrps_salaire_de_reference', period)
+        pension_minimale = individu('cnrps_pension_minimale', period)
+        pension_maximale = individu('cnrps_pension_maximale', period)
+        return min_(pension_maximale, max_(taux_de_liquidation * salaire_de_reference, pension_minimale))
 
 class cnrps_pension_brute_au_31_decembre(Variable):
     value_type = float
@@ -137,6 +141,24 @@ class cnrps_pension_brute_au_31_decembre(Variable):
         revalorisation = parameters(period).cnrps.revalorisation_pension_au_31_decembre
         pension_brute = individu('cnrps_pension_brute', period)
         return revalorise(pension_brute_au_31_decembre_annee_precedente, pension_brute, annee_de_liquidation, revalorisation, period)
+
+class cnrps_pension_maximale(Variable):
+    value_type = float
+    entity = Individu
+    definition_period = YEAR
+    label = 'Pension maximale'
+
+    def formula(individu, period, parameters):
+        NotImplementedError
+
+class cnrps_pension_minimale(Variable):
+    value_type = float
+    entity = Individu
+    definition_period = YEAR
+    label = 'Pension minimale'
+
+    def formula(individu, period, parameters):
+        NotImplementedError
 
 class cnrps_pension_servie(Variable):
     value_type = float

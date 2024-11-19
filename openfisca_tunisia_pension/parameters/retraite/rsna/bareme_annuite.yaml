@@ -1,4 +1,4 @@
-description: Taux d'annuité par trimestre validé
+description: Taux d'annuité par trimestre validé du régime des salariés non agricoles (RSNA) de la CNSS
 brackets:
 - threshold:
     1960-01-01:
@@ -21,3 +21,6 @@ brackets:
 metadata:
   threshold_unit: trimestre
   rate_unit: /1
+  reference:
+    1960-01-01:
+      title: Loi n°60-33 du 14 Décembre 1960 instituant un régime d'invalidité de vieillesse et de survie et un régime d'allocation de vieillesse et de survie dans le secteur non agricole.

@@ -9,6 +9,14 @@ from numpy import apply_along_axis, logical_not as not_, maximum as max_, vstack
 from openfisca_tunisia_pension.tools import make_mean_over_largest
 from openfisca_tunisia_pension.variables.helpers import pension_generique
 
+class rsna_RSNATypesRaisonDepartAnticipe(Enum):
+    __order__ = 'non_concerne licenciement_economique usure_prematuree_organisme mere_3_enfants convenance_personnelle'
+    non_concerne = 'Non concerné'
+    licenciement_economique = 'Licenciement économique avec au minimum 60 mois de cotisations (20 trimestres)'
+    usure_prematuree_organisme = "Usure prématurée de l'organisme médicalement constatée avec au minimum 60 mois de cotisations (20 trimestres)"
+    mere_3_enfants = "Femme salariée, mère de 3 enfants en vie, justifiant d'au moins 180 mois de cotisations (60 trimestres)"
+    convenance_personnelle = 'Convenance personnelle, avec 360 mois de cotisations (120 trimestres)'
+
 class rsna_cotisation(Variable):
     value_type = float
     entity = Individu
@@ -87,13 +95,13 @@ class rsna_pension(Variable):
         rsna = parameters(period).retraite.rsna
         taux_annuite_base = rsna.taux_annuite_base
         taux_annuite_supplementaire = rsna.taux_annuite_supplementaire
-        duree_stage = rsna.stage_derog
         age_eligible = rsna.age_dep_anticip
         periode_remplacement_base = rsna.periode_remplacement_base
         plaf_taux_pension = rsna.plaf_taux_pension
         smig = parameters(period).marche_travail.smig_48h
         pension_min_sup = rsna.pension_minimale.sup
         pension_min_inf = rsna.pension_minimale.inf
+        duree_stage = rsna.stage_derog
         stage = duree_assurance > 4 * duree_stage
         pension_minimale = stage * pension_min_sup + not_(stage) * pension_min_inf
         montant = pension_generique(duree_assurance, salaire_reference, taux_annuite_base, taux_annuite_supplementaire, duree_stage, age_eligible, periode_remplacement_base, plaf_taux_pension)
@@ -120,7 +128,11 @@ class rsna_pension_brute(Variable):
     label = 'Pension brute'
 
     def formula(individu, period, parameters):
-        NotImplementedError
+        taux_de_liquidation = individu('rsna_taux_de_liquidation', period)
+        salaire_de_reference = individu('rsna_salaire_de_reference', period)
+        pension_minimale = individu('rsna_pension_minimale', period)
+        pension_maximale = individu('rsna_pension_maximale', period)
+        return min_(pension_maximale, max_(taux_de_liquidation * salaire_de_reference, pension_minimale))
 
 class rsna_pension_brute_au_31_decembre(Variable):
     value_type = float
@@ -137,6 +149,24 @@ class rsna_pension_brute_au_31_decembre(Variable):
         revalorisation = parameters(period).rsna.revalorisation_pension_au_31_decembre
         pension_brute = individu('rsna_pension_brute', period)
         return revalorise(pension_brute_au_31_decembre_annee_precedente, pension_brute, annee_de_liquidation, revalorisation, period)
+
+class rsna_pension_maximale(Variable):
+    value_type = float
+    entity = Individu
+    definition_period = YEAR
+    label = 'Pension maximale'
+
+    def formula(individu, period, parameters):
+        NotImplementedError
+
+class rsna_pension_minimale(Variable):
+    value_type = float
+    entity = Individu
+    definition_period = YEAR
+    label = 'Pension minimale'
+
+    def formula(individu, period, parameters):
+        NotImplementedError
 
 class rsna_pension_servie(Variable):
     value_type = float

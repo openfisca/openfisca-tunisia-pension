@@ -162,6 +162,25 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
             majoration_pension_au_31_decembre = individu('regime_name_majoration_pension_au_31_decembre', period)
             return pension_brute_au_31_decembre + majoration_pension_au_31_decembre
 
+    class pension_brute(Variable):
+        value_type = float
+        entity = Individu
+        definition_period = YEAR
+        label = 'Pension brute'
+
+        def formula(individu, period, parameters):
+            taux_de_liquidation = individu('regime_name_taux_de_liquidation', period)
+            salaire_de_reference = individu('regime_name_salaire_de_reference', period)
+            pension_minimale = individu('regime_name_pension_minimale', period)
+            pension_maximale = individu('regime_name_pension_maximale', period)
+            return min_(
+                pension_maximale,
+                max_(
+                    taux_de_liquidation * salaire_de_reference,
+                    pension_minimale
+                    )
+                )
+
     class pension_brute_au_31_decembre(Variable):
         value_type = float
         entity = Individu
@@ -184,6 +203,24 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
                 revalorisation,
                 period,
                 )
+
+    class pension_maximale(Variable):
+        value_type = float
+        entity = Individu
+        definition_period = YEAR
+        label = 'Pension maximale'
+
+        def formula(individu, period, parameters):
+            NotImplementedError
+
+    class pension_minimale(Variable):
+        value_type = float
+        entity = Individu
+        definition_period = YEAR
+        label = 'Pension minimale'
+
+        def formula(individu, period, parameters):
+            NotImplementedError
 
     class pension_servie(Variable):
         value_type = float

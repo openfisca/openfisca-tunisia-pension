@@ -5,6 +5,7 @@ from numpy import minimum as min_
 
 
 
+def pension_from_bareme_annuite(bareme_annuite_en_trimestres)
 
 
 def pension_generique(duree_assurance, sal_ref, taux_annuite_base, taux_annuite_supplementaire, duree_stage,

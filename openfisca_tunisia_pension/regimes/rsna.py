@@ -26,6 +26,16 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
     variable_prefix = 'rsna'
     parameters_prefix = 'rsna'
 
+    class RSNATypesRaisonDepartAnticipe(Enum):
+        __order__ = 'non_concerne licenciement_economique usure_prematuree_organisme mere_3_enfants convenance_personnelle'
+        non_concerne = 'Non concerné'
+        # A partir de 50 ans :
+        licenciement_economique = 'Licenciement économique avec au minimum 60 mois de cotisations (20 trimestres)'
+        usure_prematuree_organisme = "Usure prématurée de l'organisme médicalement constatée avec au minimum 60 mois de cotisations (20 trimestres)"
+        mere_3_enfants = "Femme salariée, mère de 3 enfants en vie, justifiant d'au moins 180 mois de cotisations (60 trimestres)"
+        # A partir de 55 ans :
+        convenance_personnelle = 'Convenance personnelle, avec 360 mois de cotisations (120 trimestres)'
+
     class salaire_reference(Variable):
         value_type = float
         entity = Individu
@@ -62,7 +72,6 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
             rsna = parameters(period).retraite.regime_name
             taux_annuite_base = rsna.taux_annuite_base
             taux_annuite_supplementaire = rsna.taux_annuite_supplementaire
-            duree_stage = rsna.stage_derog
             age_eligible = rsna.age_dep_anticip
             periode_remplacement_base = rsna.periode_remplacement_base
             plaf_taux_pension = rsna.plaf_taux_pension
@@ -71,6 +80,7 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
             pension_min_sup = rsna.pension_minimale.sup
             pension_min_inf = rsna.pension_minimale.inf
 
+            duree_stage = rsna.stage_derog
             stage = duree_assurance > 4 * duree_stage
             pension_minimale = (
                 stage * pension_min_sup + not_(stage) * pension_min_inf
@@ -91,3 +101,21 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
             # plafonnement
             montant_pension_percu = max_(montant, pension_minimale * smig)
             return eligibilite * montant_pension_percu
+
+    class pension_maximale(Variable):
+        value_type = float
+        entity = Individu
+        definition_period = YEAR
+        label = 'Pension maximale'
+
+        def formula(individu, period, parameters):
+            NotImplementedError
+
+    class pension_minimale(Variable):
+        value_type = float
+        entity = Individu
+        definition_period = YEAR
+        label = 'Pension minimale'
+
+        def formula(individu, period, parameters):
+            NotImplementedError
