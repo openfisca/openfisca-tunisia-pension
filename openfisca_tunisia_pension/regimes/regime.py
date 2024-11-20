@@ -2,7 +2,7 @@
 
 
 from openfisca_core.model_api import *
-# from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
+from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
 
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_tunisia_pension.entities import Individu
@@ -148,19 +148,24 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
 
         def formula(individu, period):
             pension_brute = individu('regime_name_pension_brute', period)
-            majoration_pension = individu('regime_name_majoration_pension', period)
-            return pension_brute + majoration_pension
-
-    class pension_au_31_decembre(Variable):
-        value_type = float
-        entity = Individu
-        definition_period = YEAR
-        label = 'Pension'
-
-        def formula(individu, period):
-            pension_brute_au_31_decembre = individu('regime_name_pension_brute_au_31_decembre', period)
-            majoration_pension_au_31_decembre = individu('regime_name_majoration_pension_au_31_decembre', period)
-            return pension_brute_au_31_decembre + majoration_pension_au_31_decembre
+            try:
+                pension_minimale = individu('regime_name_pension_minimale', period)
+            except VariableNotFoundError:
+                pension_minimale = 0
+            try:
+                pension_maximale = individu('regime_name_pension_maximale', period)
+            except VariableNotFoundError:
+                return max_(
+                    pension_brute,
+                    pension_minimale
+                    )
+            return min_(
+                pension_maximale,
+                max_(
+                    pension_brute,
+                    pension_minimale
+                    )
+                )
 
     class pension_brute(Variable):
         value_type = float
@@ -171,56 +176,27 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
         def formula(individu, period, parameters):
             taux_de_liquidation = individu('regime_name_taux_de_liquidation', period)
             salaire_de_reference = individu('regime_name_salaire_de_reference', period)
-            pension_minimale = individu('regime_name_pension_minimale', period)
-            pension_maximale = individu('regime_name_pension_maximale', period)
-            return min_(
-                pension_maximale,
-                max_(
-                    taux_de_liquidation * salaire_de_reference,
-                    pension_minimale
-                    )
-                )
+            return taux_de_liquidation * salaire_de_reference,
 
-    class pension_brute_au_31_decembre(Variable):
-        value_type = float
-        entity = Individu
-        definition_period = YEAR
-        label = 'Pension brute au 31 décembre'
+    # class pension_maximale(Variable):
+    #     value_type = float
+    #     default_value = np.inf  # Pas de pension maximale par défaut
+    #     entity = Individu
+    #     definition_period = YEAR
+    #     label = 'Pension maximale'
 
-        def formula(individu, period, parameters):
-            annee_de_liquidation = individu('regime_name_liquidation_date', period).astype('datetime64[Y]').astype(int) + 1970
-            # Raccouci pour arrêter les calculs dans le passé quand toutes les liquidations ont lieu dans le futur
-            if all(period.start.year < annee_de_liquidation):
-                return individu.empty_array()
-            last_year = period.last_year
-            pension_brute_au_31_decembre_annee_precedente = individu('regime_name_pension_brute_au_31_decembre', last_year)
-            revalorisation = parameters(period).regime_name.revalorisation_pension_au_31_decembre
-            pension_brute = individu('regime_name_pension_brute', period)
-            return revalorise(
-                pension_brute_au_31_decembre_annee_precedente,
-                pension_brute,
-                annee_de_liquidation,
-                revalorisation,
-                period,
-                )
+    #     def formula(individu, period, parameters):
+    #         NotImplementedError
 
-    class pension_maximale(Variable):
-        value_type = float
-        entity = Individu
-        definition_period = YEAR
-        label = 'Pension maximale'
+    # class pension_minimale(Variable):
+    #     value_type = float
+    #     default_value = 0  # Pas de pension minimale par défaut, elle est à zéro
+    #     entity = Individu
+    #     definition_period = YEAR
+    #     label = 'Pension minimale'
 
-        def formula(individu, period, parameters):
-            NotImplementedError
-
-    class pension_minimale(Variable):
-        value_type = float
-        entity = Individu
-        definition_period = YEAR
-        label = 'Pension minimale'
-
-        def formula(individu, period, parameters):
-            NotImplementedError
+    #     def formula(individu, period, parameters):
+    #         NotImplementedError
 
     class pension_servie(Variable):
         value_type = float
@@ -269,18 +245,3 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
             duree_assurance = individu('regime_name_duree_assurance', period)
             taux_annuite = bareme_annuite.calc(duree_assurance)
             return taux_annuite
-
-
-# def revalorise(variable_31_decembre_annee_precedente, variable_originale, annee_de_liquidation, revalorisation, period):
-#     return select(
-#         [
-#             annee_de_liquidation > period.start.year,
-#             annee_de_liquidation == period.start.year,
-#             annee_de_liquidation < period.start.year,
-#             ],
-#         [
-#             0,
-#             variable_originale,
-#             variable_31_decembre_annee_precedente * revalorisation
-#             ]
-#         )

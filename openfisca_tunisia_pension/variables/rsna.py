@@ -1,5 +1,6 @@
 """Abstract regimes definition."""
 from openfisca_core.model_api import *
+from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
 from openfisca_tunisia_pension.entities import Individu
 'Régime des salariés non agricoles.'
 from openfisca_core.model_api import *
@@ -110,17 +111,6 @@ class rsna_pension(Variable):
         montant_pension_percu = max_(montant, pension_minimale * smig)
         return eligibilite * montant_pension_percu
 
-class rsna_pension_au_31_decembre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Pension'
-
-    def formula(individu, period):
-        pension_brute_au_31_decembre = individu('rsna_pension_brute_au_31_decembre', period)
-        majoration_pension_au_31_decembre = individu('rsna_majoration_pension_au_31_decembre', period)
-        return pension_brute_au_31_decembre + majoration_pension_au_31_decembre
-
 class rsna_pension_brute(Variable):
     value_type = float
     entity = Individu
@@ -130,25 +120,7 @@ class rsna_pension_brute(Variable):
     def formula(individu, period, parameters):
         taux_de_liquidation = individu('rsna_taux_de_liquidation', period)
         salaire_de_reference = individu('rsna_salaire_de_reference', period)
-        pension_minimale = individu('rsna_pension_minimale', period)
-        pension_maximale = individu('rsna_pension_maximale', period)
-        return min_(pension_maximale, max_(taux_de_liquidation * salaire_de_reference, pension_minimale))
-
-class rsna_pension_brute_au_31_decembre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Pension brute au 31 décembre'
-
-    def formula(individu, period, parameters):
-        annee_de_liquidation = individu('rsna_liquidation_date', period).astype('datetime64[Y]').astype(int) + 1970
-        if all(period.start.year < annee_de_liquidation):
-            return individu.empty_array()
-        last_year = period.last_year
-        pension_brute_au_31_decembre_annee_precedente = individu('rsna_pension_brute_au_31_decembre', last_year)
-        revalorisation = parameters(period).rsna.revalorisation_pension_au_31_decembre
-        pension_brute = individu('rsna_pension_brute', period)
-        return revalorise(pension_brute_au_31_decembre_annee_precedente, pension_brute, annee_de_liquidation, revalorisation, period)
+        return (taux_de_liquidation * salaire_de_reference,)
 
 class rsna_pension_maximale(Variable):
     value_type = float

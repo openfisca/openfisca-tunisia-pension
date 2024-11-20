@@ -16,7 +16,7 @@ from numpy import (
     )
 
 from openfisca_tunisia_pension.variables.helpers import pension_generique
-from openfisca_tunisia_pension.tools import make_mean_over_largest
+from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
 
 
 # Avant 1985
@@ -61,7 +61,13 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
     variable_prefix = 'cnrps'
     parameters_prefix = 'cnrps'
 
-    class salaire_reference(Variable):
+    class salaire_de_reference_calcule_sur_demande(Variable):
+        value_type = bool
+        entity = Individu
+        label = "Le salaire de référence du régime de la CNRPS est calculé à la demande de l'agent sur ses meilleures années"
+        definition_period = ETERNITY
+
+    class salaire_de_reference(Variable):
         value_type = float
         entity = Individu
         label = 'Salaires de référence du régime de la CNRPS'
@@ -72,7 +78,7 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
             '''3 dernières rémunérations ou les 2 plus élevées sur demande.'''
             n = 40
             k = 2
-            mean_over_largest = make_mean_over_largest(k)
+            mean_over_largest = make_mean_over_consecutive_largest(k)
             moyenne_2_salaires_plus_eleves = apply_along_axis(
                 mean_over_largest,
                 axis = 0,
@@ -84,9 +90,10 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
                 for year in range(period.start.year, period.start.year - p, -1)
                 ) / p
 
-            salaire_refererence = max_(
+            salaire_refererence = where(
+                individu('regime_name_salaire_de_reference_calcule_sur_demande', period),
+                moyenne_2_salaires_plus_eleves,
                 moyenne_3_derniers_salaires,
-                moyenne_2_salaires_plus_eleves
                 )
             return salaire_refererence
 
@@ -98,7 +105,7 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
 
         def formula(individu, period, parameters):
             duree_assurance = individu('regime_name_duree_assurance', period = period)
-            salaire_reference = individu('regime_name_salaire_reference', period = period)
+            salaire_reference = individu('regime_name_salaire_de_reference', period = period)
             age = individu('age', period = period)
 
             cnrps = parameters(period).retraite.regime_name

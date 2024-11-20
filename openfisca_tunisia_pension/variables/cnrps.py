@@ -1,5 +1,6 @@
 """Abstract regimes definition."""
 from openfisca_core.model_api import *
+from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
 from openfisca_tunisia_pension.entities import Individu
 'Régime de la Caisse nationale de retraite et de prévoyance sociale (CNRPS).'
 from openfisca_core.model_api import *
@@ -7,7 +8,7 @@ from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
 from numpy import apply_along_axis, logical_not as not_, maximum as max_, vstack
 from openfisca_tunisia_pension.variables.helpers import pension_generique
-from openfisca_tunisia_pension.tools import make_mean_over_largest
+from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
 
 class cnrps_cotisation(Variable):
     value_type = float
@@ -82,7 +83,7 @@ class cnrps_pension(Variable):
 
     def formula(individu, period, parameters):
         duree_assurance = individu('cnrps_duree_assurance', period=period)
-        salaire_reference = individu('cnrps_salaire_reference', period=period)
+        salaire_reference = individu('cnrps_salaire_de_reference', period=period)
         age = individu('age', period=period)
         cnrps = parameters(period).retraite.cnrps
         taux_annuite_base = cnrps.taux_annuite_base
@@ -102,17 +103,6 @@ class cnrps_pension(Variable):
         montant_pension_percu = max_(montant, pension_minimale * smig)
         return eligibilite * montant_pension_percu
 
-class cnrps_pension_au_31_decembre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Pension'
-
-    def formula(individu, period):
-        pension_brute_au_31_decembre = individu('cnrps_pension_brute_au_31_decembre', period)
-        majoration_pension_au_31_decembre = individu('cnrps_majoration_pension_au_31_decembre', period)
-        return pension_brute_au_31_decembre + majoration_pension_au_31_decembre
-
 class cnrps_pension_brute(Variable):
     value_type = float
     entity = Individu
@@ -122,43 +112,7 @@ class cnrps_pension_brute(Variable):
     def formula(individu, period, parameters):
         taux_de_liquidation = individu('cnrps_taux_de_liquidation', period)
         salaire_de_reference = individu('cnrps_salaire_de_reference', period)
-        pension_minimale = individu('cnrps_pension_minimale', period)
-        pension_maximale = individu('cnrps_pension_maximale', period)
-        return min_(pension_maximale, max_(taux_de_liquidation * salaire_de_reference, pension_minimale))
-
-class cnrps_pension_brute_au_31_decembre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Pension brute au 31 décembre'
-
-    def formula(individu, period, parameters):
-        annee_de_liquidation = individu('cnrps_liquidation_date', period).astype('datetime64[Y]').astype(int) + 1970
-        if all(period.start.year < annee_de_liquidation):
-            return individu.empty_array()
-        last_year = period.last_year
-        pension_brute_au_31_decembre_annee_precedente = individu('cnrps_pension_brute_au_31_decembre', last_year)
-        revalorisation = parameters(period).cnrps.revalorisation_pension_au_31_decembre
-        pension_brute = individu('cnrps_pension_brute', period)
-        return revalorise(pension_brute_au_31_decembre_annee_precedente, pension_brute, annee_de_liquidation, revalorisation, period)
-
-class cnrps_pension_maximale(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Pension maximale'
-
-    def formula(individu, period, parameters):
-        NotImplementedError
-
-class cnrps_pension_minimale(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Pension minimale'
-
-    def formula(individu, period, parameters):
-        NotImplementedError
+        return (taux_de_liquidation * salaire_de_reference,)
 
 class cnrps_pension_servie(Variable):
     value_type = float
@@ -186,12 +140,6 @@ class cnrps_salaire_de_base(Variable):
 class cnrps_salaire_de_reference(Variable):
     value_type = float
     entity = Individu
-    definition_period = ETERNITY
-    label = 'Salaire de référence'
-
-class cnrps_salaire_reference(Variable):
-    value_type = float
-    entity = Individu
     label = 'Salaires de référence du régime de la CNRPS'
     definition_period = YEAR
 
@@ -199,12 +147,18 @@ class cnrps_salaire_reference(Variable):
         """3 dernières rémunérations ou les 2 plus élevées sur demande."""
         n = 40
         k = 2
-        mean_over_largest = make_mean_over_largest(k)
+        mean_over_largest = make_mean_over_consecutive_largest(k)
         moyenne_2_salaires_plus_eleves = apply_along_axis(mean_over_largest, axis=0, arr=vstack([individu('cnrps_salaire_de_base', period=year) for year in range(period.start.year, period.start.year - n, -1)]))
         p = 3
         moyenne_3_derniers_salaires = sum((individu('cnrps_salaire_de_base', period=year) for year in range(period.start.year, period.start.year - p, -1))) / p
-        salaire_refererence = max_(moyenne_3_derniers_salaires, moyenne_2_salaires_plus_eleves)
+        salaire_refererence = where(individu('cnrps_salaire_de_reference_calcule_sur_demande', period), moyenne_2_salaires_plus_eleves, moyenne_3_derniers_salaires)
         return salaire_refererence
+
+class cnrps_salaire_de_reference_calcule_sur_demande(Variable):
+    value_type = bool
+    entity = Individu
+    label = "Le salaire de référence du régime de la CNRPS est calculé à la demande de l'agent sur ses meilleures années"
+    definition_period = ETERNITY
 
 class cnrps_taux_de_liquidation(Variable):
     value_type = float
