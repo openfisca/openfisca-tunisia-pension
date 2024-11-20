@@ -42,6 +42,20 @@ from openfisca_tunisia_pension.tools import make_mean_over_largest
 # - Sur demande ou d’office aux agents de plus de 50 ans et plus de 20 ans de services.
 
 
+# Après 1985
+
+# Le départ à la retraite est prononcé :
+# Lors de l'atteinte de l'âge légal de mise à retraite ;
+# Avant l'atteinte de cet âge:
+# a/ en cas d'invalidité physique ;
+# b/ sur demande ;
+# c/ en cas de démission ;
+# d/ à l'initiative de l'employeur pour insuffisance professionnelle de l'agent ;
+# e/ en cas de révocation ;
+# f/ sur demande pour les mères de trois enfants;
+# g/ d’office.
+
+
 class RegimeCNRPS(AbstractRegimeEnAnnuites):
     name = 'Régime des salariés non agricoles'
     variable_prefix = 'cnrps'
