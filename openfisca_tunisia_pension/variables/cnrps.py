@@ -1,4 +1,5 @@
 """Abstract regimes definition."""
+import numpy as np
 from openfisca_core.model_api import *
 from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
 from openfisca_tunisia_pension.entities import Individu
@@ -6,8 +7,7 @@ from openfisca_tunisia_pension.entities import Individu
 from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-from numpy import apply_along_axis, logical_not as not_, maximum as max_, vstack
-from openfisca_tunisia_pension.variables.helpers import pension_generique
+from numpy import apply_along_axis, vstack
 from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
 
 class cnrps_cotisation(Variable):
@@ -31,6 +31,21 @@ class cnrps_duree_assurance_annuelle(Variable):
     definition_period = YEAR
     label = "Durée d'assurance (en trimestres validés l'année considérée)"
 
+class cnrps_eligible(Variable):
+    value_type = bool
+    entity = Individu
+    label = "L'individu est éligible à une pension CNRPS"
+    definition_period = YEAR
+
+    def formula(individu, period, parameters):
+        duree_assurance = individu('cnrps_duree_assurance', period=period)
+        salaire_de_reference = individu('cnrps_salaire_de_reference', period=period)
+        age = individu('age', period=period)
+        cnrps = parameters(period).retraite.cnrps
+        duree_de_service_minimale_accomplie = duree_assurance > 4 * cnrps.duree_de_service_minimale
+        critere_age_verifie = age >= cnrps.age_legal.civil.cadre_commun
+        return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
+
 class cnrps_liquidation_date(Variable):
     value_type = date
     entity = Individu
@@ -38,70 +53,33 @@ class cnrps_liquidation_date(Variable):
     label = 'Date de liquidation'
     default_value = date(2250, 12, 31)
 
-class cnrps_majoration_duree_assurance(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = ETERNITY
-    label = "Majoration de durée d'assurance"
-
-    def formula(individu, period):
-        return individu('cnrps_majoration_duree_assurance_enfant', period) + individu('cnrps_majoration_duree_assurance_autre', period)
-
-class cnrps_majoration_duree_assurance_autre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = ETERNITY
-    label = "Majoration de durée d'assurance autre que celle attribuée au motif des enfants"
-
 class cnrps_majoration_pension(Variable):
-    value_type = float
+    value_type = int
     entity = Individu
-    definition_period = YEAR
+    definition_period = MONTH
     label = 'Majoration de pension'
 
-class cnrps_majoration_pension_au_31_decembre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Majoration de pension au 31 décembre'
-
     def formula(individu, period, parameters):
-        annee_de_liquidation = individu('cnrps_liquidation_date', period).astype('datetime64[Y]').astype(int) + 1970
-        if all(annee_de_liquidation > period.start.year):
-            return individu.empty_array()
-        last_year = period.last_year
-        majoration_pension_au_31_decembre_annee_precedente = individu('cnrps_majoration_pension_au_31_decembre', last_year)
-        revalorisation = parameters(period).cnrps.revalorisation_pension_au_31_decembre
-        majoration_pension = individu('cnrps_majoration_pension', period)
-        return revalorise(majoration_pension_au_31_decembre_annee_precedente, majoration_pension, annee_de_liquidation, revalorisation, period)
+        NotImplementedError
 
 class cnrps_pension(Variable):
     value_type = float
     entity = Individu
-    label = 'Pension des affiliés au régime des salariés non agricoles'
     definition_period = YEAR
+    label = 'Pension'
 
-    def formula(individu, period, parameters):
-        duree_assurance = individu('cnrps_duree_assurance', period=period)
-        salaire_reference = individu('cnrps_salaire_de_reference', period=period)
-        age = individu('age', period=period)
-        cnrps = parameters(period).retraite.cnrps
-        taux_annuite_base = cnrps.taux_annuite_base
-        taux_annuite_supplementaire = cnrps.taux_annuite_supplementaire
-        duree_stage = cnrps.stage_derog
-        age_eligible = cnrps.age_dep_anticip
-        periode_remplacement_base = cnrps.periode_remplacement_base
-        plaf_taux_pension = cnrps.plaf_taux_pension
-        smig = parameters(period).marche_travail.smig_48h
-        pension_min_sup = cnrps.pension_minimale.sup
-        pension_min_inf = cnrps.pension_minimale.inf
-        stage = duree_assurance > 4 * duree_stage
-        pension_minimale = stage * pension_min_sup + not_(stage) * pension_min_inf
-        montant = pension_generique(duree_assurance, salaire_reference, taux_annuite_base, taux_annuite_supplementaire, duree_stage, age_eligible, periode_remplacement_base, plaf_taux_pension)
-        eligibilite_age = age > age_eligible
-        eligibilite = stage * eligibilite_age * (salaire_reference > 0)
-        montant_pension_percu = max_(montant, pension_minimale * smig)
-        return eligibilite * montant_pension_percu
+    def formula(individu, period):
+        pension_brute = individu('cnrps_pension_brute', period)
+        eligible = individu('cnrps_eligible', period)
+        try:
+            pension_minimale = individu('cnrps_pension_minimale', period)
+        except VariableNotFoundError:
+            pension_minimale = 0
+        try:
+            pension_maximale = individu('cnrps_pension_maximale', period)
+        except (VariableNotFoundError, NotImplementedError):
+            return max_(pension_brute, pension_minimale)
+        return eligible * min_(pension_maximale, max_(pension_brute, pension_minimale))
 
 class cnrps_pension_brute(Variable):
     value_type = float
@@ -113,6 +91,31 @@ class cnrps_pension_brute(Variable):
         taux_de_liquidation = individu('cnrps_taux_de_liquidation', period)
         salaire_de_reference = individu('cnrps_salaire_de_reference', period)
         return (taux_de_liquidation * salaire_de_reference,)
+
+class cnrps_pension_maximale(Variable):
+    value_type = float
+    default_value = np.inf
+    entity = Individu
+    definition_period = YEAR
+    label = 'Pension maximale'
+
+    def formula(individu, period, parameters):
+        NotImplementedError
+
+class cnrps_pension_minimale(Variable):
+    value_type = float
+    default_value = 0
+    entity = Individu
+    definition_period = YEAR
+    label = 'Pension minimale'
+
+    def formula(individu, period, parameters):
+        cnrps = parameters(period).retraite.cnrps
+        pension_minimale = cnrps.pension_minimale
+        duree_de_service_minimale = cnrps.duree_de_service_minimale
+        smig_annuel = 12 * parameters(period).marche_travail.smig_40h_mensuel
+        duree_assurance = individu('cnrps_duree_assurance', period)
+        return apply_thresholds(duree_assurance / 4, [pension_minimale.duree_service_allocation_vieillesse, duree_de_service_minimale], [0, pension_minimale.allocation_vieillesse * smig_annuel, pension_minimale.minimum_garanti * smig_annuel])
 
 class cnrps_pension_servie(Variable):
     value_type = float

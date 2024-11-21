@@ -1,4 +1,5 @@
 """Abstract regimes definition."""
+import numpy as np
 from openfisca_core.model_api import *
 from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
 from openfisca_tunisia_pension.entities import Individu
@@ -6,9 +7,8 @@ from openfisca_tunisia_pension.entities import Individu
 from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-from numpy import apply_along_axis, logical_not as not_, maximum as max_, vstack
+from numpy import apply_along_axis, vstack
 from openfisca_tunisia_pension.tools import make_mean_over_largest
-from openfisca_tunisia_pension.variables.helpers import pension_generique
 
 class rsna_RSNATypesRaisonDepartAnticipe(Enum):
     __order__ = 'non_concerne licenciement_economique usure_prematuree_organisme mere_3_enfants convenance_personnelle'
@@ -39,6 +39,21 @@ class rsna_duree_assurance_annuelle(Variable):
     definition_period = YEAR
     label = "Durée d'assurance (en trimestres validés l'année considérée)"
 
+class rsna_eligible(Variable):
+    value_type = bool
+    entity = Individu
+    label = "L'individu est éligible à une pension CNRPS"
+    definition_period = YEAR
+
+    def formula(individu, period, parameters):
+        duree_assurance = individu('rsna_duree_assurance', period=period)
+        salaire_de_reference = individu('rsna_salaire_de_reference', period=period)
+        age = individu('age', period=period)
+        rsna = parameters(period).retraite.rsna
+        duree_stage_accomplie = duree_assurance > 4 * rsna.stage_requis
+        critere_age_verifie = age >= rsna.age_legal
+        return duree_stage_accomplie * critere_age_verifie * (salaire_de_reference > 0)
+
 class rsna_liquidation_date(Variable):
     value_type = date
     entity = Individu
@@ -46,70 +61,33 @@ class rsna_liquidation_date(Variable):
     label = 'Date de liquidation'
     default_value = date(2250, 12, 31)
 
-class rsna_majoration_duree_assurance(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = ETERNITY
-    label = "Majoration de durée d'assurance"
-
-    def formula(individu, period):
-        return individu('rsna_majoration_duree_assurance_enfant', period) + individu('rsna_majoration_duree_assurance_autre', period)
-
-class rsna_majoration_duree_assurance_autre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = ETERNITY
-    label = "Majoration de durée d'assurance autre que celle attribuée au motif des enfants"
-
 class rsna_majoration_pension(Variable):
-    value_type = float
+    value_type = int
     entity = Individu
-    definition_period = YEAR
+    definition_period = MONTH
     label = 'Majoration de pension'
 
-class rsna_majoration_pension_au_31_decembre(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = YEAR
-    label = 'Majoration de pension au 31 décembre'
-
     def formula(individu, period, parameters):
-        annee_de_liquidation = individu('rsna_liquidation_date', period).astype('datetime64[Y]').astype(int) + 1970
-        if all(annee_de_liquidation > period.start.year):
-            return individu.empty_array()
-        last_year = period.last_year
-        majoration_pension_au_31_decembre_annee_precedente = individu('rsna_majoration_pension_au_31_decembre', last_year)
-        revalorisation = parameters(period).rsna.revalorisation_pension_au_31_decembre
-        majoration_pension = individu('rsna_majoration_pension', period)
-        return revalorise(majoration_pension_au_31_decembre_annee_precedente, majoration_pension, annee_de_liquidation, revalorisation, period)
+        NotImplementedError
 
 class rsna_pension(Variable):
     value_type = float
     entity = Individu
-    label = 'Pension des affiliés au régime des salariés non agricoles'
     definition_period = YEAR
+    label = 'Pension'
 
-    def formula(individu, period, parameters):
-        duree_assurance = individu('rsna_duree_assurance', period=period)
-        salaire_reference = individu('rsna_salaire_reference', period=period)
-        age = individu('age', period=period)
-        rsna = parameters(period).retraite.rsna
-        taux_annuite_base = rsna.taux_annuite_base
-        taux_annuite_supplementaire = rsna.taux_annuite_supplementaire
-        age_eligible = rsna.age_dep_anticip
-        periode_remplacement_base = rsna.periode_remplacement_base
-        plaf_taux_pension = rsna.plaf_taux_pension
-        smig = parameters(period).marche_travail.smig_48h
-        pension_min_sup = rsna.pension_minimale.sup
-        pension_min_inf = rsna.pension_minimale.inf
-        duree_stage = rsna.stage_derog
-        stage = duree_assurance > 4 * duree_stage
-        pension_minimale = stage * pension_min_sup + not_(stage) * pension_min_inf
-        montant = pension_generique(duree_assurance, salaire_reference, taux_annuite_base, taux_annuite_supplementaire, duree_stage, age_eligible, periode_remplacement_base, plaf_taux_pension)
-        eligibilite_age = age > age_eligible
-        eligibilite = stage * eligibilite_age * (salaire_reference > 0)
-        montant_pension_percu = max_(montant, pension_minimale * smig)
-        return eligibilite * montant_pension_percu
+    def formula(individu, period):
+        pension_brute = individu('rsna_pension_brute', period)
+        eligible = individu('rsna_eligible', period)
+        try:
+            pension_minimale = individu('rsna_pension_minimale', period)
+        except VariableNotFoundError:
+            pension_minimale = 0
+        try:
+            pension_maximale = individu('rsna_pension_maximale', period)
+        except (VariableNotFoundError, NotImplementedError):
+            return max_(pension_brute, pension_minimale)
+        return eligible * min_(pension_maximale, max_(pension_brute, pension_minimale))
 
 class rsna_pension_brute(Variable):
     value_type = float
@@ -124,6 +102,7 @@ class rsna_pension_brute(Variable):
 
 class rsna_pension_maximale(Variable):
     value_type = float
+    default_value = np.inf
     entity = Individu
     definition_period = YEAR
     label = 'Pension maximale'
@@ -133,12 +112,17 @@ class rsna_pension_maximale(Variable):
 
 class rsna_pension_minimale(Variable):
     value_type = float
+    default_value = 0
     entity = Individu
     definition_period = YEAR
     label = 'Pension minimale'
 
     def formula(individu, period, parameters):
-        NotImplementedError
+        rsna = parameters(period).retraite.rsna
+        pension_minimale = rsna.pension_minimale
+        smig_annuel = 12 * parameters(period).marche_travail.smig_40h_mensuel
+        duree_assurance = individu('rsna_duree_assurance', period)
+        return apply_thresholds(duree_assurance / 4, [rsna.stage_derog, rsna.stage_requis], [0, pension_minimale.inf * smig_annuel, pension_minimale.sup * smig_annuel])
 
 class rsna_pension_servie(Variable):
     value_type = float
@@ -164,12 +148,6 @@ class rsna_salaire_de_base(Variable):
     set_input = set_input_divide_by_period
 
 class rsna_salaire_de_reference(Variable):
-    value_type = float
-    entity = Individu
-    definition_period = ETERNITY
-    label = 'Salaire de référence'
-
-class rsna_salaire_reference(Variable):
     value_type = float
     entity = Individu
     label = 'Salaires de référence du régime des salariés non agricoles'

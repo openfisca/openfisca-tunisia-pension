@@ -10,12 +10,9 @@ from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
 
 from numpy import (
     apply_along_axis,
-    logical_not as not_,
-    maximum as max_,
     vstack,
     )
 
-from openfisca_tunisia_pension.variables.helpers import pension_generique
 from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
 
 
@@ -97,46 +94,55 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
                 )
             return salaire_refererence
 
-    class pension(Variable):
+    # class pension_maximale(Variable):
+    #     value_type = float
+    #     default_value = np.inf  # Pas de pension maximale par défaut
+    #     entity = Individu
+    #     definition_period = YEAR
+    #     label = 'Pension maximale'
+
+    #     def formula(individu, period, parameters):
+    #         NotImplementedError
+
+    class pension_minimale(Variable):
         value_type = float
+        default_value = 0  # Pas de pension minimale par défaut, elle est à zéro
         entity = Individu
-        label = 'Pension des affiliés au régime des salariés non agricoles'
+        definition_period = YEAR
+        label = 'Pension minimale'
+
+        def formula(individu, period, parameters):
+            cnrps = parameters(period).retraite.regime_name
+            pension_minimale = cnrps.pension_minimale
+            duree_de_service_minimale = cnrps.duree_de_service_minimale
+            # TODO Annualiser le Smig
+            smig_annuel = 12 * parameters(period).marche_travail.smig_40h_mensuel
+            duree_assurance = individu('regime_name_duree_assurance', period)
+            return apply_thresholds(
+                duree_assurance / 4,
+                [
+                    pension_minimale.duree_service_allocation_vieillesse,
+                    duree_de_service_minimale,
+                    ],
+                [
+                    0,
+                    pension_minimale.allocation_vieillesse * smig_annuel,
+                    pension_minimale.minimum_garanti * smig_annuel,
+                    ]
+
+                )
+
+    class eligible(Variable):
+        value_type = bool
+        entity = Individu
+        label = "L'individu est éligible à une pension CNRPS"
         definition_period = YEAR
 
         def formula(individu, period, parameters):
             duree_assurance = individu('regime_name_duree_assurance', period = period)
-            salaire_reference = individu('regime_name_salaire_de_reference', period = period)
+            salaire_de_reference = individu('regime_name_salaire_de_reference', period = period)
             age = individu('age', period = period)
-
             cnrps = parameters(period).retraite.regime_name
-            taux_annuite_base = cnrps.taux_annuite_base
-            taux_annuite_supplementaire = cnrps.taux_annuite_supplementaire
-            duree_stage = cnrps.stage_derog
-            age_eligible = cnrps.age_dep_anticip
-            periode_remplacement_base = cnrps.periode_remplacement_base
-            plaf_taux_pension = cnrps.plaf_taux_pension
-            smig = parameters(period).marche_travail.smig_48h
-
-            pension_min_sup = cnrps.pension_minimale.sup
-            pension_min_inf = cnrps.pension_minimale.inf
-
-            stage = duree_assurance > 4 * duree_stage
-            pension_minimale = (
-                stage * pension_min_sup + not_(stage) * pension_min_inf
-                )
-            montant = pension_generique(
-                duree_assurance,
-                salaire_reference,
-                taux_annuite_base,
-                taux_annuite_supplementaire,
-                duree_stage,
-                age_eligible,
-                periode_remplacement_base,
-                plaf_taux_pension,
-                )
-            # eligibilite
-            eligibilite_age = age > age_eligible
-            eligibilite = stage * eligibilite_age * (salaire_reference > 0)
-            # plafonnement
-            montant_pension_percu = max_(montant, pension_minimale * smig)
-            return eligibilite * montant_pension_percu
+            duree_de_service_minimale_accomplie = duree_assurance > 4 * cnrps.duree_de_service_minimale
+            critere_age_verifie = age >= cnrps.age_legal.civil.cadre_commun
+            return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
