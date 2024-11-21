@@ -33,7 +33,6 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
         # A partir de 55 ans :
         convenance_personnelle = 'Convenance personnelle, avec 360 mois de cotisations (120 trimestres)'
 
-
     class eligible(Variable):
         value_type = bool
         entity = Individu
@@ -45,55 +44,9 @@ class RegimeRSNA(AbstractRegimeEnAnnuites):
             salaire_de_reference = individu('regime_name_salaire_de_reference', period = period)
             age = individu('age', period = period)
             rsna = parameters(period).retraite.regime_name
-            duree_stage_accomplie =  duree_assurance > 4 * rsna.stage_requis
+            duree_stage_accomplie = duree_assurance > 4 * rsna.stage_requis
             critere_age_verifie = age >= rsna.age_legal
             return duree_stage_accomplie * critere_age_verifie * (salaire_de_reference > 0)
-
-    # class pension(Variable):
-    #     value_type = float
-    #     entity = Individu
-    #     label = 'Pension des affiliés au régime des salariés non agricoles'
-    #     definition_period = YEAR
-
-    #     def formula(individu, period, parameters):
-    #         duree_assurance = individu('regime_name_duree_assurance', period = period)
-    #         salaire_reference = individu('regime_name_salaire_reference', period = period)
-    #         age = individu('age', period = period)
-
-    #         rsna = parameters(period).retraite.regime_name
-    #         taux_annuite_base = rsna.taux_annuite_base
-    #         taux_annuite_supplementaire = rsna.taux_annuite_supplementaire
-    #         age_eligible = rsna.age_dep_anticip
-    #         periode_remplacement_base = rsna.periode_remplacement_base
-    #         plaf_taux_pension = rsna.plaf_taux_pension
-    #         smig = parameters(period).marche_travail.smig_48h
-
-    #         pension_min_sup = rsna.pension_minimale.sup
-    #         pension_min_inf = rsna.pension_minimale.inf
-
-    #         duree_stage = rsna.stage_derog
-    #         stage = duree_assurance > 4 * duree_stage
-    #         pension_minimale = (
-    #             stage * pension_min_sup + not_(stage) * pension_min_inf
-    #             )
-    #         montant = pension_generique(
-    #             duree_assurance,
-    #             salaire_reference,
-    #             taux_annuite_base,
-    #             taux_annuite_supplementaire,
-    #             duree_stage,
-    #             age_eligible,
-    #             periode_remplacement_base,
-    #             plaf_taux_pension,
-    #             )
-    #         # eligibilite
-    #         eligibilite_age = age > age_eligible
-    #         eligibilite = stage * eligibilite_age * (salaire_reference > 0)
-    #         # plafonnement
-    #         montant_pension_percu = max_(montant, pension_minimale * smig)
-    #         return eligibilite * montant_pension_percu
-
-
 
     class pension_minimale(Variable):
         value_type = float
