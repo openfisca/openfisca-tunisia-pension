@@ -1,4 +1,4 @@
-- name: "Individu salarié 12000 DT par an toute sa carrière sauf accélération en fin"
+- name: "Fonctionnaires 12000 DT par an avec  accélération en fin"
   period: 2014
   absolute_error_margin: 0.5
   input:
@@ -49,7 +49,7 @@
     cnrps_salaire_de_reference: 12500
 
 
-- name: "Individu fonctionnaire 2 années à 20000 supérieure à tous le reste de sa carrière"
+- name: "Fonctionnaire 2 années à 20000 supérieures au reste de sa carrière"
   period: 2014
   absolute_error_margin: 0.5
   input:
