@@ -143,7 +143,7 @@ class rsna_pension_servie(Variable):
 class rsna_salaire_de_base(Variable):
     value_type = float
     entity = Individu
-    definition_period = YEAR
+    definition_period = MONTH
     label = 'Salaire de base (salaire brut)'
     set_input = set_input_divide_by_period
 
@@ -157,7 +157,7 @@ class rsna_salaire_de_reference(Variable):
         k = 10
         mean_over_largest = make_mean_over_largest(k=k)
         n = 40
-        salaire_refererence = apply_along_axis(mean_over_largest, axis=0, arr=vstack([individu('rsna_salaire_de_base', period=year) for year in range(period.start.year, period.start.year - n, -1)]))
+        salaire_refererence = apply_along_axis(mean_over_largest, axis=0, arr=vstack([individu('rsna_salaire_de_base', period=year, options=[ADD]) for year in range(period.start.year, period.start.year - n, -1)]))
         return salaire_refererence
 
 class rsna_taux_de_liquidation(Variable):

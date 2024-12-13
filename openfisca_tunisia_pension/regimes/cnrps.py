@@ -58,51 +58,20 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
     variable_prefix = 'cnrps'
     parameters_prefix = 'cnrps'
 
-    class salaire_de_reference_calcule_sur_demande(Variable):
+    class eligible(Variable):
         value_type = bool
         entity = Individu
-        label = "Le salaire de référence du régime de la CNRPS est calculé à la demande de l'agent sur ses meilleures années"
-        definition_period = ETERNITY
-
-    class salaire_de_reference(Variable):
-        value_type = float
-        entity = Individu
-        label = 'Salaires de référence du régime de la CNRPS'
+        label = "L'individu est éligible à une pension CNRPS"
         definition_period = YEAR
 
-        # TODO: Il semblerait que c'était les 6 deniers mois en 2011 voir manuel CNRPS
-        def formula(individu, period):
-            '''3 dernières rémunérations ou les 2 plus élevées sur demande.'''
-            n = 40
-            k = 2
-            mean_over_largest = make_mean_over_consecutive_largest(k)
-            moyenne_2_salaires_plus_eleves = apply_along_axis(
-                mean_over_largest,
-                axis = 0,
-                arr = vstack([individu('regime_name_salaire_de_base', period = year) for year in range(period.start.year, period.start.year - n, -1)]),
-                )
-            p = 3
-            moyenne_3_derniers_salaires = sum(
-                individu('regime_name_salaire_de_base', period = year)
-                for year in range(period.start.year, period.start.year - p, -1)
-                ) / p
-
-            salaire_refererence = where(
-                individu('regime_name_salaire_de_reference_calcule_sur_demande', period),
-                moyenne_2_salaires_plus_eleves,
-                moyenne_3_derniers_salaires,
-                )
-            return salaire_refererence
-
-    # class pension_maximale(Variable):
-    #     value_type = float
-    #     default_value = np.inf  # Pas de pension maximale par défaut
-    #     entity = Individu
-    #     definition_period = YEAR
-    #     label = 'Pension maximale'
-
-    #     def formula(individu, period, parameters):
-    #         NotImplementedError
+        def formula(individu, period, parameters):
+            duree_assurance = individu('regime_name_duree_assurance', period = period)
+            salaire_de_reference = individu('regime_name_salaire_de_reference', period = period)
+            age = individu('age', period = period)
+            cnrps = parameters(period).retraite.regime_name
+            duree_de_service_minimale_accomplie = duree_assurance > 4 * cnrps.duree_de_service_minimale
+            critere_age_verifie = age >= cnrps.age_legal.civil.cadre_commun
+            return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
 
     class pension_minimale(Variable):
         value_type = float
@@ -132,17 +101,51 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
 
                 )
 
-    class eligible(Variable):
+    class salaire_de_reference_calcule_sur_demande(Variable):
         value_type = bool
         entity = Individu
-        label = "L'individu est éligible à une pension CNRPS"
+        label = "Le salaire de référence du régime de la CNRPS est calculé à la demande de l'agent sur ses meilleures années"
+        definition_period = ETERNITY
+
+    class salaire_de_reference(Variable):
+        value_type = float
+        entity = Individu
+        label = 'Salaires de référence du régime de la CNRPS'
         definition_period = YEAR
 
-        def formula(individu, period, parameters):
-            duree_assurance = individu('regime_name_duree_assurance', period = period)
-            salaire_de_reference = individu('regime_name_salaire_de_reference', period = period)
-            age = individu('age', period = period)
-            cnrps = parameters(period).retraite.regime_name
-            duree_de_service_minimale_accomplie = duree_assurance > 4 * cnrps.duree_de_service_minimale
-            critere_age_verifie = age >= cnrps.age_legal.civil.cadre_commun
-            return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
+        # TODO: Il semblerait que c'était les 6 deniers mois en 2011 voir manuel CNRPS
+        def formula(individu, period):
+            '''3 dernières rémunérations ou les 2 plus élevées sur demande.'''
+            n = 40
+            k = 2
+            mean_over_largest = make_mean_over_consecutive_largest(k)
+            moyenne_2_salaires_plus_eleves = apply_along_axis(
+                mean_over_largest,
+                axis = 0,
+                arr = vstack([individu('regime_name_salaire_de_base', period = year, options = [ADD]) for year in range(period.start.year, period.start.year - n, -1)]),
+                )
+            p = 3
+            moyenne_3_derniers_salaires = sum(
+                individu('regime_name_salaire_de_base', period = year, options = [ADD])
+                for year in range(period.start.year, period.start.year - p, -1)
+                ) / p
+
+            salaire_refererence = where(
+                individu('regime_name_salaire_de_reference_calcule_sur_demande', period),
+                moyenne_2_salaires_plus_eleves,
+                moyenne_3_derniers_salaires,
+                )
+            return salaire_refererence
+
+    class bonifications(Variable):
+        value_type = float
+        entity = Individu
+        label = 'Bonifications'
+        definition_period = YEAR
+
+        def formula(individu, period):
+
+            return (
+                individu('bonfication_retraite_pour_limite_d_age', period),
+                + individu('bonfication_retraite_avant_age_legal', period)
+                )

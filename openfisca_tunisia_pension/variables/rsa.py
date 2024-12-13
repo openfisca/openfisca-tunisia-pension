@@ -132,7 +132,7 @@ class rsa_pension_servie(Variable):
 class rsa_salaire_de_base(Variable):
     value_type = float
     entity = Individu
-    definition_period = YEAR
+    definition_period = MONTH
     label = 'Salaire de base (salaire brut)'
     set_input = set_input_divide_by_period
 

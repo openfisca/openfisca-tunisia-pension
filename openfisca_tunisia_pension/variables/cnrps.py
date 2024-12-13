@@ -10,6 +10,15 @@ from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
 from numpy import apply_along_axis, vstack
 from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
 
+class cnrps_bonifications(Variable):
+    value_type = float
+    entity = Individu
+    label = 'Bonifications'
+    definition_period = YEAR
+
+    def formula(individu, period):
+        return (individu('bonfication_retraite_pour_limite_d_age', period), +individu('bonfication_retraite_avant_age_legal', period))
+
 class cnrps_cotisation(Variable):
     value_type = float
     entity = Individu
@@ -136,7 +145,7 @@ class cnrps_pension_servie(Variable):
 class cnrps_salaire_de_base(Variable):
     value_type = float
     entity = Individu
-    definition_period = YEAR
+    definition_period = MONTH
     label = 'Salaire de base (salaire brut)'
     set_input = set_input_divide_by_period
 
@@ -151,9 +160,9 @@ class cnrps_salaire_de_reference(Variable):
         n = 40
         k = 2
         mean_over_largest = make_mean_over_consecutive_largest(k)
-        moyenne_2_salaires_plus_eleves = apply_along_axis(mean_over_largest, axis=0, arr=vstack([individu('cnrps_salaire_de_base', period=year) for year in range(period.start.year, period.start.year - n, -1)]))
+        moyenne_2_salaires_plus_eleves = apply_along_axis(mean_over_largest, axis=0, arr=vstack([individu('cnrps_salaire_de_base', period=year, options=[ADD]) for year in range(period.start.year, period.start.year - n, -1)]))
         p = 3
-        moyenne_3_derniers_salaires = sum((individu('cnrps_salaire_de_base', period=year) for year in range(period.start.year, period.start.year - p, -1))) / p
+        moyenne_3_derniers_salaires = sum((individu('cnrps_salaire_de_base', period=year, options=[ADD]) for year in range(period.start.year, period.start.year - p, -1))) / p
         salaire_refererence = where(individu('cnrps_salaire_de_reference_calcule_sur_demande', period), moyenne_2_salaires_plus_eleves, moyenne_3_derniers_salaires)
         return salaire_refererence
 
