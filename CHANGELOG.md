@@ -1,6 +1,15 @@
 # Changelog
 
-# 3.0.0 [#14](https://github.com/openfisca/openfisca-tunisia-pension/pull/14)
+# 5.0.0 [#15](https://github.com/openfisca/openfisca-tunisia-pension/pull/15)
+
+* Évolution du système socio-fiscal.
+* Périodes concernées : toutes.
+* Zones impactées : `variables/regimes/cnrps`.
+* Détails :
+  - Introduit le régime de la CNRPS
+
+
+# 4.0.0 [#14](https://github.com/openfisca/openfisca-tunisia-pension/pull/14)
 
 * Évolution du système socio-fiscal.
 * Périodes concernées : toutes.
@@ -31,7 +40,7 @@
     * Move parameters from xml format to yaml files tree
 
 ### 1.0.0
-* Renomme `nb_trim_val` en `trimestres_valides`
+* Renomme `nb_trim_val` en `duree_assurance`
 * Utilisation de noms longs pour différent paramètres
 
 ## 0.9.2
