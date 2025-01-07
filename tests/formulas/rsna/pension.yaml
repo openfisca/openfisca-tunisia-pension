@@ -1,10 +1,10 @@
-- name: "Individu salarié 12000 DT par an toute sa carrière"
+- name: "Individu salarié 12000 DT par an durant toute sa carrière"
   period: 2011
   absolute_error_margin: 0.5
   input:
     age: 60
-    trimestres_valides: 50
-    salaire:
+    rsna_duree_assurance: 50
+    rsna_salaire_de_base:
       1975: 12000
       1976: 12000
       1977: 12000
@@ -46,5 +46,5 @@
       2013: 12000
       2014: 12000
   output:
-    trimestres_valides: 50
-    salaire_reference_rsna: 12000
+    rsna_salaire_de_reference: 12000
+    rsna_pension: 5400
