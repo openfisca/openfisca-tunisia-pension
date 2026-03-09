@@ -222,14 +222,13 @@ class cnrps_salaire_de_reference(Variable):
     definition_period = YEAR
 
     def formula(individu, period):
-        """3 dernières rémunérations ou les 2 plus élevées sur demande."""
+        """Dernière rémunération perçue ou les 2 plus élevées consécutives sur demande (Art 36 l 85-12)."""
         n = 40
         k = 2
         mean_over_largest = make_mean_over_consecutive_largest(k)
         moyenne_2_salaires_plus_eleves = apply_along_axis(mean_over_largest, axis=0, arr=vstack([individu('cnrps_salaire_de_base', period=year, options=[ADD]) for year in range(period.start.year, period.start.year - n, -1)]))
-        p = 3
-        moyenne_3_derniers_salaires = sum((individu('cnrps_salaire_de_base', period=year, options=[ADD]) for year in range(period.start.year, period.start.year - p, -1))) / p
-        salaire_refererence = where(individu('cnrps_salaire_de_reference_calcule_sur_demande', period), moyenne_2_salaires_plus_eleves, moyenne_3_derniers_salaires)
+        derniere_remuneration = individu('cnrps_salaire_de_base', period=period, options=[ADD])
+        salaire_refererence = where(individu('cnrps_salaire_de_reference_calcule_sur_demande', period), moyenne_2_salaires_plus_eleves, derniere_remuneration)
         return salaire_refererence
 
 class cnrps_salaire_de_reference_calcule_sur_demande(Variable):
