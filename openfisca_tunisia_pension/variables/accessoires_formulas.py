@@ -43,8 +43,9 @@ class indemnite_revenu_unique(Variable):
         params_iru = parameters(period).accessoires.indemnite_revenu_unique
 
         # Determine amount based on number of children
-        mnt_1 = (nb_enfants == 1) * params_iru.get('1_enfant', 0)
-        mnt_2 = (nb_enfants == 2) * params_iru.get('2_enfants', 0)
-        mnt_3_plus = (nb_enfants >= 3) * params_iru.get('3_enfants_et_plus', 0)
+        mnt_1 = (nb_enfants == 1) * getattr(params_iru, '1_enfant', 0)
+        mnt_2 = (nb_enfants == 2) * getattr(params_iru, '2_enfants', 0)
+        mnt_3_plus = (nb_enfants >= 3) * getattr(params_iru, '3_enfants_et_plus', 0)
+
 
         return (mnt_1 + mnt_2 + mnt_3_plus) * eligible
