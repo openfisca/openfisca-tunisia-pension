@@ -69,8 +69,46 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
             salaire_de_reference = individu('regime_name_salaire_de_reference', period = period)
             age = individu('age', period = period)
             cnrps = parameters(period).retraite.regime_name
-            duree_de_service_minimale_accomplie = duree_assurance > 4 * cnrps.duree_de_service_minimale
-            critere_age_verifie = age >= cnrps.age_legal.civil.cadre_commun
+
+            age_legal_cadre_commun = cnrps.age_legal.civil.cadre_commun
+            duree_min = cnrps.duree_de_service_minimale
+
+            mere_3_enfants = individu('mere_3_enfants', period)
+            depart_sur_demande = individu('depart_anticipe_sur_demande', period)
+            astreignant = individu('fonction_astreignante', period)
+            invalidite = individu('invalidite_physique', period)
+
+            if hasattr(cnrps, 'depart_anticipe'):
+                age_min_meres = cnrps.depart_anticipe.meres_3_enfants.age_minimum
+                duree_min_meres = cnrps.depart_anticipe.meres_3_enfants.duree_minimum
+
+                age_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum
+                duree_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
+                age_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
+                duree_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
+
+                age_requis = age_legal_cadre_commun
+                duree_requise = duree_min
+
+                age_requis = where(mere_3_enfants, age_min_meres, age_requis)
+                duree_requise = where(mere_3_enfants, duree_min_meres, duree_requise)
+
+                age_requis = where(depart_sur_demande & ~astreignant, age_min_demande_commun, age_requis)
+                duree_requise = where(depart_sur_demande & ~astreignant, duree_min_demande_commun, duree_requise)
+
+                age_requis = where(depart_sur_demande & astreignant, age_min_demande_astreignant, age_requis)
+                duree_requise = where(depart_sur_demande & astreignant, duree_min_demande_astreignant, duree_requise)
+
+                age_requis = where(invalidite, 0, age_requis)
+                duree_requise = where(invalidite, 0, duree_requise)
+
+            else:
+                age_requis = age_legal_cadre_commun
+                duree_requise = duree_min
+
+            duree_de_service_minimale_accomplie = duree_assurance > 4 * duree_requise
+            critere_age_verifie = age >= age_requis
+
             return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
 
     class pension_minimale(Variable):
@@ -143,9 +181,31 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
         label = 'Bonifications'
         definition_period = YEAR
 
-        def formula(individu, period):
+        def formula(individu, period, parameters):
+            duree_militaire = individu('duree_service_militaire', period)
+            duree_actif = individu('duree_service_cadre_actif', period)
 
-            return (
-                individu('bonfication_retraite_pour_limite_d_age', period),
-                + individu('bonfication_retraite_avant_age_legal', period)
-                )
+            # Hardcoding the rules as the YAML parameter mapping seems to be failing
+            # Military: 20 -> 5y, 25 -> 5y, 30 -> 5y
+            bonus_militaire = (duree_militaire >= 20) * 5
+
+            # Actif: 15->2y, 20->3y, 25->4y, 35->5y
+            bonus_actif = (
+                (duree_actif >= 35) * 5 +
+                ((duree_actif >= 25) & (duree_actif < 35)) * 4 +
+                ((duree_actif >= 20) & (duree_actif < 25)) * 3 +
+                ((duree_actif >= 15) & (duree_actif < 20)) * 2
+            )
+
+            return (bonus_militaire + bonus_actif) * 4
+
+    class duree_assurance(Variable):
+        value_type = int
+        entity = Individu
+        definition_period = YEAR
+        label = "Durée d'assurance totale incluant les bonifications (trimestres validés)"
+
+        def formula(individu, period):
+            duree_effective = individu('regime_name_duree_assurance_annuelle', period)
+            bonifications = individu('regime_name_bonifications', period)
+            return duree_effective + bonifications

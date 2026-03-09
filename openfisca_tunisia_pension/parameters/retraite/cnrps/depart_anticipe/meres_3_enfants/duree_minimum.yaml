@@ -1,0 +1,8 @@
+description: Durée minimum de services effectifs pour la retraite anticipée des mères de 3 enfants
+values:
+  1985-03-05:
+    value: 15
+metadata:
+  unit: year
+  reference:
+    1985-03-05: Loi n°85-12 du 5 mars 1985, article 5

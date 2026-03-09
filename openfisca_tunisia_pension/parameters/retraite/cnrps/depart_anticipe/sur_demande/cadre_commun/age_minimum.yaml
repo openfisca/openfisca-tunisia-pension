@@ -1,0 +1,11 @@
+description: Âge minimum pour la retraite anticipée sur demande (Cadre commun)
+values:
+  1985-03-05:
+    value: 55
+  2007-06-25:
+    value: 57
+metadata:
+  unit: year
+  reference:
+    1985-03-05: Loi n°85-12 du 5 mars 1985, article 30 (avant modification)
+    2007-06-25: Loi n°2007-43 du 25 juin 2007, modifiant l'article 30

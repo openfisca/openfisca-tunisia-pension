@@ -1,0 +1,8 @@
+description: Bonification pour cadres actifs pour 25 ans de service
+values:
+  1985-03-05:
+    value: 4
+metadata:
+  unit: year
+  reference:
+    1985-03-05: Loi n°85-12 du 5 mars 1985 (art 32) et décret n°85-1177 du 24-09-1985

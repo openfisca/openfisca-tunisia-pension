@@ -1,0 +1,8 @@
+description: Durée minimum de services effectifs pour la retraite anticipée sur demande pour travaux astreignants
+values:
+  1985-09-24:
+    value: 35
+metadata:
+  unit: year
+  reference:
+    1985-09-24: Décret n°85-1178 du 24 septembre 1985

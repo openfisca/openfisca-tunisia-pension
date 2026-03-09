@@ -4,6 +4,8 @@ values:
     value: 55
 metadata:
   unit: year
+  reference:
+    1959-02-01: Loi n°59-18 du 5 février 1959, et décret n° 1177 du 24 septembre 1985
 documentation: |-
   Il s'agit
   - des ouvriers exerçant dans le cadre commun des taches pénibles et insalubres soumis aux conditions prévues par le décret décret n° 1177 du 24 septembre 1985

@@ -87,3 +87,6 @@ filterwarnings = [
     "ignore:invalid value encountered in multiply:RuntimeWarning",
     "ignore:divide by zero encountered in divide:RuntimeWarning",
 ]
+
+[tool.setuptools]
+packages = ["openfisca_tunisia_pension"]

@@ -4,3 +4,5 @@ values:
     value: 60
 metadata:
   unit: year
+  reference:
+    1959-02-01: Loi n°59-18 du 5 février 1959, fixant le régime des pensions civiles et militaires de retraite

@@ -1,0 +1,11 @@
+description: Âge maximum des enfants pour le droit à la retraite anticipée des mères de 3 enfants
+values:
+  1985-03-05:
+    value: 15
+  1988-06-27:
+    value: 20
+metadata:
+  unit: year
+  reference:
+    1985-03-05: Loi n°85-12 du 5 mars 1985, article 5
+    1988-06-27: Loi n°88-71 du 27 juin 1988 modifiant l'article 5
