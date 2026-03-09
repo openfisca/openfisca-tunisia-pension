@@ -66,3 +66,72 @@ class cnrps_capital_deces(Variable):
         # Ensure it's not below SMIG (simplified to constant for this model based on parameters later, using 0 check for now as placeholder for smig check if needed)
 
         return CD_final * is_deceased
+
+
+class cnrps_pension_de_reversion(Variable):
+    value_type = float
+    entity = Individu
+    label = "Pension de réversion servie au conjoint survivant"
+    definition_period = MONTH
+
+    def formula(individu, period, parameters):
+        pension_ref = individu('cnrps_pension_reference_deces', period)
+        eligible = individu('conjoint_survivant_eligible', period)
+        nb_orphelins = individu('nombre_orphelins_eligibles', period)
+        is_deceased = individu('age_deces', period) >= 0
+
+        # Base is 75%
+        taux_reversion = 0.75
+
+        # Reduction based on number of orphans
+        taux_reversion = where(
+            nb_orphelins >= 5, 0.50,
+            where(
+                nb_orphelins == 4, 0.60, # 75% - 5% (3rd) - 10% (4th)
+                where(
+                    nb_orphelins == 3, 0.70, # 75% - 5%
+                    0.75
+                )
+            )
+        )
+
+        return pension_ref * taux_reversion * eligible * is_deceased
+
+class cnrps_pension_orphelins_totale(Variable):
+    value_type = float
+    entity = Individu
+    label = "Montant total des pensions temporaires d'orphelins (PTO) servi"
+    definition_period = MONTH
+
+    def formula(individu, period, parameters):
+        pension_ref = individu('cnrps_pension_reference_deces', period)
+        conjoint_eligible = individu('conjoint_survivant_eligible', period)
+        nb_orphelins = individu('nombre_orphelins_eligibles', period)
+        is_deceased = individu('age_deces', period) >= 0
+
+        # Base logic: 10% per orphan
+        taux_orphelins = nb_orphelins * 0.10
+
+        # Caps depending on the presence of a spouse
+        taux_orphelins = where(
+            conjoint_eligible,
+            where(
+                nb_orphelins >= 5, 0.50, # Global cap is 100%, spouse gets 50%, rest 50%
+                where(
+                    nb_orphelins == 4, 0.40,
+                    where(
+                        nb_orphelins == 3, 0.30,
+                        taux_orphelins
+                    )
+                )
+            ),
+            # If no eligible spouse, they get their portions. (Wait: manual says "If non attribution to conjoint, distributed to orphans")
+            # Generally, the maximum for orphans WITHOUT spouse isn't explicitly capped at 50%, they might share 100% of the pension.
+            # "En cas de non-attribution de la pension du conjoint... répartie à parts égales entre les orphelins"
+            # So if no spouse and >= 1 orphan, they share 100% of what the spouse WOULD have gotten (75%) or the whole 100%?
+            # The manual says: "En cas de non-attribution de la pension du conjoint pour n'importe quel motif légal, cette pension est répartie à parts égales entre les orphelins en sus de leurs pensions."
+            # So rate = 10% * N + 75% (or the conjoint's theoretical part). Max 100%.
+            min_(1.0, nb_orphelins * 0.10 + 0.75) * (nb_orphelins > 0)
+        )
+
+        return pension_ref * taux_orphelins * is_deceased
