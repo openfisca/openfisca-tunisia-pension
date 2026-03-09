@@ -65,13 +65,58 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
         definition_period = YEAR
 
         def formula(individu, period, parameters):
-            duree_assurance = individu('regime_name_duree_assurance', period = period)
-            salaire_de_reference = individu('regime_name_salaire_de_reference', period = period)
-            age = individu('age', period = period)
-            cnrps = parameters(period).retraite.regime_name
+            cnrps_duree = individu('regime_name_duree_assurance', period=period)
+            cnss_duree = individu('cnss_duree_assurance', period=period)
+            duree_totale = cnrps_duree + cnss_duree
 
+            salaire_de_reference = individu('regime_name_salaire_de_reference', period=period)
+            age = individu('age', period=period)
+
+            duree_requise_annees = individu('regime_name_duree_requise_annees', period)
+            age_requis = individu('regime_name_age_requis', period)
+
+            duree_de_service_minimale_accomplie = duree_totale >= 4 * duree_requise_annees
+            critere_age_verifie = age >= age_requis
+
+            return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
+
+    class duree_requise_annees(Variable):
+        value_type = float
+        entity = Individu
+        label = "La durée d'assurance (en années) requise pour ouvrir le droit à la pension CNRPS"
+        definition_period = YEAR
+
+        def formula(individu, period, parameters):
+            cnrps = parameters(period).retraite.regime_name
+            duree_requise = cnrps.duree_de_service_minimale
+
+            mere_3_enfants = individu('mere_3_enfants', period)
+            depart_sur_demande = individu('depart_anticipe_sur_demande', period)
+            astreignant = individu('fonction_astreignante', period)
+            invalidite = individu('invalidite_physique', period)
+
+            if hasattr(cnrps, 'depart_anticipe'):
+                duree_min_meres = cnrps.depart_anticipe.meres_3_enfants.duree_minimum
+                duree_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
+                duree_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
+
+                duree_requise = where(mere_3_enfants, duree_min_meres, duree_requise)
+                duree_requise = where(depart_sur_demande & ~astreignant, duree_min_demande_commun, duree_requise)
+                duree_requise = where(depart_sur_demande & astreignant, duree_min_demande_astreignant, duree_requise)
+                duree_requise = where(invalidite, 0, duree_requise)
+
+            return duree_requise
+
+    class age_requis(Variable):
+        value_type = float
+        entity = Individu
+        label = "L'âge requis pour ouvrir le droit à la pension CNRPS"
+        definition_period = YEAR
+
+        def formula(individu, period, parameters):
+            cnrps = parameters(period).retraite.regime_name
             age_legal_cadre_commun = cnrps.age_legal.civil.cadre_commun
-            duree_min = cnrps.duree_de_service_minimale
+            age_requis = age_legal_cadre_commun
 
             mere_3_enfants = individu('mere_3_enfants', period)
             depart_sur_demande = individu('depart_anticipe_sur_demande', period)
@@ -80,36 +125,15 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
 
             if hasattr(cnrps, 'depart_anticipe'):
                 age_min_meres = cnrps.depart_anticipe.meres_3_enfants.age_minimum
-                duree_min_meres = cnrps.depart_anticipe.meres_3_enfants.duree_minimum
-
                 age_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum
-                duree_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
                 age_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
-                duree_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
-
-                age_requis = age_legal_cadre_commun
-                duree_requise = duree_min
 
                 age_requis = where(mere_3_enfants, age_min_meres, age_requis)
-                duree_requise = where(mere_3_enfants, duree_min_meres, duree_requise)
-
                 age_requis = where(depart_sur_demande & ~astreignant, age_min_demande_commun, age_requis)
-                duree_requise = where(depart_sur_demande & ~astreignant, duree_min_demande_commun, duree_requise)
-
                 age_requis = where(depart_sur_demande & astreignant, age_min_demande_astreignant, age_requis)
-                duree_requise = where(depart_sur_demande & astreignant, duree_min_demande_astreignant, duree_requise)
-
                 age_requis = where(invalidite, 0, age_requis)
-                duree_requise = where(invalidite, 0, duree_requise)
 
-            else:
-                age_requis = age_legal_cadre_commun
-                duree_requise = duree_min
-
-            duree_de_service_minimale_accomplie = duree_assurance > 4 * duree_requise
-            critere_age_verifie = age >= age_requis
-
-            return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
+            return age_requis
 
     class pension_minimale(Variable):
         value_type = float
@@ -209,3 +233,55 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
             duree_effective = individu('regime_name_duree_assurance_annuelle', period)
             bonifications = individu('regime_name_bonifications', period)
             return duree_effective + bonifications
+
+    class taux_de_liquidation(Variable):
+        value_type = float
+        entity = Individu
+        definition_period = YEAR
+        label = 'Taux de liquidation de la pension'
+
+        def formula(individu, period, parameters):
+            bareme_annuite = parameters(period).retraite.regime_name.bareme_annuite
+            duree_cnrps = individu('regime_name_duree_assurance', period)
+            duree_cnss = individu('cnss_duree_assurance', period)
+            duree_totale = duree_cnrps + duree_cnss
+
+            duree_requise_annees = individu('regime_name_duree_requise_annees', period)
+            duree_requise_trimestres = 4 * duree_requise_annees
+
+            # Coordination proratisation applies only if CNRPS alone < required
+            duree_base_calcul = where(
+                duree_cnrps >= duree_requise_trimestres,
+                duree_cnrps,
+                duree_totale
+            )
+
+            taux_annuite = bareme_annuite.calc(duree_base_calcul)
+            return taux_annuite
+
+    class pension_brute(Variable):
+        value_type = float
+        entity = Individu
+        definition_period = YEAR
+        label = 'Pension brute'
+
+        def formula(individu, period, parameters):
+            taux_de_liquidation = individu('regime_name_taux_de_liquidation', period)
+            salaire_de_reference = individu('regime_name_salaire_de_reference', period)
+            pension_theorique = taux_de_liquidation * salaire_de_reference
+
+            duree_cnrps = individu('regime_name_duree_assurance', period)
+            duree_cnss = individu('cnss_duree_assurance', period)
+            duree_totale = duree_cnrps + duree_cnss
+
+            duree_requise_annees = individu('regime_name_duree_requise_annees', period)
+            duree_requise_trimestres = 4 * duree_requise_annees
+
+            # Proratisation only if coordination is active
+            ratio_proratisation = where(
+                duree_cnrps >= duree_requise_trimestres,
+                1.0,
+                where(duree_totale > 0, duree_cnrps / duree_totale, 0.0)
+            )
+
+            return pension_theorique * ratio_proratisation
