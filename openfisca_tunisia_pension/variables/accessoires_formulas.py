@@ -1,0 +1,50 @@
+from openfisca_core.model_api import *
+from openfisca_tunisia_pension.entities import Individu
+
+class indemnites_familiales(Variable):
+    value_type = float
+    entity = Individu
+    label = "Montant mensuel des indemnités familiales"
+    definition_period = MONTH
+
+    def formula(individu, period, parameters):
+        nb_enfants = individu('nombre_enfants_charge', period)
+        params_if = parameters(period).accessoires.indemnites_familiales
+
+        # Calculate allowance per child based on their rank
+        # Enfant 1
+        mnt_1 = (nb_enfants >= 1) * params_if.rang_1
+        # Enfant 2
+        mnt_2 = (nb_enfants >= 2) * params_if.rang_2
+        # Enfant 3
+        mnt_3 = (nb_enfants >= 3) * params_if.rang_3
+        # Enfants 4 et plus (Loi 88-3 limits this essentially to 3, but grandfathered in some cases)
+        # Assuming for the base case only 3, but allowing calculation if nb_enfants > 3
+        mnt_4_plus = max_(0, nb_enfants - 3) * params_if.rang_4_et_plus
+
+        return mnt_1 + mnt_2 + mnt_3 + mnt_4_plus
+
+class indemnite_revenu_unique(Variable):
+    value_type = float
+    entity = Individu
+    label = "Indemnité de Revenu Unique (IRU)"
+    definition_period = MONTH
+
+    def formula(individu, period, parameters):
+        nb_enfants = individu('nombre_enfants_charge', period)
+        conjoint_sans_revenu = individu('conjoint_sans_revenu', period)
+        mere_divorcee = individu('mere_divorcee_garde_enfants', period)
+
+        # The pensioner must have formed a family and had a single income.
+        # This is simplified here by checking if they declare the spouse has no income
+        # or if it's a divorced mother with custody (who receives it directly per manual).
+        eligible = conjoint_sans_revenu + mere_divorcee
+
+        params_iru = parameters(period).accessoires.indemnite_revenu_unique
+
+        # Determine amount based on number of children
+        mnt_1 = (nb_enfants == 1) * params_iru.get('1_enfant', 0)
+        mnt_2 = (nb_enfants == 2) * params_iru.get('2_enfants', 0)
+        mnt_3_plus = (nb_enfants >= 3) * params_iru.get('3_enfants_et_plus', 0)
+
+        return (mnt_1 + mnt_2 + mnt_3_plus) * eligible

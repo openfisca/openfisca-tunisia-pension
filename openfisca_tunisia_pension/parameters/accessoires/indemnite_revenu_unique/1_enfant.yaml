@@ -1,0 +1,6 @@
+description: Montant mensuel de l'Indemnité de Revenu Unique (IRU) selon le nombre d'enfants
+values:
+  1981-05-01: 3.125
+metadata:
+  reference:
+    1981-05-01: Loi n ° 81-70 du 01/08/1981 étendant le bénéfice de l’indemnité de revenu unique au profit des retraités du secteur public
