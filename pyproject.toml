@@ -76,7 +76,7 @@ ignore       = ["E128","E251","F403","F405","E501","W503"]
 in-place     = true
 
 [tool.pytest.ini_options]
-addopts      = "--showlocals --exitfirst --doctest-modules --disable-pytest-warnings"
+addopts      = "--showlocals --exitfirst --doctest-modules --disable-pytest-warnings --assert=plain"
 testpaths    = "tests"
 python_files = "**/*.py"
 filterwarnings = [
