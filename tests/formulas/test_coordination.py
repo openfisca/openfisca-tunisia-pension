@@ -9,7 +9,7 @@ def test_coordination_cnss_cnrps():
         {
             "individus": {
                 "mixte": {
-                    "age": {"2024": 60},
+                    "age": {"2024": 62},
                     "cnrps_duree_assurance_annuelle": {"2024": 40}, # 10 years in CNRPS
                     "cnss_duree_assurance_annuelle": {"2024": 40}, # 10 years in CNSS
                     "cnrps_salaire_de_base": {"2024": 1000} # Salary
@@ -48,7 +48,7 @@ def test_liquidation_separee():
         {
             "individus": {
                 "separe": {
-                    "age": {"2024": 60},
+                    "age": {"2024": 62},
                     "cnrps_duree_assurance_annuelle": {"2024": 60}, # 15 years in CNRPS
                     "cnss_duree_assurance_annuelle": {"2024": 40}, # 10 years in CNSS
                     "cnrps_salaire_de_base": {"2024": 1000}
