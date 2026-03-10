@@ -1,15 +1,15 @@
 from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
 
-class indemnites_familiales(Variable):
+class cnrps_indemnites_familiales(Variable):
     value_type = float
     entity = Individu
-    label = "Montant mensuel des indemnités familiales"
+    label = "Montant mensuel des indemnités familiales CNRPS"
     definition_period = MONTH
 
     def formula(individu, period, parameters):
         nb_enfants = individu('nombre_enfants_charge', period)
-        params_if = parameters(period).accessoires.indemnites_familiales
+        params_if = parameters(period).retraite.cnrps.accessoires.indemnites_familiales
 
         # Calculate allowance per child based on their rank
         # Enfant 1
@@ -24,10 +24,10 @@ class indemnites_familiales(Variable):
 
         return mnt_1 + mnt_2 + mnt_3 + mnt_4_plus
 
-class indemnite_revenu_unique(Variable):
+class cnrps_indemnite_revenu_unique(Variable):
     value_type = float
     entity = Individu
-    label = "Indemnité de Revenu Unique (IRU)"
+    label = "Indemnité de Revenu Unique (IRU) CNRPS"
     definition_period = MONTH
 
     def formula(individu, period, parameters):
@@ -40,7 +40,7 @@ class indemnite_revenu_unique(Variable):
         # or if it's a divorced mother with custody (who receives it directly per manual).
         eligible = conjoint_sans_revenu + mere_divorcee
 
-        params_iru = parameters(period).accessoires.indemnite_revenu_unique
+        params_iru = parameters(period).retraite.cnrps.accessoires.indemnite_revenu_unique
 
         # Determine amount based on number of children
         mnt_1 = (nb_enfants == 1) * getattr(params_iru, '1_enfant', 0)
