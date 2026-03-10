@@ -19,28 +19,19 @@ class cnrps_age_requis(Variable):
     def formula(individu, period, parameters):
         cnrps = parameters(period).retraite.cnrps
         age_legal_cadre_commun = cnrps.age_legal.civil.cadre_commun
+        age_requis = age_legal_cadre_commun
         mere_3_enfants = individu('mere_3_enfants', period)
         depart_sur_demande = individu('depart_anticipe_sur_demande', period)
         astreignant = individu('fonction_astreignante', period)
         invalidite = individu('invalidite_physique', period)
-        age_min_meres = cnrps.depart_anticipe.meres_3_enfants.age_minimum
-        age_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum
-        age_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
-        age_requis = select(
-            [
-                invalidite,
-                mere_3_enfants,
-                depart_sur_demande & astreignant,
-                depart_sur_demande & ~astreignant,
-            ],
-            [
-                0,
-                age_min_meres,
-                age_min_demande_astreignant,
-                age_min_demande_commun,
-            ],
-            default=age_legal_cadre_commun,
-        )
+        if hasattr(cnrps, 'depart_anticipe'):
+            age_min_meres = cnrps.depart_anticipe.meres_3_enfants.age_minimum
+            age_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum
+            age_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
+            age_requis = where(mere_3_enfants, age_min_meres, age_requis)
+            age_requis = where(depart_sur_demande & ~astreignant, age_min_demande_commun, age_requis)
+            age_requis = where(depart_sur_demande & astreignant, age_min_demande_astreignant, age_requis)
+            age_requis = where(invalidite, 0, age_requis)
         return age_requis
 
 class cnrps_bonifications(Variable):
@@ -90,28 +81,19 @@ class cnrps_duree_requise_annees(Variable):
 
     def formula(individu, period, parameters):
         cnrps = parameters(period).retraite.cnrps
+        duree_requise = cnrps.duree_de_service_minimale
         mere_3_enfants = individu('mere_3_enfants', period)
         depart_sur_demande = individu('depart_anticipe_sur_demande', period)
         astreignant = individu('fonction_astreignante', period)
         invalidite = individu('invalidite_physique', period)
-        duree_min_meres = cnrps.depart_anticipe.meres_3_enfants.duree_minimum
-        duree_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
-        duree_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
-        duree_requise = select(
-            [
-                invalidite,
-                mere_3_enfants,
-                depart_sur_demande & astreignant,
-                depart_sur_demande & ~astreignant,
-            ],
-            [
-                0,
-                duree_min_meres,
-                duree_min_demande_astreignant,
-                duree_min_demande_commun,
-            ],
-            default=cnrps.duree_de_service_minimale,
-        )
+        if hasattr(cnrps, 'depart_anticipe'):
+            duree_min_meres = cnrps.depart_anticipe.meres_3_enfants.duree_minimum
+            duree_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
+            duree_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
+            duree_requise = where(mere_3_enfants, duree_min_meres, duree_requise)
+            duree_requise = where(depart_sur_demande & ~astreignant, duree_min_demande_commun, duree_requise)
+            duree_requise = where(depart_sur_demande & astreignant, duree_min_demande_astreignant, duree_requise)
+            duree_requise = where(invalidite, 0, duree_requise)
         return duree_requise
 
 class cnrps_eligible(Variable):
