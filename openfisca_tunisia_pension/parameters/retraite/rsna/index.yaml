@@ -3,7 +3,7 @@ metadata:
   short_label: RSNA
   order:
   - age_legal
-  - age_dep_anticipe
+  - age_dep_anticip
   - stage_requis
   - stage_derog
   - bareme_annuite
