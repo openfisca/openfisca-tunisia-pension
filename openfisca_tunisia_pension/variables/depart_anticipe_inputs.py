@@ -1,5 +1,11 @@
-from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_core.model_api import (
+    Variable,
+    YEAR,
+    set_input_dispatch_by_period,
+)
+
+
 
 class mere_3_enfants(Variable):
     value_type = bool

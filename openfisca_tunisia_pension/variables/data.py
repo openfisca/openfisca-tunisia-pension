@@ -1,6 +1,14 @@
-from openfisca_core.model_api import *
 
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_core.model_api import (
+    Variable,
+    YEAR,
+    ETERNITY,
+    date,
+    Enum,
+)
+
+
 
 
 class age(Variable):

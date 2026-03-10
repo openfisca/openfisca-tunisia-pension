@@ -1,7 +1,6 @@
 '''Régime des salariés agricoles.'''
 
 
-from openfisca_core.model_api import *
 from openfisca_core import periods
 
 from openfisca_tunisia_pension.entities import Individu
@@ -17,6 +16,13 @@ from numpy import (
 
 from openfisca_tunisia_pension.tools import make_mean_over_largest
 from openfisca_tunisia_pension.variables.helpers import pension_generique
+from openfisca_core.model_api import (
+    Variable,
+    YEAR,
+    max_,
+)
+
+
 
 
 class RegimeRSA(AbstractRegimeEnAnnuites):

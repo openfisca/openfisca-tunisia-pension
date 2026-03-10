@@ -52,3 +52,19 @@ def mean_over_k_consecutive_largest(vector, k):
             mean[p] += vector[p + i]
         mean[p] = mean[p] / k
     return mean.max()
+
+
+def revalorise(pension_au_31_decembre_annee_precedente, pension, annee_de_liquidation, revalorisation, period):
+    """Applique la revalorisation à la pension servie."""
+    from openfisca_core.model_api import where
+
+    # Si l'année de liquidation est dans le futur, retourner un tableau vide
+    if hasattr(pension, 'empty_array'):
+        # Pour les périodes futures, retourner un tableau vide
+        future_mask = annee_de_liquidation > period.start.year
+        if future_mask.any():
+            return where(future_mask, pension.empty_array(),
+                        pension_au_31_decembre_annee_precedente * (1 + revalorisation))
+
+    # Appliquer la revalorisation
+    return pension_au_31_decembre_annee_precedente * (1 + revalorisation)

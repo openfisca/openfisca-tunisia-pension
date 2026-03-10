@@ -1,6 +1,71 @@
 import math
-from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_core.model_api import (
+    Variable,
+    MONTH,
+    where,
+    min_,
+    set_input_dispatch_by_period,
+)
+
+
+
+class age_deces(Variable):
+    value_type = int
+    entity = Individu
+    default_value = -1 # Not deceased
+    definition_period = MONTH
+    label = "Age au décès"
+    set_input = set_input_dispatch_by_period
+
+class deces_par_accident(Variable):
+    value_type = bool
+    entity = Individu
+    default_value = False
+    definition_period = MONTH
+    label = "Décès suite à un accident (circulation, travail)"
+    set_input = set_input_dispatch_by_period
+
+class cnrps_duree_services_effectifs(Variable):
+    value_type = int
+    entity = Individu
+    default_value = 0
+    definition_period = MONTH
+    label = "Durée des services effectifs (années complètes)"
+    set_input = set_input_dispatch_by_period
+
+class cnrps_remuneration_annuelle_deces(Variable):
+    value_type = float
+    entity = Individu
+    default_value = 0.0
+    definition_period = MONTH
+    label = "Rémunération annuelle de base au moment du décès"
+    set_input = set_input_dispatch_by_period
+
+class cnrps_pension_reference_deces(Variable):
+    value_type = float
+    entity = Individu
+    default_value = 0.0
+    definition_period = MONTH
+    label = "Montant de la pension dont l'agent bénéficiait ou aurait bénéficié"
+    set_input = set_input_dispatch_by_period
+
+class nombre_orphelins_eligibles(Variable):
+    value_type = int
+    entity = Individu
+    default_value = 0
+    definition_period = MONTH
+    label = "Nombre d'enfants eligibles à la Pension Temporaire d'Orphelin (PTO)"
+    set_input = set_input_dispatch_by_period
+
+class conjoint_survivant_eligible(Variable):
+    value_type = bool
+    entity = Individu
+    default_value = False
+    definition_period = MONTH
+    label = "Présence d'un conjoint survivant éligible à la pension de réversion"
+    set_input = set_input_dispatch_by_period
+
 
 class cnrps_capital_deces(Variable):
     value_type = float
@@ -128,8 +193,6 @@ class cnrps_pension_orphelins_totale(Variable):
             # If no eligible spouse, they get their portions. (Wait: manual says "If non attribution to conjoint, distributed to orphans")
             # Generally, the maximum for orphans WITHOUT spouse isn't explicitly capped at 50%, they might share 100% of the pension.
             # "En cas de non-attribution de la pension du conjoint... répartie à parts égales entre les orphelins"
-            # So if no spouse and >= 1 orphan, they share 100% of what the spouse WOULD have gotten (75%) or the whole 100%?
-            # The manual says: "En cas de non-attribution de la pension du conjoint pour n'importe quel motif légal, cette pension est répartie à parts égales entre les orphelins en sus de leurs pensions."
             # So rate = 10% * N + 75% (or the conjoint's theoretical part). Max 100%.
             min_(1.0, nb_orphelins * 0.10 + 0.75) * (nb_orphelins > 0)
         )

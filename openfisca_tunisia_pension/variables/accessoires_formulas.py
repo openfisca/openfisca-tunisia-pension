@@ -1,5 +1,11 @@
-from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_core.model_api import (
+    Variable,
+    MONTH,
+    max_,
+)
+
+
 
 class cnrps_indemnites_familiales(Variable):
     value_type = float

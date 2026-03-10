@@ -1,16 +1,17 @@
 """Abstract regimes definition."""
 import numpy as np
-from openfisca_core.model_api import *
 from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_tunisia_pension.tools import revalorise
+from openfisca_core.model_api import Variable, YEAR, MONTH, ETERNITY, date, where, max_, min_, round_, set_input_divide_by_period
 'Régime des salariés agricoles.'
-from openfisca_core.model_api import *
 from openfisca_core import periods
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
 from numpy import apply_along_axis, maximum as max_, vstack
 from openfisca_tunisia_pension.tools import make_mean_over_largest
 from openfisca_tunisia_pension.variables.helpers import pension_generique
+from openfisca_core.model_api import Variable, YEAR, max_
 
 class rsa_cotisation(Variable):
     value_type = float

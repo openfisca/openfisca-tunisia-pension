@@ -3,11 +3,25 @@
 import numpy as np
 
 
-from openfisca_core.model_api import *
 from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
 
 # Import the Entities specifically defined for this tax and benefit system
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_tunisia_pension.tools import revalorise
+from openfisca_core.model_api import (
+    Variable,
+    YEAR,
+    MONTH,
+    ETERNITY,
+    date,
+    where,
+    max_,
+    min_,
+    round_,
+    set_input_divide_by_period,
+)
+
+
 
 
 class AbstractRegime(object):

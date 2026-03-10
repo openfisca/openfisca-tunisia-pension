@@ -1,5 +1,10 @@
-from openfisca_core.model_api import *
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_core.model_api import (
+    Variable,
+    YEAR,
+)
+
+
 
 class cnss_duree_assurance_annuelle(Variable):
     value_type = float
