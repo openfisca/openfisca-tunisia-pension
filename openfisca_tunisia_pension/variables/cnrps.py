@@ -1,13 +1,14 @@
 """Abstract regimes definition."""
 import numpy as np
-from openfisca_core.model_api import *
 from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
+from openfisca_core.model_api import ETERNITY, MONTH, YEAR, Variable, date, max_, min_, set_input_divide_by_period
 from openfisca_tunisia_pension.entities import Individu
+from openfisca_tunisia_pension.tools import revalorise
 'Régime de la Caisse nationale de retraite et de prévoyance sociale (CNRPS).'
-from openfisca_core.model_api import *
+from numpy import apply_along_axis, select, vstack
+from openfisca_core.model_api import ADD, ETERNITY, YEAR, Variable, apply_thresholds, select, where
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-from numpy import apply_along_axis, vstack
 from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
 
 class cnrps_age_requis(Variable):
@@ -19,20 +20,13 @@ class cnrps_age_requis(Variable):
     def formula(individu, period, parameters):
         cnrps = parameters(period).retraite.cnrps
         age_legal_cadre_commun = cnrps.age_legal.civil.cadre_commun
-        age_requis = age_legal_cadre_commun
         mere_3_enfants = individu('mere_3_enfants', period)
         depart_sur_demande = individu('depart_anticipe_sur_demande', period)
         astreignant = individu('fonction_astreignante', period)
         invalidite = individu('invalidite_physique', period)
-        if hasattr(cnrps, 'depart_anticipe'):
-            age_min_meres = cnrps.depart_anticipe.meres_3_enfants.age_minimum
-            age_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum
-            age_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
-            age_requis = where(mere_3_enfants, age_min_meres, age_requis)
-            age_requis = where(depart_sur_demande & ~astreignant, age_min_demande_commun, age_requis)
-            age_requis = where(depart_sur_demande & astreignant, age_min_demande_astreignant, age_requis)
-            age_requis = where(invalidite, 0, age_requis)
-        return age_requis
+        conditions = [invalidite, depart_sur_demande & astreignant, depart_sur_demande & ~astreignant, mere_3_enfants]
+        choix = [0, cnrps.depart_anticipe.sur_demande.astreignants.age_minimum, cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum, cnrps.depart_anticipe.meres_3_enfants.age_minimum]
+        return select(conditions, choix, default=age_legal_cadre_commun)
 
 class cnrps_bonifications(Variable):
     value_type = float
@@ -86,15 +80,9 @@ class cnrps_duree_requise_annees(Variable):
         depart_sur_demande = individu('depart_anticipe_sur_demande', period)
         astreignant = individu('fonction_astreignante', period)
         invalidite = individu('invalidite_physique', period)
-        if hasattr(cnrps, 'depart_anticipe'):
-            duree_min_meres = cnrps.depart_anticipe.meres_3_enfants.duree_minimum
-            duree_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
-            duree_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
-            duree_requise = where(mere_3_enfants, duree_min_meres, duree_requise)
-            duree_requise = where(depart_sur_demande & ~astreignant, duree_min_demande_commun, duree_requise)
-            duree_requise = where(depart_sur_demande & astreignant, duree_min_demande_astreignant, duree_requise)
-            duree_requise = where(invalidite, 0, duree_requise)
-        return duree_requise
+        conditions = [invalidite, depart_sur_demande & astreignant, depart_sur_demande & ~astreignant, mere_3_enfants]
+        choix = [0, cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum, cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum, cnrps.depart_anticipe.meres_3_enfants.duree_minimum]
+        return select(conditions, choix, default=duree_requise)
 
 class cnrps_eligible(Variable):
     value_type = bool

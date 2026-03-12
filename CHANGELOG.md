@@ -1,5 +1,17 @@
 # Changelog
 
+# 5.1.0
+
+* Amélioration technique.
+* Périodes concernées : toutes.
+* Détails :
+  - Alignement CI et outillage sur openfisca-tunisia : Ubuntu 24.04, Python 3.10–3.12, uv (sync, cache), Node.js 24
+  - Lint : passage à ruff uniquement (remplacement de flake8), per-file-ignores pour les variables générées (script_ast)
+  - Makefile : même structure que openfisca-tunisia (format-style, check-style, uv run)
+  - Tests YAML : clé `individu` remplacée par `input` (API openfisca_core) ; tests taux_de_liquidation en 1986 avec attendus ajustés ; correction salaire_de_reference attendu
+  - CI : suppression du job test-api ; dépendance tomli pour get_minimal_version (Python 3.10)
+  - Documentation des règles ruff dans pyproject.toml
+
 # 5.0.0 [#15](https://github.com/openfisca/openfisca-tunisia-pension/pull/15)
 
 * Évolution du système socio-fiscal.

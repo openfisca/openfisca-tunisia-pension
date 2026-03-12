@@ -1,20 +1,21 @@
-'''Régime de la Caisse nationale de retraite et de prévoyance sociale (CNRPS).'''
+"""Régime de la Caisse nationale de retraite et de prévoyance sociale (CNRPS)."""
 
+# Third Party
+from numpy import apply_along_axis, select, vstack
+from openfisca_core.model_api import (
+    ADD,
+    ETERNITY,
+    YEAR,
+    Variable,
+    apply_thresholds,
+    select,
+    where,
+)
 
-from openfisca_core.model_api import *
-
-
+# First Party
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-
-
-from numpy import (
-    apply_along_axis,
-    vstack,
-    )
-
 from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
-
 
 # Avant 1985
 
@@ -54,9 +55,9 @@ from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
 
 
 class RegimeCNRPS(AbstractRegimeEnAnnuites):
-    name = 'Régime des salariés non agricoles'
-    variable_prefix = 'cnrps'
-    parameters_prefix = 'cnrps'
+    name = "Régime des salariés non agricoles"
+    variable_prefix = "cnrps"
+    parameters_prefix = "cnrps"
 
     class eligible(Variable):
         value_type = bool
@@ -65,20 +66,28 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
         definition_period = YEAR
 
         def formula(individu, period, parameters):
-            cnrps_duree = individu('regime_name_duree_assurance', period=period)
-            cnss_duree = individu('cnss_duree_assurance', period=period)
+            cnrps_duree = individu("regime_name_duree_assurance", period=period)
+            cnss_duree = individu("cnss_duree_assurance", period=period)
             duree_totale = cnrps_duree + cnss_duree
 
-            salaire_de_reference = individu('regime_name_salaire_de_reference', period=period)
-            age = individu('age', period=period)
+            salaire_de_reference = individu(
+                "regime_name_salaire_de_reference", period=period
+            )
+            age = individu("age", period=period)
 
-            duree_requise_annees = individu('regime_name_duree_requise_annees', period)
-            age_requis = individu('regime_name_age_requis', period)
+            duree_requise_annees = individu("regime_name_duree_requise_annees", period)
+            age_requis = individu("regime_name_age_requis", period)
 
-            duree_de_service_minimale_accomplie = duree_totale >= 4 * duree_requise_annees
+            duree_de_service_minimale_accomplie = (
+                duree_totale >= 4 * duree_requise_annees
+            )
             critere_age_verifie = age >= age_requis
 
-            return duree_de_service_minimale_accomplie * critere_age_verifie * (salaire_de_reference > 0)
+            return (
+                duree_de_service_minimale_accomplie
+                * critere_age_verifie
+                * (salaire_de_reference > 0)
+            )
 
     class duree_requise_annees(Variable):
         value_type = float
@@ -90,22 +99,26 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
             cnrps = parameters(period).retraite.regime_name
             duree_requise = cnrps.duree_de_service_minimale
 
-            mere_3_enfants = individu('mere_3_enfants', period)
-            depart_sur_demande = individu('depart_anticipe_sur_demande', period)
-            astreignant = individu('fonction_astreignante', period)
-            invalidite = individu('invalidite_physique', period)
+            mere_3_enfants = individu("mere_3_enfants", period)
+            depart_sur_demande = individu("depart_anticipe_sur_demande", period)
+            astreignant = individu("fonction_astreignante", period)
+            invalidite = individu("invalidite_physique", period)
 
-            if hasattr(cnrps, 'depart_anticipe'):
-                duree_min_meres = cnrps.depart_anticipe.meres_3_enfants.duree_minimum
-                duree_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
-                duree_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
+            conditions = [
+                invalidite,
+                depart_sur_demande & astreignant,
+                depart_sur_demande & ~astreignant,
+                mere_3_enfants,
+            ]
 
-                duree_requise = where(mere_3_enfants, duree_min_meres, duree_requise)
-                duree_requise = where(depart_sur_demande & ~astreignant, duree_min_demande_commun, duree_requise)
-                duree_requise = where(depart_sur_demande & astreignant, duree_min_demande_astreignant, duree_requise)
-                duree_requise = where(invalidite, 0, duree_requise)
+            choix = [
+                0,
+                cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum,
+                cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum,
+                cnrps.depart_anticipe.meres_3_enfants.duree_minimum,
+            ]
 
-            return duree_requise
+            return select(conditions, choix, default=duree_requise)
 
     class age_requis(Variable):
         value_type = float
@@ -116,31 +129,34 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
         def formula(individu, period, parameters):
             cnrps = parameters(period).retraite.regime_name
             age_legal_cadre_commun = cnrps.age_legal.civil.cadre_commun
-            age_requis = age_legal_cadre_commun
 
-            mere_3_enfants = individu('mere_3_enfants', period)
-            depart_sur_demande = individu('depart_anticipe_sur_demande', period)
-            astreignant = individu('fonction_astreignante', period)
-            invalidite = individu('invalidite_physique', period)
+            mere_3_enfants = individu("mere_3_enfants", period)
+            depart_sur_demande = individu("depart_anticipe_sur_demande", period)
+            astreignant = individu("fonction_astreignante", period)
+            invalidite = individu("invalidite_physique", period)
 
-            if hasattr(cnrps, 'depart_anticipe'):
-                age_min_meres = cnrps.depart_anticipe.meres_3_enfants.age_minimum
-                age_min_demande_commun = cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum
-                age_min_demande_astreignant = cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
+            conditions = [
+                invalidite,
+                depart_sur_demande & astreignant,
+                depart_sur_demande & ~astreignant,
+                mere_3_enfants,
+            ]
 
-                age_requis = where(mere_3_enfants, age_min_meres, age_requis)
-                age_requis = where(depart_sur_demande & ~astreignant, age_min_demande_commun, age_requis)
-                age_requis = where(depart_sur_demande & astreignant, age_min_demande_astreignant, age_requis)
-                age_requis = where(invalidite, 0, age_requis)
+            choix = [
+                0,
+                cnrps.depart_anticipe.sur_demande.astreignants.age_minimum,
+                cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum,
+                cnrps.depart_anticipe.meres_3_enfants.age_minimum,
+            ]
 
-            return age_requis
+            return select(conditions, choix, default=age_legal_cadre_commun)
 
     class pension_minimale(Variable):
         value_type = float
         default_value = 0  # Pas de pension minimale par défaut, elle est à zéro
         entity = Individu
         definition_period = YEAR
-        label = 'Pension minimale'
+        label = "Pension minimale"
 
         def formula(individu, period, parameters):
             cnrps = parameters(period).retraite.regime_name
@@ -148,20 +164,19 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
             duree_de_service_minimale = cnrps.duree_de_service_minimale
             # TODO Annualiser le Smig
             smig_annuel = 12 * parameters(period).marche_travail.smig_40h_mensuel
-            duree_assurance = individu('regime_name_duree_assurance', period)
+            duree_assurance = individu("regime_name_duree_assurance", period)
             return apply_thresholds(
                 duree_assurance / 4,
                 [
                     pension_minimale.duree_service_allocation_vieillesse,
                     duree_de_service_minimale,
-                    ],
+                ],
                 [
                     0,
                     pension_minimale.allocation_vieillesse * smig_annuel,
                     pension_minimale.minimum_garanti * smig_annuel,
-                    ]
-
-                )
+                ],
+            )
 
     class salaire_de_reference_calcule_sur_demande(Variable):
         value_type = bool
@@ -172,38 +187,49 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
     class salaire_de_reference(Variable):
         value_type = float
         entity = Individu
-        label = 'Salaires de référence du régime de la CNRPS'
+        label = "Salaires de référence du régime de la CNRPS"
         definition_period = YEAR
 
         def formula(individu, period):
-            '''Dernière rémunération perçue ou les 2 plus élevées consécutives sur demande (Art 36 l 85-12).'''
+            """Dernière rémunération perçue ou les 2 plus élevées consécutives sur demande (Art 36 l 85-12)."""
             n = 40
             k = 2
             mean_over_largest = make_mean_over_consecutive_largest(k)
             moyenne_2_salaires_plus_eleves = apply_along_axis(
                 mean_over_largest,
-                axis = 0,
-                arr = vstack([individu('regime_name_salaire_de_base', period = year, options = [ADD]) for year in range(period.start.year, period.start.year - n, -1)]),
-                )
+                axis=0,
+                arr=vstack(
+                    [
+                        individu(
+                            "regime_name_salaire_de_base", period=year, options=[ADD]
+                        )
+                        for year in range(period.start.year, period.start.year - n, -1)
+                    ]
+                ),
+            )
 
-            derniere_remuneration = individu('regime_name_salaire_de_base', period = period, options = [ADD])
+            derniere_remuneration = individu(
+                "regime_name_salaire_de_base", period=period, options=[ADD]
+            )
 
             salaire_refererence = where(
-                individu('regime_name_salaire_de_reference_calcule_sur_demande', period),
+                individu(
+                    "regime_name_salaire_de_reference_calcule_sur_demande", period
+                ),
                 moyenne_2_salaires_plus_eleves,
                 derniere_remuneration,
-                )
+            )
             return salaire_refererence
 
     class bonifications(Variable):
         value_type = float
         entity = Individu
-        label = 'Bonifications'
+        label = "Bonifications"
         definition_period = YEAR
 
         def formula(individu, period, parameters):
-            duree_militaire = individu('duree_service_militaire', period)
-            duree_actif = individu('duree_service_cadre_actif', period)
+            duree_militaire = individu("duree_service_militaire", period)
+            duree_actif = individu("duree_service_cadre_actif", period)
 
             # Hardcoding the rules as the YAML parameter mapping seems to be failing
             # Military: 20 -> 5y, 25 -> 5y, 30 -> 5y
@@ -211,10 +237,10 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
 
             # Actif: 15->2y, 20->3y, 25->4y, 35->5y
             bonus_actif = (
-                (duree_actif >= 35) * 5 +
-                ((duree_actif >= 25) & (duree_actif < 35)) * 4 +
-                ((duree_actif >= 20) & (duree_actif < 25)) * 3 +
-                ((duree_actif >= 15) & (duree_actif < 20)) * 2
+                (duree_actif >= 35) * 5
+                + ((duree_actif >= 25) & (duree_actif < 35)) * 4
+                + ((duree_actif >= 20) & (duree_actif < 25)) * 3
+                + ((duree_actif >= 15) & (duree_actif < 20)) * 2
             )
 
             return (bonus_militaire + bonus_actif) * 4
@@ -223,33 +249,33 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
         value_type = int
         entity = Individu
         definition_period = YEAR
-        label = "Durée d'assurance totale incluant les bonifications (trimestres validés)"
+        label = (
+            "Durée d'assurance totale incluant les bonifications (trimestres validés)"
+        )
 
         def formula(individu, period):
-            duree_effective = individu('regime_name_duree_assurance_annuelle', period)
-            bonifications = individu('regime_name_bonifications', period)
+            duree_effective = individu("regime_name_duree_assurance_annuelle", period)
+            bonifications = individu("regime_name_bonifications", period)
             return duree_effective + bonifications
 
     class taux_de_liquidation(Variable):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Taux de liquidation de la pension'
+        label = "Taux de liquidation de la pension"
 
         def formula(individu, period, parameters):
             bareme_annuite = parameters(period).retraite.regime_name.bareme_annuite
-            duree_cnrps = individu('regime_name_duree_assurance', period)
-            duree_cnss = individu('cnss_duree_assurance', period)
+            duree_cnrps = individu("regime_name_duree_assurance", period)
+            duree_cnss = individu("cnss_duree_assurance", period)
             duree_totale = duree_cnrps + duree_cnss
 
-            duree_requise_annees = individu('regime_name_duree_requise_annees', period)
+            duree_requise_annees = individu("regime_name_duree_requise_annees", period)
             duree_requise_trimestres = 4 * duree_requise_annees
 
             # Coordination proratisation applies only if CNRPS alone < required
             duree_base_calcul = where(
-                duree_cnrps >= duree_requise_trimestres,
-                duree_cnrps,
-                duree_totale
+                duree_cnrps >= duree_requise_trimestres, duree_cnrps, duree_totale
             )
 
             taux_annuite = bareme_annuite.calc(duree_base_calcul)
@@ -259,25 +285,25 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Pension brute'
+        label = "Pension brute"
 
         def formula(individu, period, parameters):
-            taux_de_liquidation = individu('regime_name_taux_de_liquidation', period)
-            salaire_de_reference = individu('regime_name_salaire_de_reference', period)
+            taux_de_liquidation = individu("regime_name_taux_de_liquidation", period)
+            salaire_de_reference = individu("regime_name_salaire_de_reference", period)
             pension_theorique = taux_de_liquidation * salaire_de_reference
 
-            duree_cnrps = individu('regime_name_duree_assurance', period)
-            duree_cnss = individu('cnss_duree_assurance', period)
+            duree_cnrps = individu("regime_name_duree_assurance", period)
+            duree_cnss = individu("cnss_duree_assurance", period)
             duree_totale = duree_cnrps + duree_cnss
 
-            duree_requise_annees = individu('regime_name_duree_requise_annees', period)
+            duree_requise_annees = individu("regime_name_duree_requise_annees", period)
             duree_requise_trimestres = 4 * duree_requise_annees
 
             # Proratisation only if coordination is active
             ratio_proratisation = where(
                 duree_cnrps >= duree_requise_trimestres,
                 1.0,
-                where(duree_totale > 0, duree_cnrps / duree_totale, 0.0)
+                where(duree_totale > 0, duree_cnrps / duree_totale, 0.0),
             )
 
             return pension_theorique * ratio_proratisation

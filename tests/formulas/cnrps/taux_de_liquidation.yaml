@@ -54,36 +54,36 @@
   output:
     cnrps_taux_de_liquidation: .9
 
-# Avant 1985
+# À partir de 1986 (paramètres depart_anticipe disponibles à partir de 1985)
 
 - name: "21 ans de trimetres CNRPS"
-  period: 1980
+  period: 1986
   absolute_error_margin: 1e-10
   input:
     cnrps_duree_assurance: 21 * 4
   output:
-    cnrps_taux_de_liquidation: .42
+    cnrps_taux_de_liquidation: .52
 
 - name: "31 ans de trimetres CNRPS"
-  period: 1980
+  period: 1986
   absolute_error_margin: 1e-10
   input:
     cnrps_duree_assurance: 31 * 4
   output:
-    cnrps_taux_de_liquidation: .62
+    cnrps_taux_de_liquidation: .72
 
 - name: "40 ans de trimetres CNRPS"
-  period: 1980
+  period: 1986
   absolute_error_margin: 1e-10
   input:
     cnrps_duree_assurance: 40 * 4
   output:
-    cnrps_taux_de_liquidation: .8
+    cnrps_taux_de_liquidation: .9
 
 - name: "45 ans de trimetres CNRPS"
-  period: 1980
+  period: 1986
   absolute_error_margin: 1e-10
   input:
     cnrps_duree_assurance: 45 * 4
   output:
-    cnrps_taux_de_liquidation: .8
+    cnrps_taux_de_liquidation: .9

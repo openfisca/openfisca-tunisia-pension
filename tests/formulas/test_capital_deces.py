@@ -1,6 +1,12 @@
+# Standard Library
 import math
+
+# Third Party
 from openfisca_core.simulations import SimulationBuilder
+
+# First Party
 from openfisca_tunisia_pension import TunisiaPensionTaxBenefitSystem
+
 
 def test_capital_deces_actif_normal():
     system = TunisiaPensionTaxBenefitSystem()
@@ -13,10 +19,10 @@ def test_capital_deces_actif_normal():
                     "deces_par_accident": {"2024-01": False},
                     "cnrps_remuneration_annuelle_deces": {"2024-01": 12000},
                     "cnrps_duree_services_effectifs": {"2024-01": 15},
-                    "nombre_enfants_charge": {"2024-01": 2} # +20%
+                    "nombre_enfants_charge": {"2024-01": 2},  # +20%
                 }
             }
-        }
+        },
     )
 
     # R = 12000
@@ -29,6 +35,7 @@ def test_capital_deces_actif_normal():
     print(f"Capital Décès (Actif Normal): {res}")
     assert math.isclose(res, 32400.0, abs_tol=1e-5)
 
+
 def test_capital_deces_accident_travail():
     system = TunisiaPensionTaxBenefitSystem()
     sim = SimulationBuilder().build_from_dict(
@@ -37,13 +44,13 @@ def test_capital_deces_accident_travail():
             "individus": {
                 "agent_accident": {
                     "age_deces": {"2024-01": 50},
-                    "deces_par_accident": {"2024-01": True}, # Should double
+                    "deces_par_accident": {"2024-01": True},  # Should double
                     "cnrps_remuneration_annuelle_deces": {"2024-01": 12000},
                     "cnrps_duree_services_effectifs": {"2024-01": 15},
-                    "nombre_enfants_charge": {"2024-01": 2}
+                    "nombre_enfants_charge": {"2024-01": 2},
                 }
             }
-        }
+        },
     )
 
     # Same base calculation: 32400
@@ -51,6 +58,7 @@ def test_capital_deces_accident_travail():
     res = sim.calculate("cnrps_capital_deces", "2024-01")[0]
     print(f"Capital Décès (Accident): {res}")
     assert math.isclose(res, 64800.0, abs_tol=1e-5)
+
 
 def test_capital_deces_retraite_72_ans():
     system = TunisiaPensionTaxBenefitSystem()
@@ -62,11 +70,11 @@ def test_capital_deces_retraite_72_ans():
                     "age_deces": {"2024-01": 72},
                     "deces_par_accident": {"2024-01": False},
                     "cnrps_remuneration_annuelle_deces": {"2024-01": 12000},
-                    "cnrps_duree_services_effectifs": {"2024-01": 35}, # Capped at 18
-                    "nombre_enfants_charge": {"2024-01": 0}
+                    "cnrps_duree_services_effectifs": {"2024-01": 35},  # Capped at 18
+                    "nombre_enfants_charge": {"2024-01": 0},
                 }
             }
-        }
+        },
     )
 
     # R = 12000
@@ -78,6 +86,7 @@ def test_capital_deces_retraite_72_ans():
     res = sim.calculate("cnrps_capital_deces", "2024-01")[0]
     print(f"Capital Décès (Retraite 72 ans): {res}")
     assert math.isclose(res, 12000.0, abs_tol=1e-5)
+
 
 if __name__ == "__main__":
     test_capital_deces_actif_normal()
