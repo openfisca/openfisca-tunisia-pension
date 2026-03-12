@@ -16,7 +16,7 @@ with open("./pyproject.toml", "rb") as file:
         version = re.search(r"openfisca-core\[([^\]]+)\]\s*>=\s*([\d\.]*)", dep)
         if version:
             try:
-                print(f"openfisca-core[{version[1]}]=={version[2]}")  # noqa: T201 <- This is to avoid flake8 print detection.
+                print(f"openfisca-core[{version[1]}]=={version[2]}")
             except Exception as e:
-                print(f'Error processing "{dep}": {e}')  # noqa: T201 <- This is to avoid flake8 print detection.
+                print(f'Error processing "{dep}": {e}')
                 exit(1)
