@@ -6,7 +6,6 @@ from openfisca_core.model_api import (
 )
 
 
-
 class cnrps_indemnites_familiales(Variable):
     value_type = float
     entity = Individu
@@ -14,7 +13,7 @@ class cnrps_indemnites_familiales(Variable):
     definition_period = MONTH
 
     def formula(individu, period, parameters):
-        nb_enfants = individu('nombre_enfants_charge', period)
+        nb_enfants = individu("nombre_enfants_charge", period)
         params_if = parameters(period).retraite.cnrps.accessoires.indemnites_familiales
 
         # Calculate allowance per child based on their rank
@@ -30,6 +29,7 @@ class cnrps_indemnites_familiales(Variable):
 
         return mnt_1 + mnt_2 + mnt_3 + mnt_4_plus
 
+
 class cnrps_indemnite_revenu_unique(Variable):
     value_type = float
     entity = Individu
@@ -37,21 +37,22 @@ class cnrps_indemnite_revenu_unique(Variable):
     definition_period = MONTH
 
     def formula(individu, period, parameters):
-        nb_enfants = individu('nombre_enfants_charge', period)
-        conjoint_sans_revenu = individu('conjoint_sans_revenu', period)
-        mere_divorcee = individu('mere_divorcee_garde_enfants', period)
+        nb_enfants = individu("nombre_enfants_charge", period)
+        conjoint_sans_revenu = individu("conjoint_sans_revenu", period)
+        mere_divorcee = individu("mere_divorcee_garde_enfants", period)
 
         # The pensioner must have formed a family and had a single income.
         # This is simplified here by checking if they declare the spouse has no income
         # or if it's a divorced mother with custody (who receives it directly per manual).
         eligible = conjoint_sans_revenu + mere_divorcee
 
-        params_iru = parameters(period).retraite.cnrps.accessoires.indemnite_revenu_unique
+        params_iru = parameters(
+            period
+        ).retraite.cnrps.accessoires.indemnite_revenu_unique
 
         # Determine amount based on number of children
-        mnt_1 = (nb_enfants == 1) * getattr(params_iru, '1_enfant', 0)
-        mnt_2 = (nb_enfants == 2) * getattr(params_iru, '2_enfants', 0)
-        mnt_3_plus = (nb_enfants >= 3) * getattr(params_iru, '3_enfants_et_plus', 0)
-
+        mnt_1 = (nb_enfants == 1) * getattr(params_iru, "1_enfant", 0)
+        mnt_2 = (nb_enfants == 2) * getattr(params_iru, "2_enfants", 0)
+        mnt_3_plus = (nb_enfants >= 3) * getattr(params_iru, "3_enfants_et_plus", 0)
 
         return (mnt_1 + mnt_2 + mnt_3_plus) * eligible

@@ -1,5 +1,4 @@
-'''Régime des salariés agricoles.'''
-
+"""Régime des salariés agricoles."""
 
 from openfisca_core import periods
 
@@ -11,7 +10,7 @@ from numpy import (
     apply_along_axis,
     maximum as max_,
     vstack,
-    )
+)
 
 
 from openfisca_tunisia_pension.tools import make_mean_over_largest
@@ -23,17 +22,15 @@ from openfisca_core.model_api import (
 )
 
 
-
-
 class RegimeRSA(AbstractRegimeEnAnnuites):
-    name = 'Régime des salariés agricoles'
-    variable_prefix = 'rsa'
-    parameters_prefix = 'rsa'
+    name = "Régime des salariés agricoles"
+    variable_prefix = "rsa"
+    parameters_prefix = "rsa"
 
     class salaire_reference(Variable):
         value_type = float
         entity = Individu
-        label = 'Salaires de référence du régime des salariés agricoles'
+        label = "Salaires de référence du régime des salariés agricoles"
         definition_period = YEAR
 
         def formula(individu, period):
@@ -46,19 +43,21 @@ class RegimeRSA(AbstractRegimeEnAnnuites):
             mean_over_largest = make_mean_over_largest(k)
             salaire = apply_along_axis(
                 mean_over_largest,
-                axis = 0,
-                arr = vstack([
-                    individu('salaire', period = periods.period('year', year))
-                    for year in range(period.start.year, period.start.year - n, -1)
-                    ]),
-                )
+                axis=0,
+                arr=vstack(
+                    [
+                        individu("salaire", period=periods.period("year", year))
+                        for year in range(period.start.year, period.start.year - n, -1)
+                    ]
+                ),
+            )
             salaire_refererence = salaire * base_liquidation_rsa / base_declaration_rsa
             return salaire_refererence
 
     class pension(Variable):
         value_type = float
         entity = Individu
-        label = 'Salaires de référence du régime des salariés agricoles'
+        label = "Salaires de référence du régime des salariés agricoles"
         definition_period = YEAR
 
         def formula(individu, period, parameters):
@@ -72,7 +71,7 @@ class RegimeRSA(AbstractRegimeEnAnnuites):
             smag = parameters(period).marche_travail.smag * 25
             duree_stage_validee = duree_assurance > 4 * duree_stage
             pension_min = rsa.pension_min
-            salaire_reference = individu('regime_name_salaire_reference', period)
+            salaire_reference = individu("regime_name_salaire_reference", period)
 
             montant = pension_generique(
                 duree_assurance,
@@ -82,8 +81,8 @@ class RegimeRSA(AbstractRegimeEnAnnuites):
                 duree_stage,
                 age_elig,
                 periode_remplacement_base,
-                plaf_taux_pension
-                )
+                plaf_taux_pension,
+            )
 
             elig_age = age > age_elig
             elig = duree_stage_validee * elig_age * (salaire_reference > 0)

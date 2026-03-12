@@ -1,12 +1,11 @@
-'''Tests of tools.'''
-
+"""Tests of tools."""
 
 import numpy as np
 
 
 from openfisca_tunisia_pension.tools import (
     mean_over_k_consecutive_largest,
-    )
+)
 
 
 def test_mean_over_consecutive_largest():

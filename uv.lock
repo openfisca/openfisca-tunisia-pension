@@ -1531,6 +1531,7 @@ dev = [
     { name = "requests" },
     { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
     { name = "yamllint" },
 ]
 notebook = [
@@ -1563,6 +1564,7 @@ requires-dist = [
     { name = "requests", marker = "extra == 'dev'", specifier = ">=2.28.2,<3.0" },
     { name = "scipy", specifier = ">=0.12" },
     { name = "scipy", marker = "extra == 'dev'", specifier = ">=1.10.1,<2.0" },
+    { name = "tomli", marker = "python_full_version < '3.11' and extra == 'dev'", specifier = ">=2.0.0" },
     { name = "yamllint", marker = "extra == 'dev'", specifier = ">=1.30.0,<2.0" },
 ]
 provides-extras = ["dev", "notebook"]

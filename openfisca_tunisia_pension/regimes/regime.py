@@ -1,4 +1,4 @@
-'''Abstract regimes definition.'''
+"""Abstract regimes definition."""
 
 import numpy as np
 
@@ -14,14 +14,10 @@ from openfisca_core.model_api import (
     MONTH,
     ETERNITY,
     date,
-    where,
     max_,
     min_,
-    round_,
     set_input_divide_by_period,
 )
-
-
 
 
 class AbstractRegime(object):
@@ -33,7 +29,7 @@ class AbstractRegime(object):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'cotisation retraite employeur'
+        label = "cotisation retraite employeur"
 
         def formula(individu, period, parameters):
             NotImplementedError
@@ -58,14 +54,14 @@ class AbstractRegime(object):
         value_type = date
         entity = Individu
         definition_period = ETERNITY
-        label = 'Date de liquidation'
+        label = "Date de liquidation"
         default_value = date(2250, 12, 31)
 
     class majoration_pension(Variable):
         value_type = int
         entity = Individu
         definition_period = MONTH
-        label = 'Majoration de pension'
+        label = "Majoration de pension"
 
         def formula(individu, period, parameters):
             NotImplementedError
@@ -74,7 +70,7 @@ class AbstractRegime(object):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Pension'
+        label = "Pension"
 
         def formula(individu, period, parameters):
             NotImplementedError
@@ -83,7 +79,7 @@ class AbstractRegime(object):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Pension brute'
+        label = "Pension brute"
 
         def formula(individu, period, parameters):
             NotImplementedError
@@ -92,16 +88,16 @@ class AbstractRegime(object):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Pension servie'
+        label = "Pension servie"
 
         def formula(individu, period, parameters):
             NotImplementedError
 
 
 class AbstractRegimeEnAnnuites(AbstractRegime):
-    name = 'Régime en annuités'
-    variable_prefix = 'regime_en_annuites'
-    parameters = 'regime_en_annuites'
+    name = "Régime en annuités"
+    variable_prefix = "regime_en_annuites"
+    parameters = "regime_en_annuites"
 
     class duree_assurance_annuelle(Variable):
         value_type = float
@@ -122,47 +118,40 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Pension'
+        label = "Pension"
 
         def formula(individu, period):
-            pension_brute = individu('regime_name_pension_brute', period)
-            eligible = individu('regime_name_eligible', period)
+            pension_brute = individu("regime_name_pension_brute", period)
+            eligible = individu("regime_name_eligible", period)
             try:
-                pension_minimale = individu('regime_name_pension_minimale', period)
+                pension_minimale = individu("regime_name_pension_minimale", period)
             except VariableNotFoundError:
                 pension_minimale = 0
             try:
-                pension_maximale = individu('regime_name_pension_maximale', period)
+                pension_maximale = individu("regime_name_pension_maximale", period)
             except (VariableNotFoundError, NotImplementedError):
-                return max_(
-                    pension_brute,
-                    pension_minimale
-                    )
+                return max_(pension_brute, pension_minimale)
             return eligible * min_(
-                pension_maximale,
-                max_(
-                    pension_brute,
-                    pension_minimale
-                    )
-                )
+                pension_maximale, max_(pension_brute, pension_minimale)
+            )
 
     class pension_brute(Variable):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Pension brute'
+        label = "Pension brute"
 
         def formula(individu, period, parameters):
-            taux_de_liquidation = individu('regime_name_taux_de_liquidation', period)
-            salaire_de_reference = individu('regime_name_salaire_de_reference', period)
-            return taux_de_liquidation * salaire_de_reference,
+            taux_de_liquidation = individu("regime_name_taux_de_liquidation", period)
+            salaire_de_reference = individu("regime_name_salaire_de_reference", period)
+            return (taux_de_liquidation * salaire_de_reference,)
 
     class pension_maximale(Variable):
         value_type = float
         default_value = np.inf  # Pas de pension maximale par défaut
         entity = Individu
         definition_period = YEAR
-        label = 'Pension maximale'
+        label = "Pension maximale"
 
         def formula(individu, period, parameters):
             NotImplementedError
@@ -172,7 +161,7 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
         # default_value = 0  # Pas de pension minimale par défaut, elle est à zéro
         entity = Individu
         definition_period = YEAR
-        label = 'Pension minimale'
+        label = "Pension minimale"
 
         def formula(individu, period, parameters):
             NotImplementedError
@@ -181,46 +170,55 @@ class AbstractRegimeEnAnnuites(AbstractRegime):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Pension servie'
+        label = "Pension servie"
 
         def formula(individu, period, parameters):
-            annee_de_liquidation = individu('regime_name_liquidation_date', period).astype('datetime64[Y]').astype(int) + 1970
+            annee_de_liquidation = (
+                individu("regime_name_liquidation_date", period)
+                .astype("datetime64[Y]")
+                .astype(int)
+                + 1970
+            )
             # Raccouci pour arrêter les calculs dans le passé quand toutes les liquidations ont lieu dans le futur
             if all(annee_de_liquidation > period.start.year):
                 return individu.empty_array()
             last_year = period.last_year
-            pension_au_31_decembre_annee_precedente = individu('regime_name_pension_au_31_decembre', last_year)
-            revalorisation = parameters(period).regime_name.revalarisation_pension_servie
-            pension = individu('regime_name_pension_au_31_decembre', period)
+            pension_au_31_decembre_annee_precedente = individu(
+                "regime_name_pension_au_31_decembre", last_year
+            )
+            revalorisation = parameters(
+                period
+            ).regime_name.revalarisation_pension_servie
+            pension = individu("regime_name_pension_au_31_decembre", period)
             return revalorise(
                 pension_au_31_decembre_annee_precedente,
                 pension,
                 annee_de_liquidation,
                 revalorisation,
                 period,
-                )
+            )
 
     class salaire_de_base(Variable):
         value_type = float
         entity = Individu
         definition_period = MONTH
-        label = 'Salaire de base (salaire brut)'
+        label = "Salaire de base (salaire brut)"
         set_input = set_input_divide_by_period
 
     class salaire_de_reference(Variable):
         value_type = float
         entity = Individu
         definition_period = ETERNITY
-        label = 'Salaire de référence'
+        label = "Salaire de référence"
 
     class taux_de_liquidation(Variable):
         value_type = float
         entity = Individu
         definition_period = YEAR
-        label = 'Taux de liquidation de la pension'
+        label = "Taux de liquidation de la pension"
 
         def formula(individu, period, parameters):
             bareme_annuite = parameters(period).retraite.regime_name.bareme_annuite
-            duree_assurance = individu('regime_name_duree_assurance', period)
+            duree_assurance = individu("regime_name_duree_assurance", period)
             taux_annuite = bareme_annuite.calc(duree_assurance)
             return taux_annuite

@@ -6,7 +6,6 @@ from openfisca_core.model_api import (
 )
 
 
-
 class nombre_enfants_charge(Variable):
     value_type = int
     entity = Individu
@@ -15,6 +14,7 @@ class nombre_enfants_charge(Variable):
     label = "Nombre d'enfants à charge pour les indemnités familiales"
     set_input = set_input_dispatch_by_period
 
+
 class mere_divorcee_garde_enfants(Variable):
     value_type = bool
     entity = Individu
@@ -22,6 +22,7 @@ class mere_divorcee_garde_enfants(Variable):
     definition_period = MONTH
     label = "Mère divorcée ayant obtenu la garde de ses enfants"
     set_input = set_input_dispatch_by_period
+
 
 class conjoint_sans_revenu(Variable):
     value_type = bool
