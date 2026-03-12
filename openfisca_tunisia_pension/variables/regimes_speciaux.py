@@ -1,12 +1,15 @@
-from openfisca_tunisia_pension.entities import Individu
+# Third Party
 from openfisca_core.model_api import (
-    Variable,
-    YEAR,
-    MONTH,
-    min_,
     ADD,
+    MONTH,
+    YEAR,
+    Variable,
+    min_,
     set_input_dispatch_by_period,
 )
+
+# First Party
+from openfisca_tunisia_pension.entities import Individu
 
 
 class gouverneur_duree_service(Variable):

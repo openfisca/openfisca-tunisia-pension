@@ -1,24 +1,15 @@
 """Régime des salariés non agricoles."""
 
+# Third Party
+from numpy import apply_along_axis, vstack
+from openfisca_core.model_api import ADD, YEAR, Enum, Variable, apply_thresholds
+
+# First Party
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-# from openfisca_tunisia_pension.tools import add_vectorial_timedelta, year_
-
-
-from numpy import (
-    apply_along_axis,
-    vstack,
-)
-
-
 from openfisca_tunisia_pension.tools import make_mean_over_largest
-from openfisca_core.model_api import (
-    Variable,
-    YEAR,
-    apply_thresholds,
-    ADD,
-    Enum,
-)
+
+# from openfisca_tunisia_pension.tools import add_vectorial_timedelta, year_
 
 
 class RegimeRSNA(AbstractRegimeEnAnnuites):

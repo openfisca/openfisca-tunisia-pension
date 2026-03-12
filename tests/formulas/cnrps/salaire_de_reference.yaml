@@ -46,7 +46,7 @@
       2013: 12500
       2014: 13000
   output:
-    cnrps_salaire_de_reference: 12500
+    cnrps_salaire_de_reference: 13000
 
 
 - name: "Fonctionnaire 2 années à 20000 supérieures au reste de sa carrière"

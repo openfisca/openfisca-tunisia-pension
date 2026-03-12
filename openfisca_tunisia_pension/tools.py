@@ -1,7 +1,8 @@
 """Tools."""
 
-from numba import float32, int64, jit
+# Third Party
 import numpy as np
+from numba import float32, int64, jit
 
 
 def make_mean_over_largest(k):
@@ -61,6 +62,7 @@ def revalorise(
     period,
 ):
     """Applique la revalorisation à la pension servie."""
+    # Third Party
     from openfisca_core.model_api import where
 
     # Si l'année de liquidation est dans le futur, retourner un tableau vide

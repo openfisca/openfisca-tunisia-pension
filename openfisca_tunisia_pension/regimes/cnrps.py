@@ -1,26 +1,21 @@
 """Régime de la Caisse nationale de retraite et de prévoyance sociale (CNRPS)."""
 
+# Third Party
+from numpy import apply_along_axis, select, vstack
+from openfisca_core.model_api import (
+    ADD,
+    ETERNITY,
+    YEAR,
+    Variable,
+    apply_thresholds,
+    select,
+    where,
+)
+
+# First Party
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-
-
-from numpy import (
-    apply_along_axis,
-    vstack,
-    select,
-)
-
 from openfisca_tunisia_pension.tools import make_mean_over_consecutive_largest
-from openfisca_core.model_api import (
-    Variable,
-    YEAR,
-    ETERNITY,
-    where,
-    select,
-    apply_thresholds,
-    ADD,
-)
-
 
 # Avant 1985
 
@@ -134,7 +129,6 @@ class RegimeCNRPS(AbstractRegimeEnAnnuites):
         def formula(individu, period, parameters):
             cnrps = parameters(period).retraite.regime_name
             age_legal_cadre_commun = cnrps.age_legal.civil.cadre_commun
-            age_requis = age_legal_cadre_commun
 
             mere_3_enfants = individu("mere_3_enfants", period)
             depart_sur_demande = individu("depart_anticipe_sur_demande", period)

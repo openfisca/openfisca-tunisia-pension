@@ -1,8 +1,8 @@
+# Third Party
+from openfisca_core.model_api import YEAR, Variable
+
+# First Party
 from openfisca_tunisia_pension.entities import Individu
-from openfisca_core.model_api import (
-    Variable,
-    YEAR,
-)
 
 
 class cnss_duree_assurance_annuelle(Variable):

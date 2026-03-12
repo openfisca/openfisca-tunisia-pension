@@ -7,9 +7,9 @@ afin de ne pas avoir de chemins > 150 caractères (incompatible Windows).
 Il est à utiliser avant de contribuer à l'harmonisation
 """
 
-import os
+# Standard Library
 import logging
-
+import os
 
 logging.basicConfig(level=logging.INFO)
 

@@ -1,6 +1,6 @@
 - name: Retraite normale - Non éligible (trop jeune)
   period: 2024
-  individu:
+  input:
     age: 59
     cnrps_duree_assurance: 100
     cnrps_salaire_de_base:
@@ -10,7 +10,7 @@
 
 - name: Retraite anticipée sur demande (Cadre commun > 57 ans)
   period: 2024
-  individu:
+  input:
     age: 58
     cnrps_duree_assurance: 150 # = 37.5 ans > 37
     depart_anticipe_sur_demande: true
@@ -22,7 +22,7 @@
 
 - name: Retraite anticipée mères de 3 enfants
   period: 2024
-  individu:
+  input:
     age: 52
     cnrps_duree_assurance: 65 # = 16.25 ans > 15 ans
     mere_3_enfants: true
@@ -33,7 +33,7 @@
 
 - name: Rente invalidité (pas d'âge ni durée requis)
   period: 2024
-  individu:
+  input:
     age: 30
     cnrps_duree_assurance: 10
     invalidite_physique: true

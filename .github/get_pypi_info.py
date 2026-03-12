@@ -1,7 +1,9 @@
+# Standard Library
 import argparse
-import requests
 import logging
 
+# Third Party
+import requests
 
 logging.basicConfig(level=logging.INFO)
 

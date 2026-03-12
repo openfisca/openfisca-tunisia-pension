@@ -1,11 +1,8 @@
+# Third Party
+from openfisca_core.model_api import ETERNITY, YEAR, Enum, Variable, date
+
+# First Party
 from openfisca_tunisia_pension.entities import Individu
-from openfisca_core.model_api import (
-    Variable,
-    YEAR,
-    ETERNITY,
-    date,
-    Enum,
-)
 
 
 class age(Variable):

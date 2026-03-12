@@ -1,9 +1,8 @@
+# Third Party
+from openfisca_core.model_api import MONTH, Variable, max_
+
+# First Party
 from openfisca_tunisia_pension.entities import Individu
-from openfisca_core.model_api import (
-    Variable,
-    MONTH,
-    max_,
-)
 
 
 class cnrps_indemnites_familiales(Variable):

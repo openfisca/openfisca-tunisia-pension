@@ -1,25 +1,17 @@
 """Régime des salariés agricoles."""
 
+# Third Party
+from numpy import apply_along_axis
+from numpy import maximum as max_
+from numpy import vstack
 from openfisca_core import periods
+from openfisca_core.model_api import YEAR, Variable, max_
 
+# First Party
 from openfisca_tunisia_pension.entities import Individu
 from openfisca_tunisia_pension.regimes.regime import AbstractRegimeEnAnnuites
-
-
-from numpy import (
-    apply_along_axis,
-    maximum as max_,
-    vstack,
-)
-
-
 from openfisca_tunisia_pension.tools import make_mean_over_largest
 from openfisca_tunisia_pension.variables.helpers import pension_generique
-from openfisca_core.model_api import (
-    Variable,
-    YEAR,
-    max_,
-)
 
 
 class RegimeRSA(AbstractRegimeEnAnnuites):

@@ -1,8 +1,11 @@
+# Standard Library
 import re
 
 try:
+    # Standard Library
     import tomllib
 except ImportError:
+    # Third Party
     import tomli as tomllib
 
 # This script prints the minimal version of Openfisca-Core to ensure their compatibility during CI testing

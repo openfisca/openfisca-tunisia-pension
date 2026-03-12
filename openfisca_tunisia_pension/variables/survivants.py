@@ -1,11 +1,14 @@
-from openfisca_tunisia_pension.entities import Individu
+# Third Party
 from openfisca_core.model_api import (
-    Variable,
     MONTH,
-    where,
+    Variable,
     min_,
     set_input_dispatch_by_period,
+    where,
 )
+
+# First Party
+from openfisca_tunisia_pension.entities import Individu
 
 
 class age_deces(Variable):

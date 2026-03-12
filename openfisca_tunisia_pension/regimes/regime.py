@@ -1,23 +1,23 @@
 """Abstract regimes definition."""
 
+# Third Party
 import numpy as np
-
-
 from openfisca_core.errors.variable_not_found_error import VariableNotFoundError
-
-# Import the Entities specifically defined for this tax and benefit system
-from openfisca_tunisia_pension.entities import Individu
-from openfisca_tunisia_pension.tools import revalorise
 from openfisca_core.model_api import (
-    Variable,
-    YEAR,
-    MONTH,
     ETERNITY,
+    MONTH,
+    YEAR,
+    Variable,
     date,
     max_,
     min_,
     set_input_divide_by_period,
 )
+
+# First Party
+# Import the Entities specifically defined for this tax and benefit system
+from openfisca_tunisia_pension.entities import Individu
+from openfisca_tunisia_pension.tools import revalorise
 
 
 class AbstractRegime(object):

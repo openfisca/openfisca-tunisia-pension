@@ -1,9 +1,8 @@
+# Third Party
+from openfisca_core.model_api import MONTH, Variable, set_input_dispatch_by_period
+
+# First Party
 from openfisca_tunisia_pension.entities import Individu
-from openfisca_core.model_api import (
-    Variable,
-    MONTH,
-    set_input_dispatch_by_period,
-)
 
 
 class nombre_enfants_charge(Variable):

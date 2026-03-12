@@ -1,4 +1,4 @@
-# Use uv for all Python/package commands. Override with: make UV=python to use system Python.
+# Use uv run for all Python/package commands. Override with: make UV=python to use system Python.
 UV = uv run
 
 all: test
@@ -24,22 +24,25 @@ build: clean deps
 	find dist -name "*.whl" -exec uv pip install {}[dev] \;
 
 check-syntax-errors:
-	$(UV) python -m compileall -q .
+	uv run python -m compileall -q .
+
+format-style:
+	uv run ruff format .
+	uv run ruff check --fix .
 
 check-style:
-	$(UV) flake8 openfisca_tunisia_pension
-	$(UV) flake8 tests
+	uv run ruff check .
 
 check-path-length:
-	$(UV) python openfisca_tunisia_pension/scripts/check_path_length.py
+	uv run python openfisca_tunisia_pension/scripts/check_path_length.py
 
 check-yaml:
 	.github/lint-changed-yaml-tests.sh
 
 check-all-yaml:
-	$(UV) yamllint openfisca_tunisia_pension/parameters
-	$(UV) yamllint tests
+	uv run yamllint openfisca_tunisia_pension/parameters
+	uv run yamllint tests
 
 test: clean check-syntax-errors check-style
-	@echo "> YAML tests..."
-	$(UV) openfisca test --country-package openfisca_tunisia_pension tests
+	@echo "> Yaml tests..."
+	uv run openfisca test --country-package openfisca_tunisia_pension tests

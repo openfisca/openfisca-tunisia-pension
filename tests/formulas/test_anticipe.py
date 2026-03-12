@@ -1,4 +1,7 @@
+# Third Party
 from openfisca_core.simulations import SimulationBuilder
+
+# First Party
 from openfisca_tunisia_pension import TunisiaPensionTaxBenefitSystem
 
 
@@ -21,7 +24,7 @@ def test_depart_anticipe():
         },
     )
 
-    assert sim.calculate("cnrps_eligible", "2024")[0] == True
+    assert sim.calculate("cnrps_eligible", "2024")[0]
     print("Mothers of 3 test passed!")
 
     # Simulate normal person
@@ -39,7 +42,7 @@ def test_depart_anticipe():
         },
     )
 
-    assert sim2.calculate("cnrps_eligible", "2024")[0] == False
+    assert not sim2.calculate("cnrps_eligible", "2024")[0]
     print("Normal person test passed!")
 
 

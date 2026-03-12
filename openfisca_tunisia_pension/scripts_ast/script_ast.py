@@ -1,5 +1,6 @@
 """Generate openfisca variables of pension scheme."""
 
+# Standard Library
 import ast
 import copy
 import logging
@@ -7,7 +8,7 @@ import os
 import sys
 from pathlib import Path
 
-
+# First Party
 import openfisca_tunisia_pension
 
 tunisia_pension_root = str(Path(openfisca_tunisia_pension.__file__).parent.parent)
