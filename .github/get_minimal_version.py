@@ -1,8 +1,13 @@
 import re
-import tomli
+
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
 # This script prints the minimal version of Openfisca-Core to ensure their compatibility during CI testing
 with open('./pyproject.toml', 'rb') as file:
-    config = tomli.load(file)
+    config = tomllib.load(file)
     deps = config['project']['dependencies']
     for dep in deps:
         version = re.search(r'openfisca-core\[([^\]]+)\]\s*>=\s*([\d\.]*)', dep)
