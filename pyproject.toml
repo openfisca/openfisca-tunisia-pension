@@ -58,10 +58,21 @@ notebook = [
 [tool.ruff]
 target-version = "py310"
 line-length = 88
-exclude = ["build", "dist", ".git", "**/notebooks", "openfisca_tunisia_pension/variables"]
+exclude = ["build", "dist", ".git", "**/notebooks"]
 
 [tool.ruff.lint]
-ignore = ["F403", "F405", "F811", "F821"]  # star imports; redefined/unused (formula context)
+# Règles ignorées globalement (contexte formules OpenFisca / régimes) :
+# F403, F405 : import * (usage courant dans les formules)
+# F811 : même symbole importé deux fois (ex. select depuis numpy et model_api)
+# F821 : noms "indéfinis" en apparence (variables de formule évaluées à l'exécution)
+ignore = ["F403", "F405", "F811", "F821"]
+
+# Fichiers sous variables/ : générés à la volée par script_ast à partir des régimes.
+# On applique le lint (longueur, style, isort, etc.) mais on ignore les règles inadaptées au code généré :
+# E402 : import non en tête de fichier (docstring / libellé de régime avant les imports, structure imposée par le générateur)
+# F401 : import signalé inutilisé (certains imports sont requis par le générateur ou pour l'héritage de classes)
+[tool.ruff.lint.per-file-ignores]
+"openfisca_tunisia_pension/variables/*.py" = ["E402", "F401"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["openfisca_tunisia_pension"]
