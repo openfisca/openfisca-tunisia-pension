@@ -24,6 +24,7 @@ Quelques conseils à prendre en compte :
 - [ ] Jetez un coup d'œil au [guide de contribution](https://github.com/openfisca/openfisca-tunisia-pension/blob/master/CONTRIBUTING.md).
 - [ ] Regardez s'il n'y a pas une [proposition introduisant ces mêmes changements](https://github.com/openfisca/openfisca-tunisia-pension/pulls).
 - [ ] Documentez votre contribution avec des références législatives.
+- [ ] Validez avec `openfisca-ai` : `uv run openfisca-ai validate-parameters .`
 - [ ] Mettez à jour ou ajoutez des tests correspondant à votre contribution.
 - [ ] Augmentez le [numéro de version](https://speakerdeck.com/mattisg/git-session-2-strategies?slide=81) dans [`pyproject.toml`](https://github.com/openfisca/openfisca-tunisia-pension/blob/master/pyproject.toml).
 - [ ] Mettez à jour le [`CHANGELOG.md`](https://github.com/openfisca/openfisca-tunisia-pension/blob/master/CHANGELOG.md).

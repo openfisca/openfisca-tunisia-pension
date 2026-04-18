@@ -6,6 +6,44 @@ Afin de faciliter la réutilisation d'OpenFisca et d'améliorer la qualité du c
 
 Certaines règles sont communes à tous les dépôts OpenFisca et sont détaillées dans [la documentation générale](http://openfisca.org/doc/contribute/guidelines.html).
 
+## Pré-requis
+
+```bash
+git clone <repo-url>
+cd openfisca-tunisia-pension
+uv sync
+```
+
+## Vérifications de code automatiques avec pre-commit
+
+Avant chaque commit, des vérifications automatiques sont exécutées via [pre-commit](https://pre-commit.com/).
+
+```bash
+uv run pre-commit install
+```
+
+Exécuter les vérifications manuellement :
+
+```bash
+uv run pre-commit run --all-files
+```
+
+## Validation avec openfisca-ai
+
+Ce dépôt utilise [openfisca-ai](https://github.com/benjello/openfisca-ai) comme toolkit de validation :
+
+```bash
+uv run openfisca-ai validate-parameters .
+uv run openfisca-ai validate-units .
+uv run openfisca-ai validate-code .
+uv run openfisca-ai audit .
+```
+
+## Tests
+
+```bash
+uv run pytest
+```
 
 ## Format du Changelog
 
