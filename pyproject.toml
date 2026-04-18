@@ -38,6 +38,7 @@ build-backend = "setuptools.build_meta"
 
 [project.optional-dependencies]
 dev = [
+    "openfisca-ai",
     "pytest",  # Let OpenFisca-Core decide pytest version
     "ruff >=0.6.9, <1",
     "scipy >=1.10.1, <2.0",
@@ -54,6 +55,9 @@ notebook = [
     'nbformat >= 4.4',
     'pandas >= 0.22.0',
 ]
+
+[tool.uv.sources]
+openfisca-ai = { git = "https://github.com/benjello/openfisca-ai.git" }
 
 [tool.ruff]
 target-version = "py310"
