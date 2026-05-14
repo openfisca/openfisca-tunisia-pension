@@ -34,6 +34,15 @@ KNOWN_TEXTS = {
     "2019-37": "Loi n° 2019-37 du 30 avril 2019, relèvement âge retraite",
 }
 
+KNOWN_TEXT_TYPES = {
+    "1959-18": "Loi",
+    "1960-33": "Loi",
+    "1981-6": "Loi",
+    "1985-12": "Loi",
+    "2007-43": "Loi",
+    "2019-37": "Loi",
+}
+
 
 def load_yaml(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as stream:
@@ -90,6 +99,12 @@ def extract_laws(texts: list[str]) -> set[str]:
         for year, number in LAW_RE.findall(text):
             laws.add(normalize_law_id(year, number))
     return laws
+
+
+def jort_numbers(law: str) -> tuple[str, str]:
+    year, suffix = law.split("-", 1)
+    short_number = f"{int(year) % 100}-{suffix}" if int(year) < 2000 else law
+    return law, short_number
 
 
 def describe_parameters() -> tuple[list[dict[str, Any]], Counter[str], Counter[str]]:
@@ -170,13 +185,16 @@ def query_external_jort_cache(laws: set[str]) -> dict[str, list[dict[str, Any]]]
         SELECT type, numero, titre, date_signature, date_publication,
                jort_annee, jort_numero, pages, pdf_fr, pdf_ar
         FROM textes
-        WHERE numero = ?
+        WHERE numero IN (?, ?)
         ORDER BY date_signature, recid
     """
     connection = sqlite3.connect(f"file:{EXTERNAL_JORT_CACHE}?mode=ro", uri=True)
     try:
         for law in sorted(laws):
-            rows = connection.execute(query, (law,)).fetchall()
+            rows = connection.execute(query, jort_numbers(law)).fetchall()
+            expected_type = KNOWN_TEXT_TYPES.get(law)
+            if expected_type:
+                rows = [row for row in rows if row[0] == expected_type] or rows
             for row in rows:
                 matches[law].append(
                     {
@@ -200,9 +218,10 @@ def query_external_jort_cache(laws: set[str]) -> dict[str, list[dict[str, Any]]]
 def best_jort_match(law: str, matches: list[dict[str, Any]]) -> dict[str, Any] | None:
     if not matches:
         return None
-    if law in KNOWN_TEXTS:
+    expected_type = KNOWN_TEXT_TYPES.get(law)
+    if expected_type:
         for match in matches:
-            if match["type"] == "Loi":
+            if match["type"] == expected_type:
                 return match
     return matches[0]
 

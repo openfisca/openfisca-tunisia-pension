@@ -23,14 +23,14 @@ Généré le 2026-05-14 par `scripts/generate_pension_source_audit.py`.
 
 | Texte | Occurrences paramètres | Statut |
 | --- | ---: | --- |
-| `1959-18` - Loi n° 59-18 du 5 février 1959, pensions civiles et militaires | 3 | texte pivot |
-| `1960-33` - Loi n° 60-33 du 14 décembre 1960, invalidité/vieillesse/survie secteur non agricole | 1 | texte pivot |
-| `1981-70` - Texte cité par les paramètres | 3 | à résoudre |
-| `1985-1177` - Texte cité par les paramètres | 4 | à résoudre |
-| `1985-1178` - Texte cité par les paramètres | 2 | à résoudre |
-| `1985-12` - Loi n° 85-12 du 5 mars 1985, pensions civiles et militaires secteur public | 11 | texte pivot |
+| `1959-18` - Loi n° 59-18 du 5 février 1959, pensions civiles et militaires | 3 | JORT 1959/8, texte pivot |
+| `1960-33` - Loi n° 60-33 du 14 décembre 1960, invalidité/vieillesse/survie secteur non agricole | 1 | JORT 1960/57, texte pivot |
+| `1981-70` - Texte cité par les paramètres | 3 | JORT 1981/51 |
+| `1985-1177` - Texte cité par les paramètres | 4 | JORT 1985/68 |
+| `1985-1178` - Texte cité par les paramètres | 2 | JORT 1985/68 |
+| `1985-12` - Loi n° 85-12 du 5 mars 1985, pensions civiles et militaires secteur public | 11 | JORT 1985/20, texte pivot |
 | `1985-611` - Texte cité par les paramètres | 4 | à résoudre |
-| `1988-71` - Texte cité par les paramètres | 2 | à résoudre |
+| `1988-71` - Texte cité par les paramètres | 2 | JORT 1988/45 |
 | `2007-43` - Loi n° 2007-43 du 25 juin 2007, pensions public/privé/régimes spéciaux | 2 | texte local, JORT 2007/51, texte pivot |
 | `2019-37` - Loi n° 2019-37 du 30 avril 2019, relèvement âge retraite | 2 | JORT 2019/35, texte pivot |
 | `2024-9` - Texte cité par les paramètres | 4 | JORT 2024/20 |

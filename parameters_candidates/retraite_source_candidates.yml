@@ -31,7 +31,17 @@ law_candidates:
   1959-18:
     title: Loi n° 59-18 du 5 février 1959, pensions civiles et militaires
     local_texts: []
-    jort_cache_matches: []
+    jort_cache_matches:
+    - type: Loi
+      numero: 59-18
+      titre: Loi n° 59-18 du 05 Février 1959, fixant le regime des pensions civiles et militaires de retraite
+      date_signature: '1959-02-05'
+      date_publication: '1959-02-03'
+      jort_annee: 1959
+      jort_numero: 8
+      pages: 0093-0100
+      pdf_fr: /jort/1959/1959F/Jo00859.pdf
+      pdf_ar: /jort/1959/1959A/Ja00859.pdf
     parameters:
     - retraite.cnrps.age_legal.civil.cadre_commun
     - retraite.cnrps.age_legal.civil.cadres_actifs
@@ -39,13 +49,98 @@ law_candidates:
   1960-33:
     title: Loi n° 60-33 du 14 décembre 1960, invalidité/vieillesse/survie secteur non agricole
     local_texts: []
-    jort_cache_matches: []
+    jort_cache_matches:
+    - type: Loi
+      numero: 60-33
+      titre: Loi n° 60-33 du 14 Décembre 1960, instituant un regime de pension d'invalidite,de vieillesse
+        et de survie,et un regime d'allocation de vieillesse et de survie,dans le secteur non agricole
+      date_signature: '1960-12-14'
+      date_publication: '1960-12-13'
+      jort_annee: 1960
+      jort_numero: 57
+      pages: '1616'
+      pdf_fr: /jort/1960/1960F/Jo05760.pdf
+      pdf_ar: /jort/1960/1960A/Ja05760.pdf
     parameters:
     - retraite.rsna.bareme_annuite
   1981-70:
     title: null
     local_texts: []
-    jort_cache_matches: []
+    jort_cache_matches:
+    - type: Loi
+      numero: 81-70
+      titre: Loi n° 81-70 du 01 Août 1981, modifiant la loi no 80-88 du 31 decembre 1980,portant loi de
+        finances pour la gestion 1981:premiere partie:titre premier:budget ordinaire:chapitre premier:dispositions
+        generales - Art.1 a 3
+      date_signature: '1981-08-01'
+      date_publication: '1981-08-07'
+      jort_annee: 1981
+      jort_numero: 51
+      pages: '1789'
+      pdf_fr: /jort/1981/1981F/Jo05181.pdf
+      pdf_ar: /jort/1981/1981A/Ja05181.pdf
+    - type: Loi
+      numero: 81-70
+      titre: Loi n° 81-70 du 01 Août 1981, modifiant la loi no 80-88 du 31 decembre 1980,portant loi de
+        finances pour la gestion 1981:premiere partie:titre premier:budget ordinaire:chapitre premier:dispositions
+        generales:modification de la loi no 59-18 du 5 fevrier 1959,fixant le regime des pensions civiles
+        et militaires de retraite - Art.4 et 5 abrogeant et remplacant les articles 22,paragraphe 2 et
+        5,26 paragraphe 2,31 paragraphe 1 et 6,32 alinea premier,36,37 et 42 alinea 1 de la loi no 59-18
+        du 5 fevrier 1959
+      date_signature: '1981-08-01'
+      date_publication: '1981-08-07'
+      jort_annee: 1981
+      jort_numero: 51
+      pages: 1789-1790
+      pdf_fr: /jort/1981/1981F/Jo05181.pdf
+      pdf_ar: /jort/1981/1981A/Ja05181.pdf
+    - type: Loi
+      numero: 81-70
+      titre: Loi n° 81-70 du 01 Août 1981, modifiant la loi no 80-88 du 31 decembre 1980,portant loi de
+        finances pour la gestion 1981:premiere partie:titre premier:budget ordinaire:chapitre premier:dispositions
+        generales:extension du benefice des regimes de prevoyance sociale geres par la CNRPS - Art.6 abrogeant
+        et remplacant l'article 2 de la loi no 72-2 du 15 fevrier 1972
+      date_signature: '1981-08-01'
+      date_publication: '1981-08-07'
+      jort_annee: 1981
+      jort_numero: 51
+      pages: '1790'
+      pdf_fr: /jort/1981/1981F/Jo05181.pdf
+      pdf_ar: /jort/1981/1981A/Ja05181.pdf
+    - type: Loi
+      numero: 81-70
+      titre: Loi n° 81-70 du 01 Août 1981, modifiant la loi no 80-88 du 31 decembre 1980,portant loi de
+        finances pour la gestion 1981:premiere partie:titre premier:budget ordinaire:chapitre premier:dispositions
+        generales:remunerations publiques - Art.7
+      date_signature: '1981-08-01'
+      date_publication: '1981-08-07'
+      jort_annee: 1981
+      jort_numero: 51
+      pages: '1790'
+      pdf_fr: /jort/1981/1981F/Jo05181.pdf
+      pdf_ar: /jort/1981/1981A/Ja05181.pdf
+    - type: Loi
+      numero: 81-70
+      titre: Loi n° 81-70 du 01 Août 1981, modifiant la loi no 80-88 du 31 decembre 1980,portant loi de
+        finances pour la gestion 1981:deuxieme partie:titre 2:budget d'equipement - Art.8 a 10
+      date_signature: '1981-08-01'
+      date_publication: '1981-08-07'
+      jort_annee: 1981
+      jort_numero: 51
+      pages: '1790'
+      pdf_fr: /jort/1981/1981F/Jo05181.pdf
+      pdf_ar: /jort/1981/1981A/Ja05181.pdf
+    - type: Loi
+      numero: 81-70
+      titre: Loi n° 81-70 du 01 Août 1981, modifiant la loi no 80-88 du 31 decembre 1980,portant loi de
+        finances pour la gestion 1981:troisieme partie:fonds speciaux du tresor - Art.11
+      date_signature: '1981-08-01'
+      date_publication: '1981-08-07'
+      jort_annee: 1981
+      jort_numero: 51
+      pages: 1790-1798
+      pdf_fr: /jort/1981/1981F/Jo05181.pdf
+      pdf_ar: /jort/1981/1981A/Ja05181.pdf
     parameters:
     - retraite.cnrps.accessoires.indemnite_revenu_unique.1_enfant
     - retraite.cnrps.accessoires.indemnite_revenu_unique.2_enfants
@@ -53,7 +148,18 @@ law_candidates:
   1985-1177:
     title: null
     local_texts: []
-    jort_cache_matches: []
+    jort_cache_matches:
+    - type: Decret
+      numero: 85-1177
+      titre: Decret n° 85-1177 du 24 Septembre 1985, fixant la liste des categories d'ouvriers accomplissant
+        des taches penibles et insalubres
+      date_signature: '1985-09-24'
+      date_publication: '1985-10-01'
+      jort_annee: 1985
+      jort_numero: 68
+      pages: 1255-1256
+      pdf_fr: /jort/1985/1985F/Jo06885.pdf
+      pdf_ar: /jort/1985/1985A/Ja06885.pdf
     parameters:
     - retraite.cnrps.bonifications.cadre_actif.service_15
     - retraite.cnrps.bonifications.cadre_actif.service_20
@@ -62,14 +168,36 @@ law_candidates:
   1985-1178:
     title: null
     local_texts: []
-    jort_cache_matches: []
+    jort_cache_matches:
+    - type: Decret
+      numero: 85-1178
+      titre: Decret n° 85-1178 du 24 Septembre 1985, fixant la liste des agents exercant des fonctions
+        astreignantes
+      date_signature: '1985-09-24'
+      date_publication: '1985-10-01'
+      jort_annee: 1985
+      jort_numero: 68
+      pages: '1256'
+      pdf_fr: /jort/1985/1985F/Jo06885.pdf
+      pdf_ar: /jort/1985/1985A/Ja06885.pdf
     parameters:
     - retraite.cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
     - retraite.cnrps.depart_anticipe.sur_demande.astreignants.duree_minimum
   1985-12:
     title: Loi n° 85-12 du 5 mars 1985, pensions civiles et militaires secteur public
     local_texts: []
-    jort_cache_matches: []
+    jort_cache_matches:
+    - type: Loi
+      numero: 85-12
+      titre: Loi n° 85-12 du 05 Mars 1985, portant regime des pensions civiles et militaires de retraite
+        et des survivants dans le secteur public
+      date_signature: '1985-03-05'
+      date_publication: '1985-03-12'
+      jort_annee: 1985
+      jort_numero: 20
+      pages: 0359-0365
+      pdf_fr: /jort/1985/1985F/Jo02085.pdf
+      pdf_ar: /jort/1985/1985A/Ja02085.pdf
     parameters:
     - retraite.cnrps.bareme_annuite
     - retraite.cnrps.bonifications.cadre_actif.service_15
@@ -94,7 +222,18 @@ law_candidates:
   1988-71:
     title: null
     local_texts: []
-    jort_cache_matches: []
+    jort_cache_matches:
+    - type: Loi
+      numero: 88-71
+      titre: Loi n° 88-71 du 27 Juin 1988, modifiant et completant la loi no 85-12 du 5 mars 1985 portant
+        regime des pensions civiles et militaires de retraite et des survivants dans le secteur public
+      date_signature: '1988-06-27'
+      date_publication: '1988-07-01'
+      jort_annee: 1988
+      jort_numero: 45
+      pages: 0967-0968
+      pdf_fr: /jort/1988/1988F/Jo04588.pdf
+      pdf_ar: /jort/1988/1988A/Ja04588.pdf
     parameters:
     - retraite.cnrps.depart_anticipe.meres_3_enfants.age_maximum_enfant
     - retraite.cnrps.depart_anticipe.meres_3_enfants.age_minimum
@@ -103,17 +242,6 @@ law_candidates:
     local_texts:
     - tmp/JORTs/Loi-n°-2007-43-du-25-Juin-2007-Fr.txt
     jort_cache_matches:
-    - type: Decret
-      numero: 2007-43
-      titre: Decret n° 2007-43 du 03 Janvier 2007, portant creation du centre de protection sociale "El-Amen"
-        et fixant son organisation administrative et financiere et les modalites de son fonctionnement
-      date_signature: '2007-01-03'
-      date_publication: '2007-01-12'
-      jort_annee: 2007
-      jort_numero: 4
-      pages: 0162-0164
-      pdf_fr: /jort/2007/2007F/Jo0042007.pdf
-      pdf_ar: /jort/2007/2007A/Ja0042007.pdf
     - type: Loi
       numero: 2007-43
       titre: Loi n° 2007-43 du 25 Juin 2007, modifiant et completant les lois regissant les pensions servies
@@ -133,18 +261,6 @@ law_candidates:
     title: Loi n° 2019-37 du 30 avril 2019, relèvement âge retraite
     local_texts: []
     jort_cache_matches:
-    - type: Decret présidentiel
-      numero: 2019-37
-      titre: Decret présidentiel n° 2019-37 du 12 Mars 2019,  يتعلق بالمصادقة على اتفاقية التعاون في مجال
-        النقل البحري المبرمة بتاريخ 23 نوفمبر 2017 بين حكومة الجمهورية التونسية وحكومة المملكة الأردنية
-        الهاشمية
-      date_signature: '2019-03-12'
-      date_publication: '2019-03-19'
-      jort_annee: 2019
-      jort_numero: 23
-      pages: null
-      pdf_fr: null
-      pdf_ar: null
     - type: Loi
       numero: 2019-37
       titre: Loi n° 2019-37 du 30 avril 2019, modifiant et completant la loi n° 85-12 du 5 mars 1985,
