@@ -1,0 +1,8 @@
+description: Majoration du capital-décès par enfant à charge (part du montant de base)
+values:
+  1993-02-01:
+    value: 0.10
+metadata:
+  unit: /1
+  reference:
+    1993-02-01: Décret n° 93-308 du 1er février 1993, relatif au régime du capital-décès, JORT n° 13/1993, p. 246-247 — article 5

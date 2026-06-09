@@ -90,57 +90,38 @@ class cnrps_capital_deces(Variable):
         # Returns 0 if not deceased
         is_deceased = age_deces >= 0
 
-        # CD = R + MA + ME
-        # MA: Majoration ancienneté -> R/12 per year of service (max 18)
-        duree_retenue = min_(duree_services, 18)
+        capital_deces = parameters(period).retraite.cnrps.capital_deces
+
+        # CD = R + MA + ME (décret 93-308, art. 5)
+        # MA : majoration d'ancienneté -> 1/12 de R par année de service,
+        # plafonnée à 18 mois de salaire.
+        duree_retenue = min_(duree_services, capital_deces.plafond_anciennete_mois)
         MA = (r_annuelle / 12) * duree_retenue
 
         CD1 = r_annuelle + MA
 
-        # ME: Majoration enfants -> 10% per child
-        ME = CD1 * 0.10 * nb_enfants
+        # ME : majoration enfants -> 10 % du montant de base par enfant à charge.
+        ME = CD1 * capital_deces.majoration_par_enfant * nb_enfants
 
         CD_base = CD1 + ME
 
-        # Accidents in activity double the capital (assuming age < 60 means activity/accident applicability for the multiplier)
-        # Note: The manual indicates retirees deceased by accident don't get the 200% rate.
-        multiplier_accident = where(is_accident * (age_deces < 60), 2.0, 1.0)
+        # Décès en service commandé / par accident : capital doublé (art. 5).
+        multiplier_accident = where(
+            is_accident * (age_deces < 60),
+            capital_deces.multiplicateur_deces_accidentel,
+            1.0,
+        )
 
         CD_actif = CD_base * multiplier_accident
 
-        # For retirees, the capital is reduced based on age
-        # < 70 -> 50%
-        # 70-75 -> 40%
-        # 75-80 -> 30%
-        # 80-85 -> 20%
-        # > 85 -> 10%
-        # Assuming age >= 60 implies retiree for this specific calculation if not accident
-
-        taux_retraite = where(
-            age_deces >= 85,
-            0.10,
-            where(
-                age_deces >= 80,
-                0.20,
-                where(
-                    age_deces >= 75,
-                    0.30,
-                    where(
-                        age_deces >= 70,
-                        0.40,
-                        where(
-                            age_deces >= 60,
-                            0.50,
-                            1.0,  # default for active agents < 60
-                        ),
-                    ),
-                ),
-            ),
-        )
+        # Retraité : le capital est réduit selon l'âge au décès (art. 6) — 50 %
+        # au-delà de 60 ans, puis 40/30/20/10 %. Agent en activité (<60) : 100 %.
+        taux_retraite = capital_deces.taux_retraite_selon_age.calc(age_deces)
 
         CD_final = CD_actif * taux_retraite
 
-        # Ensure it's not below SMIG (simplified to constant for this model based on parameters later, using 0 check for now as placeholder for smig check if needed)
+        # Art. 6 : le capital-décès ne peut être inférieur au SMIG annuel
+        # (plancher non encore appliqué ici).
 
         return CD_final * is_deceased
 
