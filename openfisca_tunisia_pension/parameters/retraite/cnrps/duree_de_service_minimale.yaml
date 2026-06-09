@@ -4,3 +4,7 @@ values:
     value: 15
 metadata:
   unit: year
+documentation: |
+  Loi n° 85-12 du 5 mars 1985, article 22 : la pension de retraite est acquise
+  après quinze (15) ans de services au moins. Ce minimum est ramené à dix (10) ans
+  pour les ouvriers occasionnels (exception non encore modélisée).

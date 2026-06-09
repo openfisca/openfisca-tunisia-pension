@@ -1,0 +1,8 @@
+description: Plafond du cumul des pensions de survivants (conjoint + orphelins), en part de la pension de l'agent
+values:
+  1985-03-05:
+    value: 1.0
+metadata:
+  unit: /1
+  reference:
+    1985-03-05: Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des survivants dans le secteur public, JORT n° 20/1985, p. 359-365 — article 45 (le total ne doit pas dépasser la pension de l'agent)
