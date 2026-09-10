@@ -5,4 +5,7 @@ values:
 metadata:
   unit: /1
   reference:
-    1985-03-05: Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des survivants dans le secteur public, JORT n° 20/1985, p. 359-365 — article 43
+    1985-03-05:
+    - title: "Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des survivants dans le secteur public"
+      href: "https://www.pist.tn/jort/1985/1985F/Jo02085.pdf"
+      note: "JORT n° 20/1985, p. 359-365 — article 43"

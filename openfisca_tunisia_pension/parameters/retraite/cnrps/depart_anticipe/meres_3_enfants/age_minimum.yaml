@@ -5,4 +5,7 @@ values:
 metadata:
   unit: year
   reference:
-    1985-03-05: Loi n° 85-12 du 5 mars 1985, article 5, JORT n° 20/1985, p. 359-365, modifié par la loi n° 88-71 du 27 juin 1988, JORT n° 45/1988, p. 967-968
+    1985-03-05:
+    - title: "Loi n° 85-12 du 5 mars 1985, article 5"
+      href: "https://www.pist.tn/jort/1985/1985F/Jo02085.pdf"
+      note: "JORT n° 20/1985, p. 359-365, modifié par la loi n° 88-71 du 27 juin 1988"
