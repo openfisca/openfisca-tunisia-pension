@@ -1,0 +1,11 @@
+description: Part de la pension de l'agent revenant au conjoint lorsqu'il y a au moins 5 orphelins (les 50% restants sont partagés entre les orphelins)
+values:
+  1985-03-05:
+    value: 0.50
+metadata:
+  unit: /1
+  reference:
+    1985-03-05:
+    - title: "Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des survivants dans le secteur public"
+      href: "https://www.pist.tn/jort/1985/1985F/Jo02085.pdf"
+      note: "JORT n° 20/1985, p. 359-365 — article 45 (si nombre d'orphelins ≥ 5, conjoint = 50%)"

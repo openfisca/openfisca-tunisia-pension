@@ -1,5 +1,19 @@
 # Changelog
 
+## 5.3.0 - [#21](https://github.com/openfisca/openfisca-tunisia-pension/pull/21)
+
+* Évolution du système socio-fiscal.
+* Périodes concernées : à partir du 1985-03-05.
+* Zones impactées : `parameters/retraite/cnrps/survivants`, `parameters/retraite/cnrps/capital_deces`, `variables/survivants.py`.
+* Détails :
+  - **Survivants — loi n° 85-12 du 5 mars 1985.** Les taux de réversion étaient des constantes écrites dans `variables/survivants.py`. Ils deviennent des paramètres datés et référencés : `taux_conjoint` (0,75 — article 43), `taux_orphelin` (0,10 — article 45), `plafond_cumul` (1,0 — article 45) et `taux_partage_5_orphelins` (0,50 — article 45).
+  - **Capital-décès — décret n° 93-308 du 1er février 1993.** Même traitement : `majoration_par_enfant` (0,10), `multiplicateur_deces_accidentel` (2,0), `plafond_anciennete_mois` (18) et le barème `taux_retraite_selon_age`, dégressif de 100 % avant 60 ans à 10 % à partir de 85 ans (article 6).
+  - Le remaniement **préserve les résultats** : les six tests de `test_survivants` et les trois de `test_capital_deces` passent à l'identique.
+  - **Localisations JORT** ajoutées aux références qui n'en avaient pas — lois n° 59-18, 60-33, 85-12, 88-71, 2007-43 —, et **vingt-trois références converties de la chaîne libre à la forme structurée** `title` + `href` + `note`, avec l'URL du fascicule sur pist.tn. Une référence en texte libre ne se vérifie pas ; une URL, si.
+  - Neuf références restent en texte libre, faute d'URL vérifiée : les indemnités du décret « n° 85-611 du 3 juin 1986 » — dont le millésime et l'année se contredisent —, la loi n° 81-70 des indemnités de revenu unique, et le décret n° 85-1178 des départs anticipés astreignants.
+
+<!-- -->
+
 ## 5.2.0 - [#23](https://github.com/openfisca/openfisca-tunisia-pension/pull/23)
 
 * Évolution du système socio-fiscal.

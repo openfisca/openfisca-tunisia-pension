@@ -90,57 +90,38 @@ class cnrps_capital_deces(Variable):
         # Returns 0 if not deceased
         is_deceased = age_deces >= 0
 
-        # CD = R + MA + ME
-        # MA: Majoration ancienneté -> R/12 per year of service (max 18)
-        duree_retenue = min_(duree_services, 18)
+        capital_deces = parameters(period).retraite.cnrps.capital_deces
+
+        # CD = R + MA + ME (décret 93-308, art. 5)
+        # MA : majoration d'ancienneté -> 1/12 de R par année de service,
+        # plafonnée à 18 mois de salaire.
+        duree_retenue = min_(duree_services, capital_deces.plafond_anciennete_mois)
         MA = (r_annuelle / 12) * duree_retenue
 
         CD1 = r_annuelle + MA
 
-        # ME: Majoration enfants -> 10% per child
-        ME = CD1 * 0.10 * nb_enfants
+        # ME : majoration enfants -> 10 % du montant de base par enfant à charge.
+        ME = CD1 * capital_deces.majoration_par_enfant * nb_enfants
 
         CD_base = CD1 + ME
 
-        # Accidents in activity double the capital (assuming age < 60 means activity/accident applicability for the multiplier)
-        # Note: The manual indicates retirees deceased by accident don't get the 200% rate.
-        multiplier_accident = where(is_accident * (age_deces < 60), 2.0, 1.0)
+        # Décès en service commandé / par accident : capital doublé (art. 5).
+        multiplier_accident = where(
+            is_accident * (age_deces < 60),
+            capital_deces.multiplicateur_deces_accidentel,
+            1.0,
+        )
 
         CD_actif = CD_base * multiplier_accident
 
-        # For retirees, the capital is reduced based on age
-        # < 70 -> 50%
-        # 70-75 -> 40%
-        # 75-80 -> 30%
-        # 80-85 -> 20%
-        # > 85 -> 10%
-        # Assuming age >= 60 implies retiree for this specific calculation if not accident
-
-        taux_retraite = where(
-            age_deces >= 85,
-            0.10,
-            where(
-                age_deces >= 80,
-                0.20,
-                where(
-                    age_deces >= 75,
-                    0.30,
-                    where(
-                        age_deces >= 70,
-                        0.40,
-                        where(
-                            age_deces >= 60,
-                            0.50,
-                            1.0,  # default for active agents < 60
-                        ),
-                    ),
-                ),
-            ),
-        )
+        # Retraité : le capital est réduit selon l'âge au décès (art. 6) — 50 %
+        # au-delà de 60 ans, puis 40/30/20/10 %. Agent en activité (<60) : 100 %.
+        taux_retraite = capital_deces.taux_retraite_selon_age.calc(age_deces)
 
         CD_final = CD_actif * taux_retraite
 
-        # Ensure it's not below SMIG (simplified to constant for this model based on parameters later, using 0 check for now as placeholder for smig check if needed)
+        # Art. 6 : le capital-décès ne peut être inférieur au SMIG annuel
+        # (plancher non encore appliqué ici).
 
         return CD_final * is_deceased
 
@@ -157,21 +138,23 @@ class cnrps_pension_de_reversion(Variable):
         nb_orphelins = individu("nombre_orphelins_eligibles", period)
         is_deceased = individu("age_deces", period) >= 0
 
-        # Base is 75%
-        taux_reversion = 0.75
+        survivants = parameters(period).retraite.cnrps.survivants
+        taux_conjoint = survivants.taux_conjoint  # 0,75 (loi 85-12, art. 43)
+        taux_orphelin = survivants.taux_orphelin  # 0,10 (art. 45)
+        plafond = survivants.plafond_cumul  # 1,0 (art. 45)
+        taux_5 = survivants.taux_partage_5_orphelins  # 0,50 (art. 45)
 
-        # Reduction based on number of orphans
+        # Art. 45 : le total (conjoint + orphelins) ne dépasse pas la pension de
+        # l'agent. Au-delà de 2 orphelins, la part du conjoint est réduite du
+        # dépassement (plafond − N×taux_orphelin) ; à partir de 5 orphelins elle
+        # est ramenée à 50 % (les 50 % restants partagés entre les orphelins).
         taux_reversion = where(
             nb_orphelins >= 5,
-            0.50,
+            taux_5,
             where(
-                nb_orphelins == 4,
-                0.60,  # 75% - 5% (3rd) - 10% (4th)
-                where(
-                    nb_orphelins == 3,
-                    0.70,  # 75% - 5%
-                    0.75,
-                ),
+                nb_orphelins >= 3,
+                plafond - nb_orphelins * taux_orphelin,
+                taux_conjoint,
             ),
         )
 
@@ -190,26 +173,24 @@ class cnrps_pension_orphelins_totale(Variable):
         nb_orphelins = individu("nombre_orphelins_eligibles", period)
         is_deceased = individu("age_deces", period) >= 0
 
-        # Base logic: 10% per orphan
-        taux_orphelins = nb_orphelins * 0.10
+        survivants = parameters(period).retraite.cnrps.survivants
+        taux_orphelin = survivants.taux_orphelin  # 0,10 (art. 45)
+        taux_conjoint = survivants.taux_conjoint  # 0,75 (art. 43)
+        plafond = survivants.plafond_cumul  # 1,0 (art. 45)
+        taux_5 = survivants.taux_partage_5_orphelins  # 0,50 (art. 45)
 
-        # Caps depending on the presence of a spouse
+        # 10 % par orphelin (art. 45).
+        taux_orphelins = nb_orphelins * taux_orphelin
+
         taux_orphelins = where(
             conjoint_eligible,
-            where(
-                nb_orphelins >= 5,
-                0.50,  # Global cap is 100%, spouse gets 50%, rest 50%
-                where(
-                    nb_orphelins == 4,
-                    0.40,
-                    where(nb_orphelins == 3, 0.30, taux_orphelins),
-                ),
-            ),
-            # If no eligible spouse, they get their portions. (Wait: manual says "If non attribution to conjoint, distributed to orphans")
-            # Generally, the maximum for orphans WITHOUT spouse isn't explicitly capped at 50%, they might share 100% of the pension.
-            # "En cas de non-attribution de la pension du conjoint... répartie à parts égales entre les orphelins"
-            # So rate = 10% * N + 75% (or the conjoint's theoretical part). Max 100%.
-            min_(1.0, nb_orphelins * 0.10 + 0.75) * (nb_orphelins > 0),
+            # Avec conjoint : à partir de 5 orphelins, ils se partagent 50 %
+            # (le conjoint garde 50 %) ; en deçà, ils perçoivent N×10 %.
+            where(nb_orphelins >= 5, taux_5, taux_orphelins),
+            # Sans conjoint (art. 46) : la part du conjoint leur est répartie,
+            # le total restant plafonné à la pension de l'agent.
+            min_(plafond, nb_orphelins * taux_orphelin + taux_conjoint)
+            * (nb_orphelins > 0),
         )
 
         return pension_ref * taux_orphelins * is_deceased

@@ -1,0 +1,14 @@
+description: Taux de la pension temporaire d'orphelin, par orphelin (part de la pension de l'agent)
+values:
+  1985-03-05:
+    value: 0.10
+metadata:
+  unit: /1
+  reference:
+    1985-03-05:
+    - title: "Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des survivants dans le secteur public"
+      href: "https://www.pist.tn/jort/1985/1985F/Jo02085.pdf"
+      note: "JORT n° 20/1985, p. 359-365 — article 45"
+documentation: |
+  Servie jusqu'à 21 ans (25 ans si études supérieures sans bourse ; sans limite d'âge
+  pour l'orphelin invalide ou la fille sans ressources). Cf. articles 45-47.

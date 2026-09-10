@@ -7,5 +7,11 @@ values:
 metadata:
   unit: year
   reference:
-    1985-03-05: Loi n°85-12 du 5 mars 1985, article 30 (avant modification)
-    2007-06-25: Loi n°2007-43 du 25 juin 2007, modifiant l'article 30
+    1985-03-05:
+    - title: "Loi n° 85-12 du 5 mars 1985, article 30 avant modification"
+      href: "https://www.pist.tn/jort/1985/1985F/Jo02085.pdf"
+      note: "JORT n° 20/1985, p. 359-365"
+    2007-06-25:
+    - title: "Loi n° 2007-43 du 25 juin 2007, modifiant l'article 30"
+      href: "https://www.pist.tn/jort/2007/2007F/Jo0512007.pdf"
+      note: "JORT n° 51/2007, p. 2198-2199"

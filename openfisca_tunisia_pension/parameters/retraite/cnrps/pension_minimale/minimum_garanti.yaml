@@ -4,5 +4,7 @@ values:
     value: 0.66666
 metadata:
   unit: smig
-documentation:
-  Pension minimale servie aux cotisants justifiant d'une durée suffisante pour prétendre à une pension de retraite
+documentation: |
+  Pension minimale servie aux cotisants justifiant d'une durée suffisante pour
+  prétendre à une pension de retraite. Loi n° 85-12 du 5 mars 1985, article 39 :
+  la pension ne peut être inférieure aux deux tiers (2/3) du SMIG (régime 2400 h/an).
