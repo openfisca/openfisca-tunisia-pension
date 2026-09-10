@@ -1,6 +1,6 @@
 [project]
 name = "OpenFisca-Tunisia-Pension"
-version = "5.1.1"
+version = "5.2.0"
 description = "OpenFisca Rules as Code model for Tunisia pensions."
 readme = "README.md"
 keywords = ["microsimulation", "tax", "benefit", "pension", "rac", "rules-as-code", "tunisia"]
@@ -22,7 +22,7 @@ dependencies = [
     "numba>=0.54,<1.0.0",
     'numpy >=1.24.3, <3',
     'openfisca-core[web-api] >=44.0.0, <45.0.0',
-    'openfisca-tunisia >=0.79',
+    'openfisca-tunisia >=0.80',
     'scipy >= 0.12',
 ]
 
