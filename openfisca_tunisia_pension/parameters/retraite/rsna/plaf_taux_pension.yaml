@@ -1,0 +1,12 @@
+description: Plafonnement du taux de pension
+values:
+  1974-01-01:
+    value: 0.8
+metadata:
+  unit: /1
+  documentation: |-
+    Valeur reprise d'openfisca-tunisia lors du partage de propriété des paramètres,
+    où elle existait sans être lue par aucune formule. Elle n'est pas sourcée : la date
+    de 1974 est celle que porte tout le bloc RSNA, sans qu'un texte l'établisse, et le
+    plafond de 80 % ne fait aujourd'hui que redire la tranche terminale à taux zéro du
+    barème d'annuités. À établir sur le décret n° 74-499 et sa chaîne modificative.

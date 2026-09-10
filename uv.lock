@@ -1763,14 +1763,27 @@ web-api = [
 ]
 
 [[package]]
+name = "openfisca-tunisia"
+version = "0.80"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "openfisca-core", extra = ["web-api"] },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/55/9e/6617bf7220d128f7569d37f6dcb58416dbf6464ac8cc10df9f71a8b9367a/openfisca_tunisia-0.80.tar.gz", hash = "sha256:d1cb3e05027e6c59b329540f8b14f9920b8e5faff061b3b1e3d85846e28441ae", size = 1461213, upload-time = "2026-09-10T12:10:08.355Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b3/c2/68f27f0f21d243b579f4bc6a33cba8fa29b91971e6c50d0b08bf716a5eb0/openfisca_tunisia-0.80-py3-none-any.whl", hash = "sha256:e69fb4e8ebd297d5f3052f021df535f3ab2c36e2429c2c7cdee7b50951c79a2a", size = 2649025, upload-time = "2026-09-10T12:10:06.682Z" },
+]
+
+[[package]]
 name = "openfisca-tunisia-pension"
-version = "5.1.1"
+version = "5.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "numba" },
     { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "openfisca-core", extra = ["web-api"] },
+    { name = "openfisca-tunisia" },
     { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
@@ -1805,7 +1818,8 @@ requires-dist = [
     { name = "nbformat", marker = "extra == 'notebook'", specifier = ">=4.4" },
     { name = "numba", specifier = ">=0.54,<1.0.0" },
     { name = "numpy", specifier = ">=1.24.3,<3" },
-    { name = "openfisca-core", extras = ["web-api"], specifier = ">=43.0.0,<45.0.0" },
+    { name = "openfisca-core", extras = ["web-api"], specifier = ">=44.0.3,<45.0.0" },
+    { name = "openfisca-tunisia", specifier = ">=0.80" },
     { name = "pandas", marker = "extra == 'notebook'", specifier = ">=0.22.0" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "requests", marker = "extra == 'dev'", specifier = ">=2.28.2,<3.0" },
