@@ -1,5 +1,20 @@
 # Changelog
 
+## 5.2.0 - [#23](https://github.com/openfisca/openfisca-tunisia-pension/pull/23)
+
+* Évolution du système socio-fiscal.
+* Périodes concernées : à partir du 2020-01-01.
+* Zones impactées : `parameters/marche_travail`, pensions minimales de tous les régimes.
+* Détails :
+  - Ce paquet lit désormais les sous-arbres de paramètres dont `openfisca-tunisia` est propriétaire **chez lui**, greffés au chargement, au lieu d'en garder une copie. La copie locale de `marche_travail` est supprimée.
+  - **Le SMIG était figé depuis 2019.** Les deux paquets portaient chacun leur `marche_travail`, et les copies avaient divergé sans que rien ne le signale : la série s'arrêtait ici au 1er mai 2019 avec 36 références, quand celle d'`openfisca-tunisia` court jusqu'au 1er janvier 2025 avec 110. Le SMIG 40 h lu passe de **343,892 dinars** gelés à **448,238** en 2025.
+  - **Conséquence sur les calculs** : les pensions minimales — `minimum_garanti` et `allocation_vieillesse` du CNRPS, `inf` et `sup` du RSNA — sont indexées sur le SMIG. Elles étaient donc **fausses de 2020 à 2026**, d'une valeur périmée et non d'une valeur manquante : rien ne le signalait.
+  - La règle qui en découle : un sous-arbre de paramètres a un propriétaire et un seul. `retraite/` appartient à ce paquet, `marche_travail/` à `openfisca-tunisia`, dont la PR #402 a retiré sa copie morte de `retraite/`. `tests/test_parametres_partages.py` interdit le retour de la duplication.
+  - Trois éléments que seul l'autre paquet portait sont récoltés au passage : l'URL du fascicule du JORT sur les âges légaux du cadre commun et des cadres actifs — dont les références en texte libre deviennent structurées et gagnent leur page —, le paragraphe sur l'option de report des enseignants du supérieur introduite par la loi n° 2019-37, et `rsna/plaf_taux_pension.yaml`.
+  - Le plancher d'`openfisca-core` monte à **44.0.3**, puisque c'est ce qu'`openfisca-tunisia` exige. Le patch compte : `.github/get_minimal_version.py` épingle le plancher **à l'exact** pour la matrice « minimal », et `44.0.0` n'a jamais été publiée — la série 44 commence à 44.0.3. Un plancher qui n'existe pas rend la résolution minimale insatisfiable.
+
+<!-- -->
+
 ### 5.1.1 - [#22](https://github.com/openfisca/openfisca-tunisia-pension/pull/22)
 
 * Amélioration technique.
