@@ -1763,6 +1763,18 @@ web-api = [
 ]
 
 [[package]]
+name = "openfisca-tunisia"
+version = "0.79"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "openfisca-core", extra = ["web-api"] },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2a/e0/58fe5fc7d1cfcf1f33d9885d8f0b517d809b092940e10f73c01162f7244f/openfisca_tunisia-0.79.tar.gz", hash = "sha256:8712aa6788bd780a0269df0095e40cff923cd4ac146d7d257a26df77fd12e2a6", size = 1464782, upload-time = "2026-09-09T19:10:16.24Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/23/bf/d8d35d8f9db859ee6577d3db779d9b463e542f708ee472db4388e43c8fd8/openfisca_tunisia-0.79-py3-none-any.whl", hash = "sha256:af658ff6c291b149c63c01221cdcbef11c2d885c892836199739c707683b0843", size = 2660917, upload-time = "2026-09-09T19:10:14.642Z" },
+]
+
+[[package]]
 name = "openfisca-tunisia-pension"
 version = "5.1.1"
 source = { editable = "." }
@@ -1771,6 +1783,7 @@ dependencies = [
     { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "openfisca-core", extra = ["web-api"] },
+    { name = "openfisca-tunisia" },
     { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
@@ -1805,7 +1818,8 @@ requires-dist = [
     { name = "nbformat", marker = "extra == 'notebook'", specifier = ">=4.4" },
     { name = "numba", specifier = ">=0.54,<1.0.0" },
     { name = "numpy", specifier = ">=1.24.3,<3" },
-    { name = "openfisca-core", extras = ["web-api"], specifier = ">=43.0.0,<45.0.0" },
+    { name = "openfisca-core", extras = ["web-api"], specifier = ">=44.0.0,<45.0.0" },
+    { name = "openfisca-tunisia", specifier = ">=0.79" },
     { name = "pandas", marker = "extra == 'notebook'", specifier = ">=0.22.0" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "requests", marker = "extra == 'dev'", specifier = ">=2.28.2,<3.0" },
