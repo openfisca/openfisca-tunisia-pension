@@ -1,13 +1,13 @@
 # Audit sources retraite OpenFisca Tunisia Pension
 
-Généré le 2026-05-14 par `scripts/generate_pension_source_audit.py`.
+Généré le 2026-09-10 par `scripts/generate_pension_source_audit.py`.
 
 ## Synthèse
 
-- Fichiers paramètres retraite: 52
-- Paramètres avec valeurs ou barèmes: 41
-- Paramètres avec référence: 23 / 41
-- Paramètres sans référence: 18 / 41
+- Fichiers paramètres retraite: 63
+- Paramètres avec valeurs ou barèmes: 50
+- Paramètres avec référence: 31 / 50
+- Paramètres sans référence: 19 / 50
 - Paramètres multi-dates: 6
 - Textes JORT locaux: 1
 
@@ -15,9 +15,9 @@ Généré le 2026-05-14 par `scripts/generate_pension_source_audit.py`.
 
 | Régime | Paramètres avec valeurs |
 | --- | ---: |
-| `cnrps` | 27 |
+| `cnrps` | 35 |
 | `rsa` | 7 |
-| `rsna` | 7 |
+| `rsna` | 8 |
 
 ## Textes cités dans les références
 
@@ -28,9 +28,10 @@ Généré le 2026-05-14 par `scripts/generate_pension_source_audit.py`.
 | `1981-70` - Texte cité par les paramètres | 3 | JORT 1981/51 |
 | `1985-1177` - Texte cité par les paramètres | 4 | JORT 1985/68 |
 | `1985-1178` - Texte cité par les paramètres | 2 | JORT 1985/68 |
-| `1985-12` - Loi n° 85-12 du 5 mars 1985, pensions civiles et militaires secteur public | 11 | JORT 1985/20, texte pivot |
+| `1985-12` - Loi n° 85-12 du 5 mars 1985, pensions civiles et militaires secteur public | 17 | JORT 1985/20, texte pivot |
 | `1985-611` - Texte cité par les paramètres | 4 | à résoudre |
-| `1988-71` - Texte cité par les paramètres | 2 | JORT 1988/45 |
+| `1988-71` - Texte cité par les paramètres | 1 | JORT 1988/45 |
+| `1993-308` - Texte cité par les paramètres | 4 | JORT 1993/13 |
 | `2007-43` - Loi n° 2007-43 du 25 juin 2007, pensions public/privé/régimes spéciaux | 2 | texte local, JORT 2007/51, texte pivot |
 | `2019-37` - Loi n° 2019-37 du 30 avril 2019, relèvement âge retraite | 2 | JORT 2019/35, texte pivot |
 | `2024-9` - Texte cité par les paramètres | 4 | JORT 2024/20 |
@@ -61,6 +62,7 @@ Généré le 2026-05-14 par `scripts/generate_pension_source_audit.py`.
 | `retraite.rsna.age_legal` | Age légal de de départ à la retraite | 1974-01-01 |
 | `retraite.rsna.pension_minimale.inf` | Inférieur à la durée du stage requis | 1974-01-01 |
 | `retraite.rsna.pension_minimale.sup` | Supérieur à la durée du stage requis | 1974-01-01 |
+| `retraite.rsna.plaf_taux_pension` | Plafonnement du taux de pension | 1974-01-01 |
 | `retraite.rsna.stage_derog` | Durée du stage dérogatoire | 1974-01-01 |
 | `retraite.rsna.stage_requis` | Durée normale du stage requis | 1974-01-01 |
 
@@ -68,8 +70,8 @@ Généré le 2026-05-14 par `scripts/generate_pension_source_audit.py`.
 
 | Paramètre | Dates | Lois citées |
 | --- | --- | --- |
-| `retraite.cnrps.age_legal.civil.cadre_commun` | 1959-02-01, 2019-07-01, 2020-01-01 | `1959-18`, `2019-37` |
-| `retraite.cnrps.age_legal.civil.cadres_actifs` | 1959-02-01, 2019-07-01, 2020-01-01 | `1959-18`, `2019-37` |
+| `retraite.cnrps.age_legal.civil.cadre_commun` | 1959-02-01, 2019-07-01, 2020-01-01 | `1959-18`, `1985-12`, `2019-37` |
+| `retraite.cnrps.age_legal.civil.cadres_actifs` | 1959-02-01, 2019-07-01, 2020-01-01 | `1959-18`, `1985-12`, `2019-37` |
 | `retraite.cnrps.bareme_annuite` | 1959-02-01, 1985-01-01 | `1959-18`, `1985-12` |
 | `retraite.cnrps.depart_anticipe.meres_3_enfants.age_maximum_enfant` | 1985-03-05, 1988-06-27 | `1985-12`, `1988-71` |
 | `retraite.cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum` | 1985-03-05, 2007-06-25 | `1985-12`, `2007-43` |
@@ -83,6 +85,7 @@ Généré le 2026-05-14 par `scripts/generate_pension_source_audit.py`.
 | `cnrps.py` | `retraite.cnrps`, `retraite.cnrps.bareme_annuite` |
 | `rsa.py` | `retraite.rsa`, `retraite.rsa.bareme_annuite` |
 | `rsna.py` | `retraite.rsna`, `retraite.rsna.bareme_annuite` |
+| `survivants.py` | `retraite.cnrps.capital_deces`, `retraite.cnrps.survivants` |
 
 ## Recommandations
 

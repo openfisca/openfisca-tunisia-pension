@@ -52,6 +52,13 @@ def load_yaml(path: Path) -> dict[str, Any]:
     return data
 
 
+# Champs d'une référence structurée où un numéro de texte peut légitimement figurer.
+# La `note` en est exclue : elle porte la localisation JORT, dont les plages de pages
+# — « pp. 1312-1315 » — ont exactement la forme d'un numéro de loi et étaient comptées
+# comme tel. Le rapport annonçait ainsi un « texte 1312-1315 » à résoudre.
+CHAMPS_PORTEURS_DE_TEXTE = ("title", "href")
+
+
 def flatten_reference(reference: Any) -> list[str]:
     if reference is None:
         return []
@@ -59,6 +66,12 @@ def flatten_reference(reference: Any) -> list[str]:
         return [reference]
     if isinstance(reference, dict):
         refs: list[str] = []
+        # Une référence structurée : on ne lit que les champs qui nomment un texte.
+        if any(champ in reference for champ in CHAMPS_PORTEURS_DE_TEXTE):
+            for champ in CHAMPS_PORTEURS_DE_TEXTE:
+                if champ in reference:
+                    refs.extend(flatten_reference(reference[champ]))
+            return refs
         for value in reference.values():
             refs.extend(flatten_reference(value))
         return refs

@@ -1,5 +1,18 @@
 # Changelog
 
+### 5.3.1 - [#19](https://github.com/openfisca/openfisca-tunisia-pension/pull/19)
+
+* Amélioration technique.
+* Périodes concernées : aucune.
+* Zones impactées : aucune — outillage seul.
+* Détails :
+  - Ajoute `scripts/generate_pension_source_audit.py`, qui dresse la carte de ce qui est sourcé et de ce qui ne l'est pas : couverture par régime, textes cités, paramètres sans référence, paramètres multi-dates, et rapprochement avec le corpus JORT local quand il est disponible. Sortie dans `reports/openfisca/pension_source_audit.md` et `parameters_candidates/retraite_source_candidates.yml`.
+  - **Ce que l'audit établit aujourd'hui** : 50 paramètres portent une valeur ou un barème, **31 ont une référence et 19 n'en ont aucune**. Les sept paramètres du régime des salariés agricoles n'en ont pas une seule, et portent tous la même date conventionnelle du 24 février 1981.
+  - Il isole aussi un texte impossible : le décret cité « n° 85-611 du 3 juin 1986 », dont le millésime et l'année ne peuvent pas être justes tous les deux. Le rapport le classe « à résoudre ».
+  - **Correction au passage** : l'extraction des numéros de texte lisait aussi le champ `note`, dont les plages de pages — « pp. 1312-1315 » — ont exactement la forme d'un numéro de loi. Le rapport annonçait un « texte 1312-1315 » à résoudre. Elle ne lit plus que `title` et `href`.
+
+<!-- -->
+
 ## 5.3.0 - [#21](https://github.com/openfisca/openfisca-tunisia-pension/pull/21)
 
 * Évolution du système socio-fiscal.

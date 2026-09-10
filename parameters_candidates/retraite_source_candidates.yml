@@ -1,11 +1,11 @@
 metadata:
   generated_by: scripts/generate_pension_source_audit.py
-  generated_at: '2026-05-14'
+  generated_at: '2026-09-10'
   needs_review: true
   scope: openfisca_tunisia_pension.parameters.retraite
 coverage:
-  parameters_with_values: 41
-  parameters_with_reference: 23
+  parameters_with_values: 50
+  parameters_with_reference: 31
   parameters_without_reference:
   - retraite.cnrps.age_legal.civil.enseignants_du_superieur
   - retraite.cnrps.duree_de_service_minimale
@@ -23,6 +23,7 @@ coverage:
   - retraite.rsna.age_legal
   - retraite.rsna.pension_minimale.inf
   - retraite.rsna.pension_minimale.sup
+  - retraite.rsna.plaf_taux_pension
   - retraite.rsna.stage_derog
   - retraite.rsna.stage_requis
   local_jort_laws:
@@ -199,6 +200,8 @@ law_candidates:
       pdf_fr: /jort/1985/1985F/Jo02085.pdf
       pdf_ar: /jort/1985/1985A/Ja02085.pdf
     parameters:
+    - retraite.cnrps.age_legal.civil.cadre_commun
+    - retraite.cnrps.age_legal.civil.cadres_actifs
     - retraite.cnrps.bareme_annuite
     - retraite.cnrps.bonifications.cadre_actif.service_15
     - retraite.cnrps.bonifications.cadre_actif.service_20
@@ -210,6 +213,10 @@ law_candidates:
     - retraite.cnrps.depart_anticipe.meres_3_enfants.duree_minimum
     - retraite.cnrps.depart_anticipe.sur_demande.cadre_commun.age_minimum
     - retraite.cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
+    - retraite.cnrps.survivants.plafond_cumul
+    - retraite.cnrps.survivants.taux_conjoint
+    - retraite.cnrps.survivants.taux_orphelin
+    - retraite.cnrps.survivants.taux_partage_5_orphelins
   1985-611:
     title: null
     local_texts: []
@@ -236,7 +243,25 @@ law_candidates:
       pdf_ar: /jort/1988/1988A/Ja04588.pdf
     parameters:
     - retraite.cnrps.depart_anticipe.meres_3_enfants.age_maximum_enfant
-    - retraite.cnrps.depart_anticipe.meres_3_enfants.age_minimum
+  1993-308:
+    title: null
+    local_texts: []
+    jort_cache_matches:
+    - type: Decret
+      numero: 93-308
+      titre: Decret n° 93-308 du 01 Février 1993, relatif au regime du capital-deces
+      date_signature: '1993-02-01'
+      date_publication: '1993-02-16'
+      jort_annee: 1993
+      jort_numero: 13
+      pages: 0246-0247
+      pdf_fr: /jort/1993/1993F/Jo01393.pdf
+      pdf_ar: /jort/1993/1993A/Ja01393.pdf
+    parameters:
+    - retraite.cnrps.capital_deces.majoration_par_enfant
+    - retraite.cnrps.capital_deces.multiplicateur_deces_accidentel
+    - retraite.cnrps.capital_deces.plafond_anciennete_mois
+    - retraite.cnrps.capital_deces.taux_retraite_selon_age
   2007-43:
     title: Loi n° 2007-43 du 25 juin 2007, pensions public/privé/régimes spéciaux
     local_texts:
@@ -372,11 +397,16 @@ parameter_candidates:
   - '2020-01-01'
   laws:
   - 1959-18
+  - 1985-12
   - 2019-37
   references:
-  - Loi n°59-18 du 5 février 1959, fixant le régime des pensions civiles et militaires de retraite
-  - Loi n°2019-37 du 30 avril 2019 (Dispositions transitoires)
-  - Loi n°2019-37 du 30 avril 2019
+  - Loi n° 59-18 du 5 février 1959 fixant le régime des pensions civiles et militaires de retraite
+  - https://www.pist.tn/jort/1959/1959F/Jo00859.pdf
+  - Loi n° 2019-37 du 30 avril 2019 modifiant et complétant la loi n° 85-12 du 5 mars 1985 (dispositions
+    transitoires)
+  - https://www.pist.tn/jort/2019/2019F/Jo0352019.pdf
+  - Loi n° 2019-37 du 30 avril 2019 modifiant et complétant la loi n° 85-12 du 5 mars 1985
+  - https://www.pist.tn/jort/2019/2019F/Jo0352019.pdf
   needs_review: true
 - parameter: retraite.cnrps.age_legal.civil.cadres_actifs
   description: Age légal de de départ à la retraite pour certains cadres actifs et ouvriers
@@ -386,11 +416,16 @@ parameter_candidates:
   - '2020-01-01'
   laws:
   - 1959-18
+  - 1985-12
   - 2019-37
   references:
-  - Loi n°59-18 du 5 février 1959, et décret n° 1177 du 24 septembre 1985
-  - Loi n°2019-37 du 30 avril 2019 (Dispositions transitoires)
-  - Loi n°2019-37 du 30 avril 2019
+  - Loi n° 59-18 du 5 février 1959 fixant le régime des pensions civiles et militaires de retraite
+  - https://www.pist.tn/jort/1959/1959F/Jo00859.pdf
+  - Loi n° 2019-37 du 30 avril 2019 modifiant et complétant la loi n° 85-12 du 5 mars 1985 (dispositions
+    transitoires)
+  - https://www.pist.tn/jort/2019/2019F/Jo0352019.pdf
+  - Loi n° 2019-37 du 30 avril 2019 modifiant et complétant la loi n° 85-12 du 5 mars 1985
+  - https://www.pist.tn/jort/2019/2019F/Jo0352019.pdf
   needs_review: true
 - parameter: retraite.cnrps.age_legal.civil.enseignants_du_superieur
   description: Age de départ à la retraite pour certains enseignants du supérieur
@@ -408,8 +443,11 @@ parameter_candidates:
   - 1959-18
   - 1985-12
   references:
-  - Loi n°59-18 du 5 février 1959, fixant le régime des pensions civiles et militaires de retraite
-  - Loi n°85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite
+  - Loi n° 59-18 du 5 février 1959, fixant le régime des pensions civiles et militaires de retraite
+  - https://www.pist.tn/jort/1959/1959F/Jo00859.pdf
+  - Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des
+    survivants dans le secteur public
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.cnrps.bonifications.cadre_actif.service_15
   description: Bonification pour cadres actifs pour 15 ans de service
@@ -421,6 +459,7 @@ parameter_candidates:
   - 2024-9
   references:
   - Loi n°85-12 du 5 mars 1985 (art 32) et décret n°85-1177 du 24-09-1985
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.cnrps.bonifications.cadre_actif.service_20
   description: Bonification pour cadres actifs pour 20 ans de service
@@ -432,6 +471,7 @@ parameter_candidates:
   - 2024-9
   references:
   - Loi n°85-12 du 5 mars 1985 (art 32) et décret n°85-1177 du 24-09-1985
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.cnrps.bonifications.cadre_actif.service_25
   description: Bonification pour cadres actifs pour 25 ans de service
@@ -443,6 +483,7 @@ parameter_candidates:
   - 2024-9
   references:
   - Loi n°85-12 du 5 mars 1985 (art 32) et décret n°85-1177 du 24-09-1985
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.cnrps.bonifications.cadre_actif.service_35
   description: Bonification maximum pour cadres actifs et travaux pénibles pour 35 ans de service
@@ -454,6 +495,7 @@ parameter_candidates:
   - 2024-9
   references:
   - Loi n°85-12 du 5 mars 1985 (art 32) et décret n°85-1177 du 24-09-1985
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.cnrps.bonifications.militaire.bonus
   description: Bonification maximum pour militaires
@@ -463,6 +505,49 @@ parameter_candidates:
   - 1985-12
   references:
   - Loi n°85-12 du 5 mars 1985 (art 32)
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
+  needs_review: true
+- parameter: retraite.cnrps.capital_deces.majoration_par_enfant
+  description: Majoration du capital-décès par enfant à charge (part du montant de base)
+  dates:
+  - '1993-02-01'
+  laws:
+  - 1993-308
+  references:
+  - Décret n° 93-308 du 1er février 1993, relatif au régime du capital-décès
+  - https://www.pist.tn/jort/1993/1993F/Jo01393.pdf
+  needs_review: true
+- parameter: retraite.cnrps.capital_deces.multiplicateur_deces_accidentel
+  description: Multiplicateur du capital-décès en cas de décès en service commandé ou par accident
+  dates:
+  - '1993-02-01'
+  laws:
+  - 1993-308
+  references:
+  - Décret n° 93-308 du 1er février 1993, relatif au régime du capital-décès
+  - https://www.pist.tn/jort/1993/1993F/Jo01393.pdf
+  needs_review: true
+- parameter: retraite.cnrps.capital_deces.plafond_anciennete_mois
+  description: Plafond de la majoration d'ancienneté du capital-décès, en mois de salaire (1/12 de la
+    rémunération annuelle par année de service)
+  dates:
+  - '1993-02-01'
+  laws:
+  - 1993-308
+  references:
+  - Décret n° 93-308 du 1er février 1993, relatif au régime du capital-décès
+  - https://www.pist.tn/jort/1993/1993F/Jo01393.pdf
+  needs_review: true
+- parameter: retraite.cnrps.capital_deces.taux_retraite_selon_age
+  description: Taux appliqué au capital-décès du retraité selon l'âge au décès (50 % au-delà de 60 ans,
+    réduit ensuite). Les agents en activité (< 60 ans) perçoivent 100 %.
+  dates:
+  - '1993-02-01'
+  laws:
+  - 1993-308
+  references:
+  - Décret n° 93-308 du 1er février 1993, relatif au régime du capital-décès
+  - https://www.pist.tn/jort/1993/1993F/Jo01393.pdf
   needs_review: true
 - parameter: retraite.cnrps.depart_anticipe.meres_3_enfants.age_maximum_enfant
   description: Âge maximum des enfants pour le droit à la retraite anticipée des mères de 3 enfants
@@ -474,7 +559,9 @@ parameter_candidates:
   - 1988-71
   references:
   - Loi n°85-12 du 5 mars 1985, article 5
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   - Loi n°88-71 du 27 juin 1988 modifiant l'article 5
+  - https://www.pist.tn/jort/1988/1988F/Jo04588.pdf
   needs_review: true
 - parameter: retraite.cnrps.depart_anticipe.meres_3_enfants.age_minimum
   description: Âge minimum de jouissance de la pension pour les mères de 3 enfants
@@ -482,9 +569,9 @@ parameter_candidates:
   - '1985-03-05'
   laws:
   - 1985-12
-  - 1988-71
   references:
-  - Loi n°85-12 du 5 mars 1985, article 5, modifié par la loi n°88-71 du 27 juin 1988
+  - Loi n° 85-12 du 5 mars 1985, article 5
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.cnrps.depart_anticipe.meres_3_enfants.duree_minimum
   description: Durée minimum de services effectifs pour la retraite anticipée des mères de 3 enfants
@@ -493,7 +580,8 @@ parameter_candidates:
   laws:
   - 1985-12
   references:
-  - Loi n°85-12 du 5 mars 1985, article 5
+  - Loi n° 85-12 du 5 mars 1985, article 5
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.cnrps.depart_anticipe.sur_demande.astreignants.age_minimum
   description: Âge minimum pour la retraite anticipée sur demande pour travaux astreignants
@@ -523,8 +611,10 @@ parameter_candidates:
   - 1985-12
   - 2007-43
   references:
-  - Loi n°85-12 du 5 mars 1985, article 30 (avant modification)
-  - Loi n°2007-43 du 25 juin 2007, modifiant l'article 30
+  - Loi n° 85-12 du 5 mars 1985, article 30 avant modification
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
+  - Loi n° 2007-43 du 25 juin 2007, modifiant l'article 30
+  - https://www.pist.tn/jort/2007/2007F/Jo0512007.pdf
   needs_review: true
 - parameter: retraite.cnrps.depart_anticipe.sur_demande.cadre_commun.duree_minimum
   description: Durée minimum de services effectifs pour la retraite anticipée sur demande (Cadre commun)
@@ -535,8 +625,10 @@ parameter_candidates:
   - 1985-12
   - 2007-43
   references:
-  - Loi n°85-12 du 5 mars 1985, article 30 (avant modification)
-  - Loi n°2007-43 du 25 juin 2007, modifiant l'article 30
+  - Loi n° 85-12 du 5 mars 1985, article 30 avant modification
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
+  - Loi n° 2007-43 du 25 juin 2007, modifiant l'article 30
+  - https://www.pist.tn/jort/2007/2007F/Jo0512007.pdf
   needs_review: true
 - parameter: retraite.cnrps.duree_de_service_minimale
   description: Durée de service minimale requise pour prétendre à une pension de retraite
@@ -565,6 +657,52 @@ parameter_candidates:
   - '1974-01-01'
   laws: []
   references: []
+  needs_review: true
+- parameter: retraite.cnrps.survivants.plafond_cumul
+  description: Plafond du cumul des pensions de survivants (conjoint + orphelins), en part de la pension
+    de l'agent
+  dates:
+  - '1985-03-05'
+  laws:
+  - 1985-12
+  references:
+  - Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des
+    survivants dans le secteur public
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
+  needs_review: true
+- parameter: retraite.cnrps.survivants.taux_conjoint
+  description: Taux de la pension de réversion du conjoint survivant (part de la pension de l'agent)
+  dates:
+  - '1985-03-05'
+  laws:
+  - 1985-12
+  references:
+  - Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des
+    survivants dans le secteur public
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
+  needs_review: true
+- parameter: retraite.cnrps.survivants.taux_orphelin
+  description: Taux de la pension temporaire d'orphelin, par orphelin (part de la pension de l'agent)
+  dates:
+  - '1985-03-05'
+  laws:
+  - 1985-12
+  references:
+  - Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des
+    survivants dans le secteur public
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
+  needs_review: true
+- parameter: retraite.cnrps.survivants.taux_partage_5_orphelins
+  description: Part de la pension de l'agent revenant au conjoint lorsqu'il y a au moins 5 orphelins (les
+    50% restants sont partagés entre les orphelins)
+  dates:
+  - '1985-03-05'
+  laws:
+  - 1985-12
+  references:
+  - Loi n° 85-12 du 5 mars 1985, portant régime des pensions civiles et militaires de retraite et des
+    survivants dans le secteur public
+  - https://www.pist.tn/jort/1985/1985F/Jo02085.pdf
   needs_review: true
 - parameter: retraite.rsa.age_legal
   description: Age légal de de départ à la retraite
@@ -636,8 +774,9 @@ parameter_candidates:
   laws:
   - 1960-33
   references:
-  - Loi n°60-33 du 14 Décembre 1960 instituant un régime d'invalidité de vieillesse et de survie et un
-    régime d'allocation de vieillesse et de survie dans le secteur non agricole.
+  - Loi n° 60-33 du 14 décembre 1960 instituant un régime d'invalidité, de vieillesse et de survie et
+    un régime d'allocation de vieillesse et de survie dans le secteur non agricole, JORT n° 57/1960, p.
+    1616
   needs_review: true
 - parameter: retraite.rsna.pension_minimale.inf
   description: Inférieur à la durée du stage requis
@@ -648,6 +787,13 @@ parameter_candidates:
   needs_review: true
 - parameter: retraite.rsna.pension_minimale.sup
   description: Supérieur à la durée du stage requis
+  dates:
+  - '1974-01-01'
+  laws: []
+  references: []
+  needs_review: true
+- parameter: retraite.rsna.plaf_taux_pension
+  description: Plafonnement du taux de pension
   dates:
   - '1974-01-01'
   laws: []
