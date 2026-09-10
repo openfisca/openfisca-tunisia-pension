@@ -1818,7 +1818,7 @@ requires-dist = [
     { name = "nbformat", marker = "extra == 'notebook'", specifier = ">=4.4" },
     { name = "numba", specifier = ">=0.54,<1.0.0" },
     { name = "numpy", specifier = ">=1.24.3,<3" },
-    { name = "openfisca-core", extras = ["web-api"], specifier = ">=44.0.0,<45.0.0" },
+    { name = "openfisca-core", extras = ["web-api"], specifier = ">=44.0.3,<45.0.0" },
     { name = "openfisca-tunisia", specifier = ">=0.80" },
     { name = "pandas", marker = "extra == 'notebook'", specifier = ">=0.22.0" },
     { name = "pytest", marker = "extra == 'dev'" },
