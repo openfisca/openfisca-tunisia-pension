@@ -1,5 +1,13 @@
 # Changelog
 
+### 8.0.0
+
+* Dépréciation.
+* Détails :
+  - **Le système des pensions est désormais livré par openfisca-tunisia**, à partir de sa version 0.93 (openfisca-tunisia#434), avec l'extra `[pension]`. Ses paramètres vivent dans l'arbre unique d'openfisca-tunisia, sous `openfisca_tunisia/parameters/retraite/`, et l'histoire de ce dépôt y a été conservée.
+  - Cette version ne livre plus aucun module : elle dépend seulement de `openfisca-tunisia[pension] >=0.93`. Le nom d'import `openfisca_tunisia_pension` et la commande `openfisca serve --country-package openfisca_tunisia_pension` restent inchangés.
+  - Ce dépôt n'est plus développé.
+
 ### 7.3.0
 
 * Évolution du système socio-fiscal.

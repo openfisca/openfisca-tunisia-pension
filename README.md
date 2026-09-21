@@ -1,5 +1,18 @@
 # OpenFisca Tunisia Pension - الجباية المفتوحة  تونس، المنح
 
+> **Ce dépôt n'est plus développé.** Depuis sa version 0.93, [openfisca-tunisia](https://github.com/openfisca/openfisca-tunisia)
+> livre le système des pensions, dont les paramètres vivent désormais dans son arbre unique
+> (`openfisca_tunisia/parameters/retraite/`). L'histoire de ce dépôt y a été conservée.
+>
+> ```sh
+> pip install 'openfisca-tunisia[pension]'
+> openfisca serve --country-package openfisca_tunisia_pension
+> ```
+>
+> La distribution `openfisca-tunisia-pension` 8.0.0 ne livre plus aucun module : elle tire
+> simplement `openfisca-tunisia[pension]`. Le nom d'import `openfisca_tunisia_pension` est
+> inchangé.
+
 [![Build Status via Travis CI](https://travis-ci.org/openfisca/openfisca-tunisia-pension.svg?branch=master)](https://travis-ci.org/openfisca/openfisca-tunisia-pension)
 
 ## Presentation - التقديم

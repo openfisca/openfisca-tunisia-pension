@@ -1,14 +1,14 @@
 [project]
 name = "OpenFisca-Tunisia-Pension"
-version = "7.3.0"
-description = "OpenFisca Rules as Code model for Tunisia pensions."
+version = "8.0.0"
+description = "Déprécié : le système des pensions est livré par openfisca-tunisia[pension] depuis sa version 0.93."
 readme = "README.md"
 keywords = ["microsimulation", "tax", "benefit", "pension", "rac", "rules-as-code", "tunisia"]
 authors = [
   {name = "OpenFisca Team", email = "contact@openfisca.org"},
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 7 - Inactive",
     "License :: OSI Approved :: GNU Affero General Public License v3",
     "Operating System :: POSIX",
     "Programming Language :: Python",
@@ -18,12 +18,12 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Information Analysis",
 ]
 requires-python = ">= 3.10"
+# Cette distribution ne livre plus aucun module : elle ne fait que tirer
+# openfisca-tunisia avec l'extra qui apporte le système des pensions. Livrer encore
+# `openfisca_tunisia_pension` entrerait en conflit de fichiers avec openfisca-tunisia,
+# qui le livre désormais.
 dependencies = [
-    "numba>=0.54,<1.0.0",
-    'numpy >=1.24.3, <3',
-    'openfisca-core[web-api] >=44.0.3, <45.0.0',
-    'openfisca-tunisia >=0.80',
-    'scipy >= 0.12',
+    "openfisca-tunisia[pension] >=0.93",
 ]
 
 [project.urls]
@@ -94,4 +94,4 @@ filterwarnings = [
 ]
 
 [tool.setuptools]
-packages = ["openfisca_tunisia_pension"]
+packages = []
