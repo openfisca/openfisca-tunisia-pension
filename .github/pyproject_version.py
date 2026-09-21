@@ -11,11 +11,17 @@ CORE_VERSION = ">=41.5.0,<41.5.3"
 NUMPY_VERSION = ">=1.24.3,<2"
 
 
-def get_versions():
+def get_versions(strict=True):
     """
     Read package version and deps in pyproject.toml
+
+    Les contraintes sur openfisca-core et numpy ne servent qu'à la recette conda. Depuis
+    la 8.0.0, ce paquet ne dépend plus que d'openfisca-tunisia[pension] : elles manquent,
+    et on ne doit l'exiger que si l'on remplit la recette (`strict`), pas pour lire le
+    seul numéro de version.
     """
     openfisca_core_api = None
+    numpy = None
     openfisca_tunisia_pension = None
     with open("./pyproject.toml", "r") as file:
         content = file.read()
@@ -37,12 +43,12 @@ def get_versions():
     version = re.search(r"numpy\s*(>=\s*[\d\.]*,\s*<\d*)", content, re.MULTILINE)
     if version:
         numpy = version.group(1)
-    if not openfisca_core_api or not numpy:
+    if strict and (not openfisca_core_api or not numpy):
         raise Exception("Dependencies not found in pyproject.toml")
     return {
         "openfisca_tunisia_pension": openfisca_tunisia_pension,
-        "openfisca_core_api": openfisca_core_api.replace(" ", ""),
-        "numpy": numpy.replace(" ", ""),
+        "openfisca_core_api": openfisca_core_api.replace(" ", "") if openfisca_core_api else None,
+        "numpy": numpy.replace(" ", "") if numpy else None,
     }
 
 
@@ -95,7 +101,7 @@ if __name__ == "__main__":
         help="Only display current package version",
     )
     args = parser.parse_args()
-    info = get_versions()
+    info = get_versions(strict=not args.only_package_version)
     file = args.filename
     if args.only_package_version:
         print(f"{info['openfisca_tunisia_pension']}")  # noqa: T201
