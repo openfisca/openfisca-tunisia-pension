@@ -1,115 +1,27 @@
-# Read package version in pyproject.toml and replace it in .conda/recipe.yaml
+"""Affiche le numéro de version déclaré dans pyproject.toml.
 
-# Standard Library
+Seul usage : `.github/is-version-number-acceptable.sh`. Ce script remplissait aussi une
+recette conda à partir des contraintes d'openfisca-core et de numpy ; cette partie a été
+retirée avec conda, que plus aucun workflow ne publiait.
+"""
+
 import argparse
-import logging
 import re
 
-logging.basicConfig(level=logging.INFO, format="%(message)s")
-PACKAGE_VERSION = "X.X.X"
-CORE_VERSION = ">=41.5.0,<41.5.3"
-NUMPY_VERSION = ">=1.24.3,<2"
 
-
-def get_versions(strict=True):
-    """
-    Read package version and deps in pyproject.toml
-
-    Les contraintes sur openfisca-core et numpy ne servent qu'à la recette conda. Depuis
-    la 8.0.0, ce paquet ne dépend plus que d'openfisca-tunisia[pension] : elles manquent,
-    et on ne doit l'exiger que si l'on remplit la recette (`strict`), pas pour lire le
-    seul numéro de version.
-    """
-    openfisca_core_api = None
-    numpy = None
-    openfisca_tunisia_pension = None
-    with open("./pyproject.toml", "r") as file:
-        content = file.read()
-    # Extract the version of openfisca_tunisia_pension
-    version_match = re.search(r'^version\s*=\s*"([\d.]*)"', content, re.MULTILINE)
-    if version_match:
-        openfisca_tunisia_pension = version_match.group(1)
-    else:
-        raise Exception("Package version not found in pyproject.toml")
-    # Extract dependencies
-    version = re.search(
-        r"openfisca-core\[web-api\]\s*((?:==|>=)\s*[\d\.]+(?:\s*,\s*<\s*\d+)?)",
-        content,
-        re.MULTILINE,
-    )
-    if version:
-        openfisca_core_api = version.group(1)
-    # 'numpy >=1.24.3, <2',
-    version = re.search(r"numpy\s*(>=\s*[\d\.]*,\s*<\d*)", content, re.MULTILINE)
-    if version:
-        numpy = version.group(1)
-    if strict and (not openfisca_core_api or not numpy):
-        raise Exception("Dependencies not found in pyproject.toml")
-    return {
-        "openfisca_tunisia_pension": openfisca_tunisia_pension,
-        "openfisca_core_api": openfisca_core_api.replace(" ", "") if openfisca_core_api else None,
-        "numpy": numpy.replace(" ", "") if numpy else None,
-    }
-
-
-def replace_in_file(filepath: str, info: dict):
-    """
-    ::filepath:: Path to meta.yaml, with filename
-    ::info:: Dict with information to populate
-    """
-    with open(filepath, "rt") as fin:
-        meta = fin.read()
-    # Replace with info from pyproject.toml
-    if PACKAGE_VERSION not in meta:
-        raise Exception(f"{PACKAGE_VERSION=} not found in {filepath}")
-    meta = meta.replace(PACKAGE_VERSION, info["openfisca_tunisia_pension"])
-    if CORE_VERSION not in meta:
-        raise Exception(f"{CORE_VERSION=} not found in {filepath}")
-    meta = meta.replace(CORE_VERSION, info["openfisca_core_api"])
-    if NUMPY_VERSION not in meta:
-        raise Exception(f"{NUMPY_VERSION=} not found in {filepath}")
-    meta = meta.replace(NUMPY_VERSION, info["numpy"])
-    with open(filepath, "wt") as fout:
-        fout.write(meta)
-    logging.info(
-        f"File {filepath} has been updated with informations from pyproject.toml."
-    )
+def version_du_paquet() -> str:
+    with open("./pyproject.toml", encoding="utf-8") as fichier:
+        contenu = fichier.read()
+    trouve = re.search(r'^version\s*=\s*"([\d.]*)"', contenu, re.MULTILINE)
+    if not trouve:
+        raise SystemExit("Package version not found in pyproject.toml")
+    return trouve.group(1)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-r",
-        "--replace",
-        type=bool,
-        default=False,
-        required=False,
-        help="replace in file",
-    )
-    parser.add_argument(
-        "-f",
-        "--filename",
-        type=str,
-        default=".conda/recipe.yaml",
-        help="Path to recipe.yaml, with filename",
-    )
-    parser.add_argument(
-        "-o",
-        "--only_package_version",
-        type=bool,
-        default=False,
-        help="Only display current package version",
-    )
-    args = parser.parse_args()
-    info = get_versions(strict=not args.only_package_version)
-    file = args.filename
-    if args.only_package_version:
-        print(f"{info['openfisca_tunisia_pension']}")  # noqa: T201
-        exit()
-    logging.info("Versions :")
-    print(info)  # noqa: T201
-    if args.replace:
-        logging.info(f"Replace in {file}")
-        replace_in_file(file, info)
-    else:
-        logging.info("Dry mode, no replace made")
+    # Gardé pour ne pas casser l'appel de is-version-number-acceptable.sh : seul le numéro
+    # de version est désormais affiché, quelle que soit sa valeur.
+    parser.add_argument("-o", "--only_package_version", type=bool, default=True)
+    parser.parse_args()
+    print(version_du_paquet())  # noqa: T201
